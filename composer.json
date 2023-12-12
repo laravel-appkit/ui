@@ -1,12 +1,12 @@
 {
-    "name": "laravel-appkit/:package_name",
+    "name": "laravel-appkit/ui",
     "description": "",
     "keywords": [
         "laravel",
         "appkit",
-        ":package_name"
+        "ui"
     ],
-    "homepage": "https://github.com/laravel-appkit/:package_name",
+    "homepage": "https://github.com/laravel-appkit/ui",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "AppKit\\:package_name_php\\": "src"
+            "AppKit\\Ui\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AppKit\\:package_name_php\\Tests\\": "tests"
+            "AppKit\\Ui\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -42,10 +42,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AppKit\\:package_name_php\\:package_name_phpServiceProvider"
+                "AppKit\\Ui\\UiServiceProvider"
             ],
             "aliases": {
-                ":package_name_php": "AppKit\\:package_name_php\\Facades\\:package_name_php"
+                "Ui": "AppKit\\Ui\\Facades\\Ui"
             }
         }
     }

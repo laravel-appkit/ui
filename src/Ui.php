@@ -1,8 +1,8 @@
 <?php
 
-namespace AppKit\:package_name_php;
+namespace AppKit\Ui;
 
-class :package_name_php
+class Ui
 {
     private $app;
 

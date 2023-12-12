@@ -1,7 +1,7 @@
 <?php
 
 /*
- * :package_name configuration
+ * ui configuration
  */
 return [
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace AppKit\:package_name_php\Facades;
+namespace AppKit\Ui\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \AppKit\:package_name_php\:package_name_php
+ * @see \AppKit\Ui\Ui
  */
-class :package_name_php extends Facade
+class Ui extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -16,6 +16,6 @@ class :package_name_php extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return ':package_name';
+        return 'ui';
     }
 }
