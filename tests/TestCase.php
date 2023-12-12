@@ -2,9 +2,9 @@
 
 namespace AppKit\Ui\Tests;
 
-use Orchestra\Testbench\TestCase as OrchestraTestCase;
-use AppKit\Ui\UiServiceProvider;
 use AppKit\Ui\Facades\Ui;
+use AppKit\Ui\UiServiceProvider;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
 {
@@ -45,7 +45,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageAliases($app)
     {
         return [
-            'Ui' => Ui::class
+            'Ui' => Ui::class,
         ];
     }
 
@@ -60,9 +60,9 @@ class TestCase extends OrchestraTestCase
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 }
