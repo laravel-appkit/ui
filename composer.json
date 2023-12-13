@@ -23,7 +23,8 @@
     "require-dev": {
         "laravel/legacy-factories": "^1.1",
         "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0|^8.0",
-        "phpunit/phpunit": "^9.6"
+        "phpunit/phpunit": "^9.6",
+        "pestphp/pest": "^1.23"
     },
     "autoload": {
         "psr-4": {
@@ -47,6 +48,11 @@
             "aliases": {
                 "Ui": "AppKit\\Ui\\Facades\\Ui"
             }
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     }
 }
