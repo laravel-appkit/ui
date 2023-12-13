@@ -18,7 +18,7 @@ it('can be initialised with an empty attribute bag', function () {
 it('can add classes in multiple ways', function (string $method, $data) {
     $attributeBuilder = $this->attributeBuilder->addClass($data);
 
-    expect($attributeBuilder->getAttributeBag()->jsonSerialize())->toHaveKey('class', 'class-1 class-2 class-3 class-4 class-5');
+    expect($attributeBuilder->jsonSerialize())->toHaveKey('class', 'class-1 class-2 class-3 class-4 class-5');
 })->with([
     ['as a single string', 'class-1 class-2 class-3 class-4 class-5'],
     ['as an array', ['class-1', 'class-2', 'class-3', 'class-4', 'class-5']],

@@ -4,10 +4,13 @@ namespace AppKit\UI;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Traits\ForwardsCalls;
 use Illuminate\View\ComponentAttributeBag;
 
 class AttributeBuilder
 {
+    use ForwardsCalls;
+
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
         protected Collection $options
@@ -58,5 +61,10 @@ class AttributeBuilder
     public function getAttributeBag()
     {
         return $this->attributeBag;
+    }
+
+    public function __call($method, $parameters)
+    {
+        return $this->forwardCallTo($this->attributeBag, $method, $parameters);
     }
 }
