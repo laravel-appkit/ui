@@ -1,5 +1,8 @@
 <?php
 
+use AppKit\UI\AttributeBuilder;
+use Illuminate\View\ComponentAttributeBag;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -11,7 +14,7 @@
 |
 */
 
-// uses(Tests\TestCase::class)->in('Feature');
+uses(AppKit\UI\Tests\TestCase::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +42,18 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Create an instance of an attribute builder
+ *
+ * @param array $attributes
+ * @param array $options
+ * @return AttributeBuilder
+ */
+function createAttributeBuilder($attributes = [], $options = [])
 {
-    // ..
+    // create an attribute bag that will be passed to the attribute builder
+    $attributeBag = new ComponentAttributeBag($attributes);
+
+    // return the attribute builder
+    return new AttributeBuilder($attributeBag, collect($options));
 }
