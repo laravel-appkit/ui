@@ -1,6 +1,6 @@
 <?php
 
-namespace Appkit\UI\Components;
+namespace AppKit\UI\Components;
 
 use Illuminate\View\Component as BladeComponent;
 

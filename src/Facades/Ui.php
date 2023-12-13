@@ -1,11 +1,11 @@
 <?php
 
-namespace AppKit\Ui\Facades;
+namespace AppKit\UI\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \AppKit\Ui\Ui
+ * @see \AppKit\UI\Ui
  */
 class Ui extends Facade
 {

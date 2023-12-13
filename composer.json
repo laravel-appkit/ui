@@ -28,12 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "AppKit\\Ui\\": "src"
+            "AppKit\\UI\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AppKit\\Ui\\Tests\\": "tests"
+            "AppKit\\UI\\Tests\\": "tests"
         }
     },
     "scripts": {
