@@ -14,8 +14,7 @@ class AttributeBuilder
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
         protected Collection $options
-    )
-    {
+    ) {
 
     }
 
@@ -28,7 +27,8 @@ class AttributeBuilder
         return $this;
     }
 
-    public function addOptionClass($option, $classes) {
+    public function addOptionClass($option, $classes)
+    {
         $value = $this->options[$option];
 
         $classes = value($classes);
@@ -54,7 +54,8 @@ class AttributeBuilder
         return $this;
     }
 
-    public function merge($attributes) {
+    public function merge($attributes)
+    {
         $this->attributeBag = $this->attributeBag->merge($attributes);
     }
 
