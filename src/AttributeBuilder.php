@@ -10,7 +10,6 @@ use Illuminate\Support\Traits\ForwardsCalls;
 use Illuminate\View\ComponentAttributeBag;
 use InvalidArgumentException;
 use ReflectionMethod;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 
 class AttributeBuilder
 {
@@ -202,7 +201,7 @@ class AttributeBuilder
             $allowedMethods = [
                 'addAttribute',
                 'setAttribute',
-                'removeAttribute'
+                'removeAttribute',
             ];
 
             // check that it is an allowed method
