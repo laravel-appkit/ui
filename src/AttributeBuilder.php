@@ -256,7 +256,7 @@ class AttributeBuilder
             $allowedMethods = [
                 'addAttribute',
                 'setAttribute',
-                'removeAttribute'
+                'removeAttribute',
             ];
 
             // check that it is an allowed method
