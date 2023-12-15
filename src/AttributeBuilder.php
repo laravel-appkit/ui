@@ -16,7 +16,11 @@ class AttributeBuilder
 {
     use ForwardsCalls;
 
-    public static $attributeHelpers = [];
+    /**
+     * An array to store the registered attribute helpers
+     * @var array
+     */
+    protected static $attributeHelpers = [];
 
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
@@ -25,7 +29,14 @@ class AttributeBuilder
 
     }
 
-    public static function createAttributeHelper(string $name, callable $callback)
+    /**
+     * Register a new attribute helper
+     *
+     * @param string $name
+     * @param callable $callback
+     * @return void
+     */
+    public static function registerAttributeHelper(string $name, callable $callback)
     {
         self::$attributeHelpers[$name] = $callback;
     }

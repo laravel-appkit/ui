@@ -60,7 +60,7 @@ function createAttributeBuilder($attributes = [], $options = [])
 
 function addDataAttributeHelperToAttributeBuilder()
 {
-    AttributeBuilder::createAttributeHelper('data', function ($attribute, $value) {
+    AttributeBuilder::registerAttributeHelper('data', function ($attribute, $value) {
         return ['data-' . $attribute => $value];
     });
 }
