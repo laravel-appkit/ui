@@ -10,25 +10,25 @@ use Illuminate\Support\Traits\ForwardsCalls;
 use Illuminate\View\ComponentAttributeBag;
 use InvalidArgumentException;
 use ReflectionMethod;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 
 class AttributeBuilder
 {
     use ForwardsCalls;
 
-    protected $magicMethodRegex = <<<'EOD'
-    /
-    (?P<operation>set|add|remove|toggle)
-    (?P<attribute>[A-Za-z0-9]*)
-    (?P<type>Attribute|Class)
-    /x
-    EOD;
+    static $attributeHelpers = [];
 
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
         protected Collection $options
     ) {
 
+    }
+
+    static function createAttributeHelper(string $name, callable $callback)
+    {
+        self::$attributeHelpers[$name] = $callback;
     }
 
     /**
@@ -112,23 +112,50 @@ class AttributeBuilder
      * @param mixed $value
      * @return AttributeBuilder
      */
-    public function setAttribute($attribute, $value = null): AttributeBuilder
+    public function setAttribute($attribute, $value = null, $attributeType = null): AttributeBuilder
     {
-        // set the attribute on the attribute bag
-        $this->offsetSet($attribute, $value);
+        // check if we have an attribute type
+        if ($attributeType != null) {
+            if (!array_key_exists($attributeType, self::$attributeHelpers)) {
+                throw new RuntimeException('No such attribute helper ' . $attributeType);
+            }
+
+            // if we do, we need to pass it through the callback
+            $attributes = self::$attributeHelpers[$attributeType]($attribute, $value);
+
+            foreach ($attributes as $attribute => $value) {
+                $this->setAttribute($attribute, $value);
+            }
+        } else {
+            // set the attribute on the attribute bag
+            $this->offsetSet($attribute, $value);
+        }
+
 
         // return a fluent API
         return $this;
     }
 
-    public function removeAttribute(...$attributes): AttributeBuilder
+    public function removeAttribute($attribute, $attributeType = null): AttributeBuilder
     {
-        // flatten the arguments to the function
-        $attributes = Arr::flatten($attributes);
+        $attributeArray = (array) $attribute;
 
-        // remove each of the attributes from the attribute bag
-        foreach ($attributes as $attribute) {
-            $this->offsetUnset($attribute);
+        foreach ($attributeArray as $attribute) {
+            // remove each of the attributes from the attribute bag
+            if ($attributeType != null) {
+                if (!array_key_exists($attributeType, self::$attributeHelpers)) {
+                    throw new RuntimeException('No such attribute helper ' . $attributeType);
+                }
+
+                // if we do, we need to pass it through the callback
+                $attributes = self::$attributeHelpers[$attributeType]($attribute, null);
+
+                foreach (array_keys($attributes) as $attribute) {
+                    $this->offsetUnset($attribute);
+                }
+            } else {
+                $this->offsetUnset($attribute);
+            }
         }
 
         // return a fluent API
@@ -184,11 +211,38 @@ class AttributeBuilder
      */
     public function __call($method, $parameters)
     {
+        // we need to build up the regex that we are going to use to parse the method
+        $attributeTypesString = '';
+
+        // check if we have any attribute helpers
+        if (!empty(self::$attributeHelpers)) {
+            // create an array to store all of the helper names
+            $attributeTypes = [];
+
+            foreach (self::$attributeHelpers as $helper => $closure) {
+                // pull out the name of the helper in studly case
+                $attributeTypes[] = Str::of($helper)->studly()->__toString();
+            }
+
+            // create the string that will be included in the regex
+            $attributeTypesString = '(?P<attributeType>' . implode('|', $attributeTypes) . ')?';
+        }
+
+        // create the regex
+        $magicMethodRegex = '
+        /
+        (?P<operation>set|add|remove|toggle)
+        ' . $attributeTypesString . '
+        (?P<attribute>[A-Za-z0-9]*)?
+        (?P<type>Attribute|Class)
+        /x
+        ';
+
         // an array to store any possible matches from the magic method regex
         $magicMethodRegexMatches = [];
 
-        if (preg_match($this->magicMethodRegex, $method, $magicMethodRegexMatches)) {
-            $magicMethodParameterNames = ['attribute', 'value'];
+        if (preg_match($magicMethodRegex, $method, $magicMethodRegexMatches)) {
+            $magicMethodParameterNames = ['attribute', 'value', 'attributeType'];
 
             // we alias the add operation to set
             if ($magicMethodRegexMatches['operation'] == 'add') {
@@ -227,7 +281,7 @@ class AttributeBuilder
                     }
 
                     // check if we have a matching parameter in the regex matches
-                    if (array_key_exists($parameterName, $magicMethodRegexMatches)) {
+                    if (array_key_exists($parameterName, $magicMethodRegexMatches) && !empty($magicMethodRegexMatches[$parameterName])) {
                         // if we do, we get that value and set it on the array that will be passed to the method
                         $methodParameterValues[$parameterName] = lcfirst($magicMethodRegexMatches[$parameterName]);
 

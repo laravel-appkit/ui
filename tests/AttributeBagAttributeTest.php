@@ -11,7 +11,6 @@ it('can add an attribute', function () {
     expect($attributeBuilder->getAttributes())->toHaveKey('foo', 'bar');
 });
 
-
 it('can change the value of an existing attribute', function () {
     // create a new attribute builder
     $attributeBuilder = createAttributeBuilder(['foo' => 'bar']);
@@ -40,17 +39,6 @@ it('can remove multiple existing attributes via an array', function () {
 
     // add the class to the attribute builder
     $attributeBuilder = $attributeBuilder->removeAttribute(['foo', 'bat']);
-
-    // check that the classes are correct
-    expect($attributeBuilder->getAttributes())->not()->toHaveKeys(['foo', 'bat']);
-});
-
-it('can remove multiple existing attributes via an multiple parameters', function () {
-    // create a new attribute builder
-    $attributeBuilder = createAttributeBuilder(['foo' => 'bar', 'bat' => 'buz']);
-
-    // add the class to the attribute builder
-    $attributeBuilder = $attributeBuilder->removeAttribute('foo', 'bat');
 
     // check that the classes are correct
     expect($attributeBuilder->getAttributes())->not()->toHaveKeys(['foo', 'bat']);

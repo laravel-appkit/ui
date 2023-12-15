@@ -57,3 +57,10 @@ function createAttributeBuilder($attributes = [], $options = [])
     // return the attribute builder
     return new AttributeBuilder($attributeBag, collect($options));
 }
+
+function addDataAttributeHelperToAttributeBuilder()
+{
+    AttributeBuilder::createAttributeHelper('data', function ($attribute, $value) {
+        return ['data-' . $attribute => $value];
+    });
+}
