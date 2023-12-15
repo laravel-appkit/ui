@@ -1,6 +1,5 @@
 <?php
 
-use AppKit\UI\AttributeBuilder;
 
 it('can have attribute helpers which modify the attributes being set', function () {
     // create a new attribute builder

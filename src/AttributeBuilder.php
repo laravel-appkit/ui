@@ -11,13 +11,12 @@ use Illuminate\View\ComponentAttributeBag;
 use InvalidArgumentException;
 use ReflectionMethod;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 
 class AttributeBuilder
 {
     use ForwardsCalls;
 
-    static $attributeHelpers = [];
+    public static $attributeHelpers = [];
 
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
@@ -26,7 +25,7 @@ class AttributeBuilder
 
     }
 
-    static function createAttributeHelper(string $name, callable $callback)
+    public static function createAttributeHelper(string $name, callable $callback)
     {
         self::$attributeHelpers[$name] = $callback;
     }
