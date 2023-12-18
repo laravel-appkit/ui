@@ -20,7 +20,7 @@ it('can add classes in multiple ways', function (string $method, $data) {
     $attributeBuilder = createAttributeBuilder();
 
     // add the class to the attribute builder
-    $attributeBuilder = $attributeBuilder->addClass($data);
+    $attributeBuilder->addClass($data);
 
     // check that the classes are correct
     expect($attributeBuilder->getAttributes())->toHaveKey('class', 'class-1 class-2 class-3 class-4 class-5');
@@ -31,7 +31,7 @@ it('can add classes to the classes that already exist', function (string $method
     $attributeBuilder = createAttributeBuilder(['class' => 'class-6']);
 
     // add the class to the attribute builder
-    $attributeBuilder = $attributeBuilder->addClass($data);
+    $attributeBuilder->addClass($data);
 
     // check that the classes are correct
     expect($attributeBuilder->getAttributes())->toHaveKey('class', 'class-1 class-2 class-3 class-4 class-5 class-6');
@@ -42,7 +42,7 @@ it('can remove classes in multiple ways', function (string $method, $data) {
     $attributeBuilder = createAttributeBuilder(['class' => 'class-1 class-2 class-3 class-4 class-5 class-6']);
 
     // add the class to the attribute builder
-    $attributeBuilder = $attributeBuilder->removeClass($data);
+    $attributeBuilder->removeClass($data);
 
     // check that the classes are correct
     expect($attributeBuilder->getAttributes())->toHaveKey('class', 'class-6');

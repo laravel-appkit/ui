@@ -64,3 +64,9 @@ function addDataAttributeHelperToAttributeBuilder()
         return ['data-' . $attribute => $value];
     });
 }
+
+function addConditionalHelpersToAttributeBuilder(AttributeBuilder $attributeBuilder)
+{
+    $attributeBuilder->registerConditional('true', fn () => true);
+    $attributeBuilder->registerConditional('false', fn () => false);
+}

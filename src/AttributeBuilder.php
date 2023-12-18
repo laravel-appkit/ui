@@ -22,6 +22,8 @@ class AttributeBuilder
      */
     protected static $attributeHelpers = [];
 
+    protected $conditionals = [];
+
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
         protected Collection $options
@@ -122,8 +124,30 @@ class AttributeBuilder
      * @param mixed $value
      * @return AttributeBuilder
      */
-    public function setAttribute($attribute, $value = null, $attributeType = null): AttributeBuilder
+    public function setAttribute($attribute, $value = null, $attributeType = null, $condition = null, $negateCondition = false): AttributeBuilder
     {
+        // if we have a conditional
+        if ($condition != null) {
+            // check if we have a condition that exists in the helpers
+            if (is_string($condition)) {
+                $condition = $this->conditionals[$condition];
+            }
+
+            // evaluate the conditional
+            $conditionResult = $condition();
+
+            // negate the result of the conditional if we need to
+            if ($negateCondition) {
+                $conditionResult = !$conditionResult;
+            }
+
+            // check that the conditional isn't false
+            if (!$conditionResult) {
+                // if it is, just return the fluent API
+                return $this;
+            }
+        }
+
         // check if we have an attribute type
         if ($attributeType != null) {
             if (!array_key_exists($attributeType, self::$attributeHelpers)) {
@@ -201,6 +225,13 @@ class AttributeBuilder
         return $this;
     }
 
+    public function registerConditional($name, callable $callable)
+    {
+        $this->conditionals[$name] = $callable;
+
+        return $this;
+    }
+
     /**
      * Return the underlying component attribute bag instance
      *
@@ -245,6 +276,11 @@ class AttributeBuilder
         ' . $attributeTypesString . '
         (?P<attribute>[A-Za-z0-9]*)?
         (?P<type>Attribute|Class)
+        (
+            (If|On|When)
+            (?P<negateCondition>Not)?
+            (?P<condition>[A-Za-z0-9]*)
+        )?
         /x
         ';
 
@@ -252,7 +288,7 @@ class AttributeBuilder
         $magicMethodRegexMatches = [];
 
         if (preg_match($magicMethodRegex, $method, $magicMethodRegexMatches)) {
-            $magicMethodParameterNames = ['attribute', 'value', 'attributeType'];
+            $magicMethodParameterNames = ['attribute', 'value', 'attributeType', 'condition'];
 
             // we alias the add operation to set
             if ($magicMethodRegexMatches['operation'] == 'add') {
