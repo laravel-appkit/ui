@@ -300,7 +300,6 @@ class AttributeBuilder
 
             // the methods that we are allowed to call via the magic method
             $allowedMethods = [
-                'addAttribute',
                 'setAttribute',
                 'removeAttribute',
             ];
@@ -319,12 +318,6 @@ class AttributeBuilder
                 foreach ($methodParametersReflection as $callableParameter) {
                     // get the name of the parameter
                     $parameterName = $callableParameter->getName();
-
-                    // check if it is variadic
-                    if ($callableParameter->isVariadic()) {
-                        // if it is, then the name is going to be the singular name of the method
-                        $parameterName = Str::of($parameterName)->singular()->__toString();
-                    }
 
                     // check if we have a matching parameter in the regex matches
                     if (array_key_exists($parameterName, $magicMethodRegexMatches) && !empty($magicMethodRegexMatches[$parameterName])) {
