@@ -216,35 +216,30 @@ class AttributeBuilder
      * @param string $attributeType
      * @return array
      */
-    protected function formatAttributes($attributes, $attributeType): array
+    protected function formatAttributes($attributes, $attributeType = null): array
     {
-        // an array to store the formatted attributes
-        $formattedAttributes = [];
-
         // ensure that the attributes are an array (it's possible only one has been passed)
         $attributes = (array) $attributes;
 
+        // if we don't have an attribute type
+        if ($attributeType == null) {
+            // then we just return the attributes as they are
+            return $attributes;
+        } elseif (!array_key_exists($attributeType, self::$attributeHelpers)) {
+            // if we don't have a matching helper, then throw an exception
+            throw new RuntimeException('No such attribute helper ' . $attributeType);
+        }
+
+        // an array to store the formatted attributes
+        $formattedAttributes = [];
+
         // loop through all of the attributes
         foreach ($attributes as $attribute => $value) {
-            // remove each of the attributes from the attribute bag
-            if ($attributeType != null) {
-                // check that we do have an appropriate helper
-                if (!array_key_exists($attributeType, self::$attributeHelpers)) {
-                    throw new RuntimeException('No such attribute helper ' . $attributeType);
-                }
+            // if we do, we need to pass it through the callback
+            $attributeHelperResults = self::$attributeHelpers[$attributeType]($attribute, $value);
 
-                // if we do, we need to pass it through the callback
-                $attributeHelperResults = self::$attributeHelpers[$attributeType]($attribute, $value);
-
-                // loop through the result of the helper, it's possible the helper sets multiple attributes
-                foreach ($attributeHelperResults as $attribute => $value) {
-                    // and add it to the formatted attributes array
-                    $formattedAttributes[$attribute] = $value;
-                }
-            } else {
-                // this is just a like for like
-                $formattedAttributes[$attribute] = $value;
-            }
+            // merge in the result of the helper, it's possible the helper sets multiple attributes
+            $formattedAttributes = $formattedAttributes + $attributeHelperResults;
         }
 
         // return the formatted attributes
