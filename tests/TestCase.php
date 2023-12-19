@@ -4,10 +4,13 @@ namespace AppKit\UI\Tests;
 
 use AppKit\UI\Facades\Ui;
 use AppKit\UI\UiServiceProvider;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
 {
+    use InteractsWithViews;
+
     /**
      * Setup the test environment
      */

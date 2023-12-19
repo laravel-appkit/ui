@@ -14,7 +14,7 @@ use Illuminate\View\ComponentAttributeBag;
 |
 */
 
-uses(AppKit\UI\Tests\TestCase::class);
+uses(AppKit\UI\Tests\TestCase::class)->in('.');
 
 /*
 |--------------------------------------------------------------------------
