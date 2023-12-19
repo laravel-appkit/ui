@@ -133,26 +133,9 @@ class AttributeBuilder
      */
     public function setAttribute($attribute, $value = null, $attributeType = null, $condition = null, $negateCondition = false): AttributeBuilder
     {
-        // if we have a conditional
-        if ($condition != null) {
-            // check if we have a condition that exists in the helpers
-            if (is_string($condition)) {
-                $condition = $this->conditionalHelpers[$condition];
-            }
-
-            // evaluate the conditional
-            $conditionResult = $condition();
-
-            // negate the result of the conditional if we need to
-            if ($negateCondition) {
-                $conditionResult = !$conditionResult;
-            }
-
-            // check that the conditional isn't false
-            if (!$conditionResult) {
-                // if it is, just return the fluent API
-                return $this;
-            }
+        // if we have a conditional, we need to check if it passes
+        if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
+            return $this;
         }
 
         // check if we have an attribute type
@@ -188,27 +171,24 @@ class AttributeBuilder
      */
     public function removeAttribute($attribute, $attributeType = null, $condition = null, $negateCondition = false): AttributeBuilder
     {
-        // if we have a conditional
-        if ($condition != null) {
-            // check if we have a condition that exists in the helpers
-            if (is_string($condition)) {
-                $condition = $this->conditionalHelpers[$condition];
-            }
-
-            // evaluate the conditional
-            $conditionResult = $condition();
-
-            // negate the result of the conditional if we need to
-            if ($negateCondition) {
-                $conditionResult = !$conditionResult;
-            }
-
-            // check that the conditional isn't false
-            if (!$conditionResult) {
-                // if it is, just return the fluent API
-                return $this;
-            }
+        // if we have a conditional, we need to check if it passes
+        if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
+            return $this;
         }
+
+        $attribute = (array) $attribute;
+
+        $attribute = array_fill_keys($attribute, null);
+
+        dump($attribute);
+
+        dd($this->parseAttributeArray($attribute, $attributeType));
+
+        foreach ($this->parseAttributeArray($attribute, $attributeType) as $attribute) {
+            $this->offsetUnset($attribute);
+        }
+
+        return $this;
 
         // we need to make sure that the attribute are an array
         $attributeArray = (array) $attribute;
@@ -262,6 +242,49 @@ class AttributeBuilder
 
         // return a fluent API
         return $this;
+    }
+
+    protected function parseAttributeArray($attributes, $attributeType)
+    {
+        $parsedAttributes = [];
+
+        $attributes = (array) $attributes;
+
+        foreach ($attributes as $attribute => $value) {
+            // remove each of the attributes from the attribute bag
+            if ($attributeType != null) {
+                if (!array_key_exists($attributeType, self::$attributeHelpers)) {
+                    throw new RuntimeException('No such attribute helper ' . $attributeType);
+                }
+
+                // if we do, we need to pass it through the callback
+                $attributes = self::$attributeHelpers[$attributeType]($attribute, $value);
+
+                $parsedAttributes[] = $attributes;
+            } else {
+                $parsedAttributes[$attribute] = $value;
+            }
+        }
+
+        return Arr::flatten($parsedAttributes);
+    }
+
+    protected function conditionalPasses($condition, $negateCondition)
+    {
+        // check if we have a condition that exists in the helpers
+        if (is_string($condition)) {
+            $condition = $this->conditionalHelpers[$condition];
+        }
+
+        // evaluate the conditional
+        $conditionResult = $condition();
+
+        // negate the result of the conditional if we need to
+        if ($negateCondition) {
+            $conditionResult = !$conditionResult;
+        }
+
+        return $conditionResult;
     }
 
     public function registerConditional($name, callable $callable)
