@@ -42,7 +42,7 @@ class AttributeBuilder
      * @param callable $callback
      * @return void
      */
-    public static function registerAttributeHelper(string $name, callable $callback)
+    public static function registerAttributeHelper(string $name, callable $callback): void
     {
         self::$attributeHelpers[$name] = $callback;
     }
@@ -138,20 +138,8 @@ class AttributeBuilder
             return $this;
         }
 
-        // check if we have an attribute type
-        if ($attributeType != null) {
-            if (!array_key_exists($attributeType, self::$attributeHelpers)) {
-                throw new RuntimeException('No such attribute helper ' . $attributeType);
-            }
-
-            // if we do, we need to pass it through the callback
-            $attributes = self::$attributeHelpers[$attributeType]($attribute, $value);
-
-            foreach ($attributes as $attribute => $value) {
-                $this->setAttribute($attribute, $value);
-            }
-        } else {
-            // set the attribute on the attribute bag
+        // loop through each of the attributes that we need to remove
+        foreach ($this->formatAttributes([$attribute => $value], $attributeType) as $attribute => $value) {
             $this->offsetSet($attribute, $value);
         }
 
@@ -176,39 +164,16 @@ class AttributeBuilder
             return $this;
         }
 
+        // make sure that the attributes are an array
         $attribute = (array) $attribute;
 
+        // and then fill them with null
         $attribute = array_fill_keys($attribute, null);
 
-        dump($attribute);
-
-        dd($this->parseAttributeArray($attribute, $attributeType));
-
-        foreach ($this->parseAttributeArray($attribute, $attributeType) as $attribute) {
+        // loop through each of the attributes that we need to remove
+        foreach ($this->formatAttributes($attribute, $attributeType) as $attribute => $value) {
+            // and remove it
             $this->offsetUnset($attribute);
-        }
-
-        return $this;
-
-        // we need to make sure that the attribute are an array
-        $attributeArray = (array) $attribute;
-
-        foreach ($attributeArray as $attribute) {
-            // remove each of the attributes from the attribute bag
-            if ($attributeType != null) {
-                if (!array_key_exists($attributeType, self::$attributeHelpers)) {
-                    throw new RuntimeException('No such attribute helper ' . $attributeType);
-                }
-
-                // if we do, we need to pass it through the callback
-                $attributes = self::$attributeHelpers[$attributeType]($attribute, null);
-
-                foreach (array_keys($attributes) as $attribute) {
-                    $this->offsetUnset($attribute);
-                }
-            } else {
-                $this->offsetUnset($attribute);
-            }
         }
 
         // return a fluent API
@@ -244,32 +209,56 @@ class AttributeBuilder
         return $this;
     }
 
-    protected function parseAttributeArray($attributes, $attributeType)
+    /**
+     * Format attributes, optionally passing them through an attribute helper
+     *
+     * @param array $attributes
+     * @param string $attributeType
+     * @return array
+     */
+    protected function formatAttributes($attributes, $attributeType): array
     {
-        $parsedAttributes = [];
+        // an array to store the formatted attributes
+        $formattedAttributes = [];
 
+        // ensure that the attributes are an array (it's possible only one has been passed)
         $attributes = (array) $attributes;
 
+        // loop through all of the attributes
         foreach ($attributes as $attribute => $value) {
             // remove each of the attributes from the attribute bag
             if ($attributeType != null) {
+                // check that we do have an appropriate helper
                 if (!array_key_exists($attributeType, self::$attributeHelpers)) {
                     throw new RuntimeException('No such attribute helper ' . $attributeType);
                 }
 
                 // if we do, we need to pass it through the callback
-                $attributes = self::$attributeHelpers[$attributeType]($attribute, $value);
+                $attributeHelperResults = self::$attributeHelpers[$attributeType]($attribute, $value);
 
-                $parsedAttributes[] = $attributes;
+                // loop through the result of the helper, it's possible the helper sets multiple attributes
+                foreach ($attributeHelperResults as $attribute => $value) {
+                    // and add it to the formatted attributes array
+                    $formattedAttributes[$attribute] = $value;
+                }
             } else {
-                $parsedAttributes[$attribute] = $value;
+                // this is just a like for like
+                $formattedAttributes[$attribute] = $value;
             }
         }
 
-        return Arr::flatten($parsedAttributes);
+        // return the formatted attributes
+        return $formattedAttributes;
     }
 
-    protected function conditionalPasses($condition, $negateCondition)
+    /**
+     * Check that a conditional helper passes
+     *
+     * @param string|callable $condition
+     * @param boolean $negateCondition
+     * @return boolean
+     */
+    protected function conditionalPasses(string|callable $condition, bool $negateCondition): bool
     {
         // check if we have a condition that exists in the helpers
         if (is_string($condition)) {
@@ -287,7 +276,14 @@ class AttributeBuilder
         return $conditionResult;
     }
 
-    public function registerConditional($name, callable $callable)
+    /**
+     * Register a conditional
+     *
+     * @param string $name
+     * @param callable $callable
+     * @return AttributeBuilder
+     */
+    public function registerConditional(string $name, callable $callable): AttributeBuilder
     {
         $this->conditionalHelpers[$name] = $callable;
 
