@@ -255,8 +255,8 @@ class AttributeBuilder
      * Check that a conditional helper passes
      *
      * @param string|callable $condition
-     * @param boolean $negateCondition
-     * @return boolean
+     * @param bool $negateCondition
+     * @return bool
      */
     protected function conditionalPasses(string|callable $condition, bool $negateCondition): bool
     {
