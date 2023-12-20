@@ -94,7 +94,8 @@ trait HasAttributeBuilder
         static::resetAllAttributeBuilderParsers();
     }
 
-    public function exposePropertyAsState($property, $state = null) {
+    public function exposePropertyAsState($property, $state = null)
+    {
         if (!$state) {
             $state = $property;
         }
