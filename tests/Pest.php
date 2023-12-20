@@ -1,8 +1,6 @@
 <?php
 
 use AppKit\UI\AttributeBuilder;
-use AppKit\UI\Tests\Components\TestComponent;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\View\ComponentAttributeBag;
 
 /*
