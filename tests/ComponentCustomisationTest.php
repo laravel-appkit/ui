@@ -85,3 +85,27 @@ it('applies customisations in the order they were defined for equal weights', fu
     // check that the attributes are created, and in the correct place
     expect($instance->getAttributeBuilder()->getAttributes())->toHaveKey('foo', 'bat');
 });
+
+it('can pass properties down to state', function () {
+    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
+        $attributes->setAttributeWhenToggle('foo', 'bar');
+    });
+
+    // render a component
+    $this->blade('<x-test-component />');
+
+    // get the instance of the component that was rendered
+    $instance = HigherOrderTestComponent::lastInstance();
+
+    // check that the attributes are created, and in the correct place
+    expect($instance->getAttributeBuilder()->getAttributes())->not()->toHaveKey('foo', 'bar');
+
+    // render another component
+    $this->blade('<x-test-component toggle="toggle" size="xs" />');
+
+    // get the instance of the component that was rendered
+    $instance = HigherOrderTestComponent::lastInstance();
+
+    // check that the attributes are created, and in the correct place
+    expect($instance->getAttributeBuilder()->getAttributes())->toHaveKey('foo', 'bar');
+});

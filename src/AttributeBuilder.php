@@ -36,7 +36,6 @@ class AttributeBuilder
 
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
-        protected Collection $options,
         array $elements = []
     ) {
         // loop through each of the elements that have been specified
@@ -300,7 +299,7 @@ class AttributeBuilder
             $conditionResult = !$conditionResult;
         }
 
-        return $conditionResult;
+        return !!$conditionResult;
     }
 
     /**

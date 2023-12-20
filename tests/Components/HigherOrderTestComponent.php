@@ -10,7 +10,7 @@ class HigherOrderTestComponent extends TestComponent
      */
     private static $lastInstance = null;
 
-    public function __construct()
+    public function __construct($toggle = false, $size = '')
     {
         // store the last instance
         static::$lastInstance = $this;

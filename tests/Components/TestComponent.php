@@ -12,10 +12,16 @@ class TestComponent extends Component
     use HasAttributeBuilder;
 
     /**
-     * Example property that can be set on the component
+     * Example boolean property that can be set on the component
      * @var bool
      */
-    public bool $property = true;
+    public bool $toggle = false;
+
+    /**
+     * Example string property that can be set on the component
+     * @var string
+     */
+    public string $size = '';
 
     /**
      * An example element attribute bag
@@ -28,9 +34,14 @@ class TestComponent extends Component
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($toggle = false, $size = '')
     {
+        $this->toggle = $toggle;
+        $this->size = $size;
+
         $this->labelAttributes = $this->registerAttributeBuilderElement('label');
+
+        $this->exposePropertyAsState('toggle');
     }
 
     /**

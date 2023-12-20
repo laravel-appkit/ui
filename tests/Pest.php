@@ -49,13 +49,13 @@ expect()->extend('toBeOne', function () {
  * @param array $options
  * @return AttributeBuilder
  */
-function createAttributeBuilder($attributes = [], $options = [], $elements = [])
+function createAttributeBuilder($attributes = [], $elements = [])
 {
     // create an attribute bag that will be passed to the attribute builder
     $attributeBag = new ComponentAttributeBag($attributes);
 
     // return the attribute builder
-    return new AttributeBuilder($attributeBag, collect($options), $elements);
+    return new AttributeBuilder($attributeBag, $elements);
 }
 
 function addDataAttributeHelperToAttributeBuilder()
