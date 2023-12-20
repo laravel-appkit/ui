@@ -10,7 +10,7 @@ class TestComponent extends Component
 
     public function __construct()
     {
-        dump('HELLO!!!');
+
     }
 
     public function render()
