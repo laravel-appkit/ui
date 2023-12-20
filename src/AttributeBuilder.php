@@ -28,11 +28,22 @@ class AttributeBuilder
      */
     protected $conditionalHelpers = [];
 
+    /**
+     * An array of attribute bags for each of the registered elements
+     * @var array<string,ComponentAttributeBag>
+     */
+    protected $elementAttributeBags = [];
+
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
-        protected Collection $options
+        protected Collection $options,
+        array $elements
     ) {
-
+        // loop through each of the elements that have been specified
+        foreach ($elements as $element) {
+            // create a new attribute bag for that element
+            $this->elementAttributeBags[$element] = new ComponentAttributeBag();
+        }
     }
 
     /**
@@ -131,7 +142,7 @@ class AttributeBuilder
      * @return AttributeBuilder
      * @throws RuntimeException
      */
-    public function setAttribute($attribute, $value = null, $attributeType = null, $condition = null, $negateCondition = false): AttributeBuilder
+    public function setAttribute($attribute, $value = null, $attributeType = null, $condition = null, $negateCondition = false, $element = null): AttributeBuilder
     {
         // if we have a conditional, we need to check if it passes
         if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
@@ -140,7 +151,7 @@ class AttributeBuilder
 
         // loop through each of the attributes that we need to remove
         foreach ($this->formatAttributes([$attribute => $value], $attributeType) as $attribute => $value) {
-            $this->offsetSet($attribute, $value);
+            $this->getAttributeBag($element)->offsetSet($attribute, $value);
         }
 
         // return a fluent API
@@ -157,7 +168,7 @@ class AttributeBuilder
      * @return AttributeBuilder
      * @throws RuntimeException
      */
-    public function removeAttribute($attribute, $attributeType = null, $condition = null, $negateCondition = false): AttributeBuilder
+    public function removeAttribute($attribute, $attributeType = null, $condition = null, $negateCondition = false, $element = null): AttributeBuilder
     {
         // if we have a conditional, we need to check if it passes
         if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
@@ -173,7 +184,7 @@ class AttributeBuilder
         // loop through each of the attributes that we need to remove
         foreach ($this->formatAttributes($attribute, $attributeType) as $attribute => $value) {
             // and remove it
-            $this->offsetUnset($attribute);
+            $this->getAttributeBag($element)->offsetUnset($attribute);
         }
 
         // return a fluent API
@@ -290,8 +301,12 @@ class AttributeBuilder
      *
      * @return ComponentAttributeBag
      */
-    public function getAttributeBag(): ComponentAttributeBag
+    public function getAttributeBag(?string $element = null): ComponentAttributeBag
     {
+        if ($element) {
+            return $this->elementAttributeBags[$element];
+        }
+
         return $this->attributeBag;
     }
 
@@ -322,6 +337,23 @@ class AttributeBuilder
             $attributeTypesString = '(?P<attributeType>' . implode('|', $attributeTypes) . ')?';
         }
 
+        // we also need to build up the regex that we are going to use for the element
+        $attributeBagString = '';
+
+        // if we have any element attribute bags
+        if (!empty($this->elementAttributeBags)) {
+            // create an array to store all of the names
+            $elementAttributeBags = [];
+
+            foreach ($this->elementAttributeBags as $name => $elementAttributeBag) {
+                // pull out each of the element names in study case
+                $elementAttributeBags[] = Str::of($name)->studly()->__toString();
+            }
+
+            // create the string that will be used in the regex
+            $attributeBagString = '((To|On|From)(?P<element>' . implode('|', $elementAttributeBags) . '))?';
+        }
+
         // create the regex
         $magicMethodRegex = '
         /
@@ -329,8 +361,9 @@ class AttributeBuilder
         ' . $attributeTypesString . '
         (?P<attribute>[A-Za-z0-9]*)?
         (?P<type>Attribute|Class)
+        ' . $attributeBagString . '
         (
-            (If|On|When)
+            (If|When)
             (?P<negateCondition>Not)?
             (?P<condition>[A-Za-z0-9]*)
         )?
@@ -341,7 +374,7 @@ class AttributeBuilder
         $magicMethodRegexMatches = [];
 
         if (preg_match($magicMethodRegex, $method, $magicMethodRegexMatches)) {
-            $magicMethodParameterNames = ['attribute', 'value', 'attributeType', 'condition'];
+            $magicMethodParameterNames = ['attribute', 'value', 'attributeType', 'condition', 'negateCondition', 'element'];
 
             // we alias the add operation to set
             if ($magicMethodRegexMatches['operation'] == 'add') {
