@@ -8,7 +8,7 @@ class HigherOrderTestComponent extends TestComponent
      * The last instantiated instance
      * @var $this
      */
-    static $lastInstance = null;
+    public static $lastInstance = null;
 
     public function __construct()
     {
