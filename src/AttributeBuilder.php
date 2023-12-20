@@ -43,6 +43,27 @@ class AttributeBuilder
         foreach ($elements as $element) {
             // create a new attribute bag for that element
             $this->elementAttributeBags[$element] = new ComponentAttributeBag();
+
+            // generate the element prefix
+            $elementPrefix = Str::of($element . ':')->kebab()->__toString();
+
+            // loop through all of the attributes that we have in the attribute bag
+            foreach ($attributeBag->getAttributes() as $attributeName => $value) {
+                // get an instance of a String for the attribute name
+                $attributeString = Str::of($attributeName);
+
+                // check if the attribute name starts with the prefix
+                if ($attributeString->startsWith($elementPrefix)) {
+                    // get the new name of the attribute, without the prefix
+                    $newAttributeName = $attributeString->remove($elementPrefix)->__toString();
+
+                    // add the attribute to the appropriate element attribute bag
+                    $this->getAttributeBag($element)->offsetSet($newAttributeName, $value);
+
+                    // and remove it from the default attribute bag (which will still have the old name)
+                    $this->getAttributeBag()->offsetUnset($attributeName);
+                }
+            }
         }
     }
 
