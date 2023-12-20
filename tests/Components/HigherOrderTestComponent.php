@@ -8,7 +8,7 @@ class HigherOrderTestComponent extends TestComponent
      * The last instantiated instance
      * @var $this
      */
-    public static $lastInstance = null;
+    private static $lastInstance = null;
 
     public function __construct()
     {
@@ -20,5 +20,15 @@ class HigherOrderTestComponent extends TestComponent
             // call the parent constructor with all of the arguments passed
             parent::__construct(...func_get_args());
         }
+    }
+
+    /**
+     * Get the last instance
+     *
+     * @return static
+     */
+    public static function lastInstance(): static
+    {
+        return static::$lastInstance;
     }
 }

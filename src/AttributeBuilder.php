@@ -37,7 +37,7 @@ class AttributeBuilder
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
         protected Collection $options,
-        array $elements
+        array $elements = []
     ) {
         // loop through each of the elements that have been specified
         foreach ($elements as $element) {
