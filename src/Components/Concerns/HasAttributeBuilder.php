@@ -33,7 +33,8 @@ trait HasAttributeBuilder
      * @param int $weight
      * @return void
      */
-    public static function registerAttributeBuilderParser(Closure $closure, $weight = 10) {
+    public static function registerAttributeBuilderParser(Closure $closure, $weight = 10)
+    {
         // if this is the first time that we are seeing the weight
         if (!array_key_exists($weight, static::$attributeBuilderParsers)) {
             // set up an array to store all of the closures of this weight
@@ -47,7 +48,8 @@ trait HasAttributeBuilder
     /**
      * @see registerAttributeBuilderParser
      */
-    public static function customize(Closure $closure, $weight = 10) {
+    public static function customize(Closure $closure, $weight = 10)
+    {
         // this is just an alias to registerAttributeBuilderParser
         static::registerAttributeBuilderParser(...func_get_args());
     }
@@ -55,7 +57,8 @@ trait HasAttributeBuilder
     /**
      * @see registerAttributeBuilderParser
      */
-    public static function customise(Closure $closure, $weight = 10) {
+    public static function customise(Closure $closure, $weight = 10)
+    {
         // this is just an alias to registerAttributeBuilderParser
         static::registerAttributeBuilderParser(...func_get_args());
     }

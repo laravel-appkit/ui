@@ -2,7 +2,6 @@
 
 use AppKit\UI\AttributeBuilder;
 use AppKit\UI\Tests\Components\HigherOrderTestComponent;
-use AppKit\UI\Tests\Components\TestComponent;
 
 beforeEach(function () {
     // we need to register the component
