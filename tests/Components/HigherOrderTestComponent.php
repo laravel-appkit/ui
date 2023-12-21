@@ -2,6 +2,10 @@
 
 namespace AppKit\UI\Tests\Components;
 
+use AppKit\UI\Tests\Components\TestComponent;
+use Closure;
+use ReflectionClass;
+
 class HigherOrderTestComponent extends TestComponent
 {
     /**
@@ -10,16 +14,18 @@ class HigherOrderTestComponent extends TestComponent
      */
     private static $lastInstance = null;
 
-    public function __construct($toggle = false, $size = '')
+    /**
+     * Render the component
+     *
+     * @return Closure
+     */
+    public function render()
     {
         // store the last instance
         static::$lastInstance = $this;
 
-        // check if we are extending a class that has a constructor
-        if (method_exists(parent::class, '__construct')) {
-            // call the parent constructor with all of the arguments passed
-            parent::__construct(...func_get_args());
-        }
+        // call the actual renderer
+        return parent::render();
     }
 
     /**

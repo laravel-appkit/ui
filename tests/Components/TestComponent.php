@@ -12,18 +12,6 @@ class TestComponent extends Component
     use HasAttributeBuilder;
 
     /**
-     * Example boolean property that can be set on the component
-     * @var bool
-     */
-    public bool $toggle = false;
-
-    /**
-     * Example string property that can be set on the component
-     * @var string
-     */
-    public string $size = '';
-
-    /**
      * An example element attribute bag
      * @var ElementAttributeBagWrapper
      */
@@ -34,11 +22,8 @@ class TestComponent extends Component
      *
      * @return void
      */
-    public function __construct($toggle = false, $size = '')
+    public function __construct(public bool $toggle = false, public string $size = '')
     {
-        $this->toggle = $toggle;
-        $this->size = $size;
-
         $this->labelAttributes = $this->registerAttributeBuilderElement('label');
 
         $this->exposePropertyAsState('toggle');
