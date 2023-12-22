@@ -26,7 +26,7 @@ trait HasAttributeBuilder
      */
     protected AttributeBuilder $attributeBuilder;
 
-    protected $attributeBuilderConditionals = [];
+    protected $attributeBuilderState = [];
 
     /**
      * Add a new attribute builder parser at a given weight
@@ -94,12 +94,13 @@ trait HasAttributeBuilder
         static::resetAllAttributeBuilderParsers();
     }
 
-    public function exposePropertyAsConditional($property, $condition = null) {
-        if (!$condition) {
-            $condition = $property;
+    public function exposePropertyAsState($property, $state = null)
+    {
+        if (!$state) {
+            $state = $property;
         }
 
-        $this->attributeBuilderConditionals[$condition] = fn () => $this->{$property};
+        $this->attributeBuilderState[$state] = fn () => $this->{$property};
     }
 
     /**
@@ -128,7 +129,7 @@ trait HasAttributeBuilder
         // get the instance of the attribute builder
         $this->attributeBuilder = new AttributeBuilder($data['attributes'], $this->attributeBuilderElements);
 
-        foreach ($this->attributeBuilderConditionals as $state => $closure) {
+        foreach ($this->attributeBuilderState as $state => $closure) {
             $this->attributeBuilder->registerState($state, $closure);
         }
 
