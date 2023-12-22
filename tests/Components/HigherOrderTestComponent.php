@@ -2,9 +2,7 @@
 
 namespace AppKit\UI\Tests\Components;
 
-use AppKit\UI\Tests\Components\TestComponent;
 use Closure;
-use ReflectionClass;
 
 class HigherOrderTestComponent extends TestComponent
 {

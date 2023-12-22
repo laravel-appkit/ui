@@ -74,5 +74,5 @@ function addStatesToAttributeBuilder(AttributeBuilder $attributeBuilder)
 
 function addSizeStateToAttributeBuilder(AttributeBuilder $attributeBuilder, $size)
 {
-    $attributeBuilder->registerState('size', fn() => $size);
+    $attributeBuilder->registerState('size', fn () => $size);
 }
