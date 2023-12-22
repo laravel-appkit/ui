@@ -26,7 +26,7 @@ class AttributeBuilder
      * An array to store the registered conditional helpers
      * @var array<string,closure>
      */
-    protected $conditionalHelpers = [];
+    protected $states = [];
 
     /**
      * An array of attribute bags for each of the registered elements
@@ -162,11 +162,23 @@ class AttributeBuilder
      * @return AttributeBuilder
      * @throws RuntimeException
      */
-    public function setAttribute($attribute, $value = null, $attributeType = null, $condition = null, $negateCondition = false, $element = null): AttributeBuilder
+    public function setAttribute($attribute, $value = null, $attributeType = null, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
     {
         // if we have a conditional, we need to check if it passes
         if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
             return $this;
+        }
+
+        // if we have passed in and array
+        if (is_array($value)) {
+            // and have a state element
+            if ($state) {
+                // get the value of the state
+                $stateValue = $this->states[$state]();
+
+                // we need to get the value from the array
+                $value = array_key_exists($stateValue, $value) ? $value[$stateValue] : null;
+            }
         }
 
         // loop through each of the attributes that we need to remove
@@ -288,30 +300,30 @@ class AttributeBuilder
     {
         // check if we have a condition that exists in the helpers
         if (is_string($condition)) {
-            $condition = $this->conditionalHelpers[$condition];
+            $condition = $this->states[$condition];
         }
 
-        // evaluate the conditional
-        $conditionResult = $condition();
+        // evaluate the conditional, ensuring that it's a boolean
+        $conditionResult = $condition() === true;
 
         // negate the result of the conditional if we need to
         if ($negateCondition) {
             $conditionResult = !$conditionResult;
         }
 
-        return !!$conditionResult;
+        return $conditionResult;
     }
 
     /**
-     * Register a conditional
+     * Register a state
      *
      * @param string $name
      * @param callable $callable
      * @return AttributeBuilder
      */
-    public function registerConditional(string $name, callable $callable): AttributeBuilder
+    public function registerState(string $name, callable $callable): AttributeBuilder
     {
-        $this->conditionalHelpers[$name] = $callable;
+        $this->states[$name] = $callable;
 
         return $this;
     }
@@ -330,6 +342,41 @@ class AttributeBuilder
         return $this->attributeBag;
     }
 
+    private function generateMagicMethodRegexCapture(string $captureGroup, array $values, array $triggers = [])
+    {
+        // we need to build up the regex that we are going to use to parse the method
+        $regexString = '';
+        $triggerString = '';
+
+        // check if we have any attribute helpers
+        if (!empty($values)) {
+            // create an array to store all of the helper names
+            $regexValues = [];
+
+            foreach (array_keys($values) as $value) {
+                // pull out the name of the helper in studly case
+                $regexValues[] = Str::of($value)->studly()->__toString();
+            }
+
+            if (!empty($triggers)) {
+                // create an array to store all of the helper names
+                $triggerValues = [];
+
+                foreach ($triggers as $trigger) {
+                    // pull out the name of the helper in studly case
+                    $triggerValues[] = Str::of($trigger)->studly()->__toString();
+                }
+
+                $triggerString = '(' . implode('|', $triggerValues) . ')';
+            }
+
+            // create the string that will be included in the regex
+            $regexString = '(' . $triggerString . '(?P<' . $captureGroup . '>' . implode('|', $regexValues) . '))?';
+        }
+
+        return $regexString;
+    }
+
     /**
      * Magic method to catch everything that we aren't already dealing with
      *
@@ -340,48 +387,15 @@ class AttributeBuilder
      */
     public function __call($method, $parameters)
     {
-        // we need to build up the regex that we are going to use to parse the method
-        $attributeTypesString = '';
-
-        // check if we have any attribute helpers
-        if (!empty(self::$attributeHelpers)) {
-            // create an array to store all of the helper names
-            $attributeTypes = [];
-
-            foreach (self::$attributeHelpers as $helper => $closure) {
-                // pull out the name of the helper in studly case
-                $attributeTypes[] = Str::of($helper)->studly()->__toString();
-            }
-
-            // create the string that will be included in the regex
-            $attributeTypesString = '(?P<attributeType>' . implode('|', $attributeTypes) . ')?';
-        }
-
-        // we also need to build up the regex that we are going to use for the element
-        $attributeBagString = '';
-
-        // if we have any element attribute bags
-        if (!empty($this->elementAttributeBags)) {
-            // create an array to store all of the names
-            $elementAttributeBags = [];
-
-            foreach ($this->elementAttributeBags as $name => $elementAttributeBag) {
-                // pull out each of the element names in study case
-                $elementAttributeBags[] = Str::of($name)->studly()->__toString();
-            }
-
-            // create the string that will be used in the regex
-            $attributeBagString = '((To|On|From)(?P<element>' . implode('|', $elementAttributeBags) . '))?';
-        }
-
         // create the regex
         $magicMethodRegex = '
         /
         (?P<operation>set|add|remove|toggle)
-        ' . $attributeTypesString . '
+        ' . $this->generateMagicMethodRegexCapture('attributeType', self::$attributeHelpers) . '
         (?P<attribute>[A-Za-z0-9]*)?
         (?P<type>Attribute|Class)
-        ' . $attributeBagString . '
+        ' . $this->generateMagicMethodRegexCapture('element', $this->elementAttributeBags, ['to', 'on', 'from']) . '
+        ' . $this->generateMagicMethodRegexCapture('state', $this->states, ['for']) . '
         (
             (If|When)
             (?P<negateCondition>Not)?

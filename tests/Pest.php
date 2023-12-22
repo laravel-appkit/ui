@@ -65,8 +65,14 @@ function addDataAttributeHelperToAttributeBuilder()
     });
 }
 
-function addConditionalHelpersToAttributeBuilder(AttributeBuilder $attributeBuilder)
+function addStatesToAttributeBuilder(AttributeBuilder $attributeBuilder)
 {
-    $attributeBuilder->registerConditional('true', fn () => true);
-    $attributeBuilder->registerConditional('false', fn () => false);
+    $attributeBuilder->registerState('true', fn () => true);
+    $attributeBuilder->registerState('false', fn () => false);
+
+}
+
+function addSizeStateToAttributeBuilder(AttributeBuilder $attributeBuilder, $size)
+{
+    $attributeBuilder->registerState('size', fn() => $size);
 }

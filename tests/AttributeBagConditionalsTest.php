@@ -20,7 +20,7 @@ it('can have conditionals specified as helpers', function () {
     $attributeBuilder = createAttributeBuilder();
 
     // add the conditional helpers
-    addConditionalHelpersToAttributeBuilder($attributeBuilder);
+    addStatesToAttributeBuilder($attributeBuilder);
 
     // add the class to the attribute builder
     $attributeBuilder
@@ -38,7 +38,7 @@ it('can use conditionals in magic methods', function () {
     $attributeBuilder = createAttributeBuilder();
 
     // add the conditional helpers
-    addConditionalHelpersToAttributeBuilder($attributeBuilder);
+    addStatesToAttributeBuilder($attributeBuilder);
 
     // add the class to the attribute builder
     $attributeBuilder
@@ -71,7 +71,7 @@ it('can have negated conditionals specified as helpers', function () {
     $attributeBuilder = createAttributeBuilder();
 
     // add the conditional helpers
-    addConditionalHelpersToAttributeBuilder($attributeBuilder);
+    addStatesToAttributeBuilder($attributeBuilder);
 
     // add the class to the attribute builder
     $attributeBuilder
@@ -89,7 +89,7 @@ it('can use negated conditionals in magic methods', function () {
     $attributeBuilder = createAttributeBuilder();
 
     // add the conditional helpers
-    addConditionalHelpersToAttributeBuilder($attributeBuilder);
+    addStatesToAttributeBuilder($attributeBuilder);
 
     // add the class to the attribute builder
     $attributeBuilder

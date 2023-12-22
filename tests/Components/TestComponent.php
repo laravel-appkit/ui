@@ -26,7 +26,7 @@ class TestComponent extends Component
     {
         $this->labelAttributes = $this->registerAttributeBuilderElement('label');
 
-        $this->exposePropertyAsState('toggle');
+        $this->exposePropertyAsConditional('toggle');
     }
 
     /**
