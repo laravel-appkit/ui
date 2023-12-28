@@ -51,7 +51,7 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
-        run: vendor/bin/phpunit --coverage-clover coverage.xml
+        run: vendor/bin/pest --coverage-clover coverage.xml
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3
