@@ -1,10 +1,10 @@
 <?php
 
-namespace AppKit\Ui;
+namespace AppKit\UI;
 
 use Illuminate\Support\ServiceProvider;
 
-class UiServiceProvider extends ServiceProvider
+class UIServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -50,11 +50,11 @@ class UiServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'ui');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'appkit-ui');
 
         // Register the main class to use with the facade
         $this->app->singleton('ui', function () {
-            return new Ui();
+            return new UI();
         });
     }
 }

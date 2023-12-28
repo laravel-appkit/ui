@@ -43,10 +43,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AppKit\\Ui\\UiServiceProvider"
+                "AppKit\\UI\\UIServiceProvider"
             ],
             "aliases": {
-                "Ui": "AppKit\\Ui\\Facades\\Ui"
+                "UI": "AppKit\\Ui\\Facades\\UI"
             }
         }
     },
