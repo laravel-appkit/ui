@@ -3,7 +3,6 @@
 namespace AppKit\UI\Tests\Components;
 
 use AppKit\UI\Components\BaseComponent;
-use AppKit\UI\Components\Concerns\HasAttributeBuilder;
 use AppKit\UI\ElementAttributeBagWrapper;
 use Closure;
 use Illuminate\View\Component;
