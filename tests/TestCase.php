@@ -2,8 +2,8 @@
 
 namespace AppKit\UI\Tests;
 
-use AppKit\UI\Facades\Ui;
-use AppKit\UI\UiServiceProvider;
+use AppKit\UI\UI;
+use AppKit\UI\UIServiceProvider;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -36,7 +36,7 @@ class TestCase extends OrchestraTestCase
      */
     protected function getPackageProviders($app)
     {
-        return [UiServiceProvider::class];
+        return [UIServiceProvider::class];
     }
 
     /**
@@ -48,7 +48,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageAliases($app)
     {
         return [
-            'Ui' => Ui::class,
+            'Ui' => UI::class,
         ];
     }
 

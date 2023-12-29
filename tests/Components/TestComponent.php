@@ -2,15 +2,14 @@
 
 namespace AppKit\UI\Tests\Components;
 
+use AppKit\UI\Components\BaseComponent;
 use AppKit\UI\Components\Concerns\HasAttributeBuilder;
 use AppKit\UI\ElementAttributeBagWrapper;
 use Closure;
 use Illuminate\View\Component;
 
-class TestComponent extends Component
+class TestComponent extends BaseComponent
 {
-    use HasAttributeBuilder;
-
     /**
      * An example element attribute bag
      * @var ElementAttributeBagWrapper
@@ -36,8 +35,6 @@ class TestComponent extends Component
      */
     public function render()
     {
-        return function ($data) {
-            $data = $this->runAttributeBuilder($data);
-        };
+        return '';
     }
 }

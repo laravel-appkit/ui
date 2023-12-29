@@ -119,49 +119,6 @@ trait HasAttributeBuilder
     }
 
     /**
-     * Run the attribute builder, and return the data that gets passed to the renderer
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function runAttributeBuilder(array $data): array
-    {
-        // get the instance of the attribute builder
-        $this->attributeBuilder = new AttributeBuilder($data['attributes'], $this->attributeBuilderElements);
-
-        foreach ($this->attributeBuilderState as $state => $closure) {
-            $this->attributeBuilder->registerState($state, $closure);
-        }
-
-        // sort the parsers by their weight
-        ksort(static::$attributeBuilderParsers);
-
-        // loop through each of the weights
-        foreach (static::$attributeBuilderParsers as $parsers) {
-            // and then through each of the parser of that weight
-            foreach ($parsers as $parser) {
-                // run the parser
-                $parser($this->attributeBuilder, $this);
-            }
-        }
-
-        // pull out the "new" attributes
-        $data['attributes'] = $this->attributeBuilder->getAttributeBag();
-
-        // loop through each piece of data that we have
-        foreach ($data as $dataName => $dataElement) {
-            // check if it it's an instance of an element attribute bag
-            if ($dataElement instanceof ElementAttributeBagWrapper) {
-                // if it is, pull out the attributes and set everything we need to
-                $this->{$dataName} = $data[$dataName] = $dataElement->run($this->attributeBuilder);
-            }
-        }
-
-        // return the updated data
-        return $data;
-    }
-
-    /**
      * Get the underlying attribute builder instance
      *
      * @return AttributeBuilder
