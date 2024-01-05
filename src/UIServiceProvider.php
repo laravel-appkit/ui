@@ -3,6 +3,7 @@
 namespace AppKit\UI;
 
 use AppKit\UI\Components\Button;
+use AppKit\UI\Styles\Tailwind\Tailwind;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -64,24 +65,5 @@ class UIServiceProvider extends ServiceProvider
 
         // setup the component namespace
         Blade::componentNamespace('AppKit\\UI\\Components', 'appkit');
-
-        // customise the components
-        Button::customise(function ($attributes) {
-            $attributes
-                ->addClass('font-semibold', 'shadow-sm', 'focus-visible:outline', 'focus-visible:outline-2', 'focus-visible:outline-offset-2')
-                ->addClass('text-white bg-red-600 hover:bg-red-900')
-                ->addClass([
-                    'xs' => 'px-2 py-1 text-xs',
-                    'sm' => 'px-2 py-1 text-sm',
-                    'md' => 'px-2.5 py-1.5 text-sm',
-                    'lg' => 'px-3 py-2 text-sm',
-                    'xl' => 'px-3.5 py-2.5 text-sm',
-                ], state: 'size')
-                ->addClass([
-                    'square' => '',
-                    'rounded' => 'rounded-md',
-                    'pill' => 'rounded-full',
-                ], state: 'shape');
-        });
     }
 }

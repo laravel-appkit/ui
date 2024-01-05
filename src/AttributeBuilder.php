@@ -85,16 +85,25 @@ class AttributeBuilder
      * @return AttributeBuilder
      * @throws InvalidArgumentException
      */
-    public function addClass(...$classes): AttributeBuilder
+    public function addClass($classes, $attributeType = null, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
     {
-        // flatten the arguments into the function
-        $classes = Arr::flatten($classes);
+        // if we have passed in and array
+        if (is_array($classes) && $state) {
+            // get the value of the state
+            $stateValue = $this->states[$state]();
 
-        // merge the new classes with the existing ones
-        $this->mergeAttributes(['class' => implode(' ', $classes)]);
+            // we need to get the value from the array
+            $classes = array_key_exists($stateValue, $classes) ? $classes[$stateValue] : null;
+        } else {
+            // flatten the arguments into the function
+            $classes = Arr::flatten((array) $classes);
+        }
 
-        // return a fluent API
-        return $this;
+        // generate the new class list
+        $newValue = trim(implode(' ', (array) $classes) . ' ' . $this->getAttribute('class'));
+
+        // now just call set attribute on the class
+        return $this->setAttribute('class', $newValue, $attributeType, $condition, $negateCondition, $element, $state);
     }
 
     /**
@@ -237,6 +246,32 @@ class AttributeBuilder
     }
 
     /**
+     * Apply mixins to the attribute builder
+     *
+     * @param mixed $mixins
+     * @return $this
+     */
+    public function mixin(...$mixins)
+    {
+        // turn the mixins into a nice array
+        $mixins = Arr::flatten($mixins);
+
+        // loop through the mixins
+        foreach ($mixins as $mixin) {
+            // if it's a class name, we need to get an instance of it
+            if (is_string($mixin) && class_exists($mixin) && method_exists($mixin, '__invoke')) {
+                $mixin = new $mixin();
+            }
+
+            // call the mixin
+            $mixin($this);
+        }
+
+        // return a fluent API
+        return $this;
+    }
+
+    /**
      * Merge the attributes into the attribute bag
      *
      * @param mixed $attributes
@@ -342,6 +377,24 @@ class AttributeBuilder
         return $this->attributeBag;
     }
 
+    /**
+     * Return the value of the component state
+     *
+     * @param mixed $state
+     * @return mixed
+     */
+    public function getStateValue($state)
+    {
+        // check if we have a condition that exists in the helpers
+        if (is_string($state)) {
+            $state = $this->states[$state];
+        }
+
+        // evaluate the conditional, ensuring that it's a boolean
+        return $state();
+    }
+
+
     private function generateMagicMethodRegexCapture(string $captureGroup, array $values, array $triggers = [])
     {
         // we need to build up the regex that we are going to use to parse the method
@@ -410,9 +463,18 @@ class AttributeBuilder
         if (preg_match($magicMethodRegex, $method, $magicMethodRegexMatches)) {
             $magicMethodParameterNames = ['attribute', 'value', 'attributeType', 'condition', 'negateCondition', 'element'];
 
-            // we alias the add operation to set
-            if ($magicMethodRegexMatches['operation'] == 'add') {
+            // we alias the add operation to set when dealing with attributes
+            if ($magicMethodRegexMatches['operation'] == 'add' && $magicMethodRegexMatches['type'] == 'Attribute') {
                 $magicMethodRegexMatches['operation'] = 'set';
+            }
+
+            // if we are dealing with classes
+            if ($magicMethodRegexMatches['type'] == 'Class') {
+                // we don't have an attribute or value element, so we remove them
+                array_splice($magicMethodParameterNames, 0, 2);
+
+                // and replace them with classes at the start
+                $magicMethodParameterNames = ['classes'] + $magicMethodParameterNames;
             }
 
             // calculate the name of the method that we actually want to call
@@ -420,8 +482,10 @@ class AttributeBuilder
 
             // the methods that we are allowed to call via the magic method
             $allowedMethods = [
-                'setAttribute',
+                'addClass',
                 'removeAttribute',
+                'removeClass',
+                'setAttribute',
             ];
 
             // check that it is an allowed method

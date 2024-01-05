@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \AppKit\UI\Ui
  */
-class Ui extends Facade
+class UI extends Facade
 {
     /**
      * Get the registered name of the component.

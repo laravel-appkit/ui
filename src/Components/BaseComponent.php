@@ -5,6 +5,7 @@ namespace AppKit\UI\Components;
 use AppKit\UI\AttributeBuilder;
 use AppKit\UI\Components\Concerns\HasAttributeBuilder;
 use AppKit\UI\ElementAttributeBagWrapper;
+use AppKit\UI\Facades\UI;
 use Illuminate\View\Component as BladeComponent;
 
 abstract class BaseComponent extends BladeComponent
@@ -21,30 +22,38 @@ abstract class BaseComponent extends BladeComponent
      */
     public function withAttributes(array $attributes)
     {
+        UI::startComponent($this);
+
         // ensure that we have an attribute bag assigned to the component
         $this->attributes = $this->attributes ?: $this->newAttributeBag();
 
         // create the new attribute bag that we will pass to the attribute builder
         $attributeBag = $this->newAttributeBag($attributes);
 
+        $elements = array_key_exists(static::class, $this->attributeBuilderElements) ? $this->attributeBuilderElements[static::class] : [];
+
         // get the instance of the attribute builder
-        $this->attributeBuilder = new AttributeBuilder($attributeBag, $this->attributeBuilderElements);
+        $this->attributeBuilder = new AttributeBuilder($attributeBag, $elements);
 
         // loop through the attribute builder states
-        foreach ($this->attributeBuilderState as $state => $closure) {
-            // and register them
-            $this->attributeBuilder->registerState($state, $closure);
+        if (array_key_exists(static::class, $this->attributeBuilderState)) {
+            foreach ($this->attributeBuilderState[static::class] as $state => $closure) {
+                // and register them
+                $this->attributeBuilder->registerState($state, $closure);
+            }
         }
 
         // sort the parsers by their weight
         ksort(static::$attributeBuilderParsers);
 
-        // loop through each of the weights
-        foreach (static::$attributeBuilderParsers as $parsers) {
-            // and then through each of the parser of that weight
-            foreach ($parsers as $parser) {
-                // run the parser
-                $parser($this->attributeBuilder, $this);
+        if (array_key_exists(static::class, static::$attributeBuilderParsers)) {
+            // loop through each of the weights
+            foreach (static::$attributeBuilderParsers[static::class] as $parsers) {
+                // and then through each of the parser of that weight
+                foreach ($parsers as $parser) {
+                    // run the parser
+                    $parser($this->attributeBuilder, $this);
+                }
             }
         }
 

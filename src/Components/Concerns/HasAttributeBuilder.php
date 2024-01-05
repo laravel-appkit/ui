@@ -35,22 +35,28 @@ trait HasAttributeBuilder
      * @param int $weight
      * @return void
      */
-    public static function registerAttributeBuilderParser(Closure $closure, $weight = 10)
+    public static function registerAttributeBuilderParser(Callable $closure, $weight = 10)
     {
         // if this is the first time that we are seeing the weight
-        if (!array_key_exists($weight, static::$attributeBuilderParsers)) {
+        if (!array_key_exists(static::class, static::$attributeBuilderParsers)) {
             // set up an array to store all of the closures of this weight
-            static::$attributeBuilderParsers[$weight] = [];
+            static::$attributeBuilderParsers[static::class] = [];
+        }
+
+        // if this is the first time that we are seeing the weight
+        if (!array_key_exists($weight, static::$attributeBuilderParsers[static::class])) {
+            // set up an array to store all of the closures of this weight
+            static::$attributeBuilderParsers[static::class][$weight] = [];
         }
 
         // store the closure in the parses array
-        static::$attributeBuilderParsers[$weight][] = $closure;
+        static::$attributeBuilderParsers[static::class][$weight][spl_object_hash($closure)] = $closure;
     }
 
     /**
      * @see registerAttributeBuilderParser
      */
-    public static function customize(Closure $closure, $weight = 10)
+    public static function customize(Callable $closure, $weight = 10)
     {
         // this is just an alias to registerAttributeBuilderParser
         static::registerAttributeBuilderParser(...func_get_args());
@@ -59,7 +65,7 @@ trait HasAttributeBuilder
     /**
      * @see registerAttributeBuilderParser
      */
-    public static function customise(Closure $closure, $weight = 10)
+    public static function customise(Callable $closure, $weight = 10)
     {
         // this is just an alias to registerAttributeBuilderParser
         static::registerAttributeBuilderParser(...func_get_args());
@@ -100,7 +106,11 @@ trait HasAttributeBuilder
             $state = $property;
         }
 
-        $this->attributeBuilderState[$state] = fn () => $this->{$property};
+        if (!array_key_exists(static::class, $this->attributeBuilderState)) {
+            $this->attributeBuilderState[static::class] = [];
+        }
+
+        $this->attributeBuilderState[static::class][$state] = fn () => $this->{$property};
     }
 
     /**
@@ -111,8 +121,12 @@ trait HasAttributeBuilder
      */
     protected function registerAttributeBuilderElement(string $element): ElementAttributeBagWrapper
     {
+        if (!array_key_exists(static::class, $this->attributeBuilderElements)) {
+            $this->attributeBuilderElements[static::class] = [];
+        }
+
         // add the name to the array of elements
-        $this->attributeBuilderElements[] = $element;
+        $this->attributeBuilderElements[static::class][] = $element;
 
         // return a wrapper, as we will need to generate the actual content attributes later
         return new ElementAttributeBagWrapper($element);
