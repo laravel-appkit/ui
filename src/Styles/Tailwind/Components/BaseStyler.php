@@ -3,6 +3,7 @@
 namespace AppKit\UI\Styles\Tailwind\Components;
 
 use AppKit\UI\AttributeBuilder;
+use AppKit\UI\Styles\Tailwind\Tailwind;
 
 abstract class BaseStyler
 {
