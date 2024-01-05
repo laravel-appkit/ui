@@ -58,6 +58,12 @@ class Tailwind implements StyleFramework
         $classes[] = $this->generateColorClass($color, $scale, $property);
         $classes[] = $this->generateColorClass($color, $darkModeColorScale, $property, 'dark');
 
+        // check if we we need to add in classes for the outline too
+        if (in_array('outline', $include)) {
+            $classes[] = $this->generateColorClass($color, $scale, 'outline', 'focus-visible');
+            $classes[] = $this->generateColorClass($color, $darkModeColorScale, 'outline', 'dark:focus-visible');
+        }
+
         // check if we are including text
         if (in_array('text', $include)) {
             // get the scale for the text on color
