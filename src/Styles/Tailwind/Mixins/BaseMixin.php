@@ -18,7 +18,8 @@ abstract class BaseMixin
      *
      * @return self
      */
-    static function with(?array $options = []) {
+    public static function with(?array $options = [])
+    {
         return new static($options);
     }
 

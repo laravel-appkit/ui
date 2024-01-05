@@ -394,7 +394,6 @@ class AttributeBuilder
         return $state();
     }
 
-
     private function generateMagicMethodRegexCapture(string $captureGroup, array $values, array $triggers = [])
     {
         // we need to build up the regex that we are going to use to parse the method

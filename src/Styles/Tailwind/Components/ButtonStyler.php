@@ -3,14 +3,12 @@
 namespace AppKit\UI\Styles\Tailwind\Components;
 
 use AppKit\UI\AttributeBuilder;
-use AppKit\UI\Components\Button as ButtonComponent;
 use AppKit\UI\Styles\Tailwind\Mixins\BackgroundColorMixin;
 use AppKit\UI\Styles\Tailwind\Mixins\FocusOutlineMixin;
-use AppKit\UI\Styles\Tailwind\Tailwind;
 
 class ButtonStyler extends BaseStyler
 {
-    function __invoke(AttributeBuilder $attributes): void
+    public function __invoke(AttributeBuilder $attributes): void
     {
         $attributes
             ->addClass(['font-semibold', 'shadow-sm'])

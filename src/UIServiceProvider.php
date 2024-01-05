@@ -2,8 +2,6 @@
 
 namespace AppKit\UI;
 
-use AppKit\UI\Components\Button;
-use AppKit\UI\Styles\Tailwind\Tailwind;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 

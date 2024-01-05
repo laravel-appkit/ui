@@ -3,7 +3,6 @@
 namespace AppKit\UI\Styles\Tailwind\Mixins;
 
 use AppKit\UI\AttributeBuilder;
-use AppKit\UI\Styles\Tailwind\Tailwind;
 use InvalidArgumentException;
 
 class BackgroundColorMixin extends BaseMixin
@@ -15,7 +14,7 @@ class BackgroundColorMixin extends BaseMixin
      * @return void
      * @throws InvalidArgumentException
      */
-    function __invoke(AttributeBuilder $attributes): void
+    public function __invoke(AttributeBuilder $attributes): void
     {
         // get the colour that we want to apply
         $color = $attributes->getStateValue('color');
