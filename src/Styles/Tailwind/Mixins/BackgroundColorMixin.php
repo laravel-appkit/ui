@@ -20,7 +20,7 @@ class BackgroundColorMixin extends BaseMixin
         $color = $attributes->getStateValue('color');
 
         $attributes->addClass(
-            $this->tailwind->getColorClasses($color, includeText: true, includeHover: true)
+            $this->tailwind->getColorClasses($color, include: ['hover', 'outline', 'text'])
         );
     }
 }

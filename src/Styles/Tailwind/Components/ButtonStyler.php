@@ -11,7 +11,7 @@ class ButtonStyler extends BaseStyler
     public function __invoke(AttributeBuilder $attributes): void
     {
         $attributes
-            ->addClass(['font-semibold', 'shadow-sm'])
+            ->addClass(['text-md', 'font-semibold', 'shadow-sm'])
             ->mixin(
                 FocusOutlineMixin::class,
                 BackgroundColorMixin::with(['include' => ['text', 'hover']])
