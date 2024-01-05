@@ -14,7 +14,7 @@ class ButtonStyler extends BaseStyler
             ->addClass(['font-semibold', 'shadow-sm'])
             ->mixin(
                 FocusOutlineMixin::class,
-                BackgroundColorMixin::with(['includeText' => true, 'includeHover' => true])
+                BackgroundColorMixin::with(['include' => ['text', 'hover']])
             )
             ->addClassForSize([
                 'xs' => 'px-2 py-1 text-xs',

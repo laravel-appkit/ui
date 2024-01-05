@@ -2,9 +2,17 @@
 
 namespace AppKit\UI\Styles\Tailwind;
 
-class Tailwind
+use AppKit\UI\Contracts\StyleFramework;
+
+class Tailwind implements StyleFramework
 {
-    public function locateCustomizationsForComponent(string $component): ?string
+    /**
+     * (Optionally) return the name of the styler class for a particular component
+     *
+     * @param string $component
+     * @return null|string
+     */
+    public function locateStylerForComponent(string $component): ?string
     {
         // generate the namespace to the component
         $class = __NAMESPACE__ . '\Components\\' . class_basename($component) . 'Styler';
@@ -36,8 +44,7 @@ class Tailwind
         //     $classes = array_merge($classes, $darkModeClasses);
         // }
 
-
-        return $classes;
+        return array_reverse($classes);
     }
 
     public function getTextOnColorClass(string $color, int $scale)

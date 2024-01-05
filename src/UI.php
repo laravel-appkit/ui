@@ -3,6 +3,7 @@
 namespace AppKit\UI;
 
 use AppKit\UI\Components\BaseComponent;
+use AppKit\UI\Contracts\StyleFramework;
 use AppKit\UI\Styles\Tailwind\Tailwind;
 
 class UI
@@ -21,16 +22,16 @@ class UI
     }
 
     /**
-     * Get the instance of the style formatter
+     * Get the instance of the style framework
      *
-     * @return Tailwind
+     * @return StyleFramework
      */
-    private function getStyleFormatter()
+    private function getStyleFramework(): StyleFramework
     {
         // TODO: Turn this into something configurable
         $style = Tailwind::class;
 
-        // get an instance of the formatter
+        // get an instance of the framework
         return new $style();
     }
 
@@ -43,7 +44,7 @@ class UI
     public function loadCustomizationsForComponent(string $component)
     {
         // get the name of the styler class
-        $componentStylerClass = $this->getStyleFormatter()->locateCustomizationsForComponent($component);
+        $componentStylerClass = $this->getStyleFramework()->locateStylerForComponent($component);
 
         // check that we do have a styler class
         if ($componentStylerClass) {
