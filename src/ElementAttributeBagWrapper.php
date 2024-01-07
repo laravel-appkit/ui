@@ -2,8 +2,12 @@
 
 namespace AppKit\UI;
 
-class ElementAttributeBagWrapper
+use Illuminate\Contracts\Support\Htmlable;
+
+class ElementAttributeBagWrapper implements Htmlable
 {
+    private $elements;
+
     public function __construct(protected string $element)
     {
 
@@ -11,6 +15,16 @@ class ElementAttributeBagWrapper
 
     public function run(AttributeBuilder $attributeBuilder)
     {
-        return $attributeBuilder->getAttributeBag($this->element);
+        $this->elements = $attributeBuilder->getAttributeBag($this->element);
+    }
+
+    public function __toString()
+    {
+        return $this->elements->__toString();
+    }
+
+    public function toHtml()
+    {
+        return $this->__toString();
     }
 }

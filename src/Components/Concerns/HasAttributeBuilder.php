@@ -100,6 +100,15 @@ trait HasAttributeBuilder
         static::resetAllAttributeBuilderParsers();
     }
 
+    public function defineState(string $state, closure $closure)
+    {
+        if (!array_key_exists(static::class, $this->attributeBuilderState)) {
+            $this->attributeBuilderState[static::class] = [];
+        }
+
+        $this->attributeBuilderState[static::class][$state] = $closure;
+    }
+
     public function exposePropertyAsState($property, $state = null)
     {
         if (!$state) {

@@ -14,6 +14,8 @@ abstract class BaseComponent extends BladeComponent
 
     protected $viewName = null;
 
+    public $elements = [];
+
     /**
      * Set the extra attributes that the component should make available.
      *
@@ -66,6 +68,8 @@ abstract class BaseComponent extends BladeComponent
             if ($dataElement instanceof ElementAttributeBagWrapper) {
                 // if it is, pull out the attributes and set everything we need to
                 $this->{$dataName} = $dataElement->run($this->attributeBuilder);
+
+                $this->elements[$dataName] = $this->{$dataName};
             }
         }
 

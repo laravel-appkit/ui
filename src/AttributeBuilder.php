@@ -3,6 +3,7 @@
 namespace AppKit\UI;
 
 use BadMethodCallException;
+use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -100,7 +101,7 @@ class AttributeBuilder
         }
 
         // generate the new class list
-        $newValue = trim(implode(' ', (array) $classes) . ' ' . $this->getAttribute('class'));
+        $newValue = trim(implode(' ', (array) $classes) . ' ' . $this->getAttribute('class', attributeBag:$element));
 
         // now just call set attribute on the class
         return $this->setAttribute('class', $newValue, $attributeType, $condition, $negateCondition, $element, $state);
@@ -112,10 +113,19 @@ class AttributeBuilder
      * @param mixed $classes
      * @return AttributeBuilder
      */
-    public function removeClass(...$classes): AttributeBuilder
+    public function removeClass($classes, $attributeType = null, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
     {
-        // flatten the arguments to the function
-        $classes = Arr::flatten($classes);
+        // if we have passed in and array
+        if (is_array($classes) && $state) {
+            // get the value of the state
+            $stateValue = $this->states[$state]();
+
+            // we need to get the value from the array
+            $classes = array_key_exists($stateValue, $classes) ? $classes[$stateValue] : null;
+        } else {
+            // flatten the arguments into the function
+            $classes = Arr::flatten((array) $classes);
+        }
 
         // calculate the classes that we need to remove
         $classesToRemove = collect($classes)
@@ -137,7 +147,7 @@ class AttributeBuilder
             ->toArray();
 
         // get all of the current classes already applied
-        $currentClasses = explode(' ', $this->getAttribute('class'));
+        $currentClasses = explode(' ', $this->getAttribute('class', '', $element));
 
         // create an array to store all of the new classes
         $newClasses = [];
@@ -154,11 +164,9 @@ class AttributeBuilder
             }
         }
 
-        // set the class attribute
-        $this->setAttribute('class', implode(' ', $newClasses));
+        $newValue = implode(' ', $newClasses);
 
-        // return a fluent API
-        return $this;
+        return $this->setAttribute('class', $newValue, $attributeType, $condition, $negateCondition, $element, $state);
     }
 
     /**
@@ -239,10 +247,34 @@ class AttributeBuilder
      * @param mixed $default
      * @return mixed
      */
-    public function getAttribute($attribute, $default = null): mixed
+    public function getAttribute($attribute, $default = null, $attributeBag = null): mixed
     {
         // get the attribute from the attribute bag
-        return $this->get($attribute, $default);
+        return $this->getAttributeBag($attributeBag)->get($attribute, $default);
+    }
+
+    public function when($condition, Closure $callback, bool $negateCondition = false)
+    {
+        if ($this->conditionalPasses($condition, $negateCondition)) {
+            $callback($this);
+        }
+
+        return $this;
+    }
+
+    public function whenNot($condition, Closure $callback)
+    {
+        return $this->when($condition, $callback, true);
+    }
+
+    public function if($condition, Closure $callback, bool $negateCondition = false)
+    {
+        return $this->when($condition, $callback, $negateCondition);
+    }
+
+    public function ifNot($condition, Closure $callback)
+    {
+        return $this->when($condition, $callback, true);
     }
 
     /**
