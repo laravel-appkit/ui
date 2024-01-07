@@ -39,7 +39,7 @@ class InputFieldMixin extends BaseMixin
             'dark:ring-white/10',
             'dark:disabled:bg-gray-900',
             'dark:disabled:text-gray-700',
-            'dark:disabled:ring-gray-700'
+            'dark:disabled:ring-gray-700',
         ]);
     }
 }
