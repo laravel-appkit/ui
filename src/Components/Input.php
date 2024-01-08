@@ -9,9 +9,10 @@ class Input extends BaseComponent
     public $wrapperElement;
 
     public function __construct(
-        public string $width = 'md',
-        public string $prefix = '',
         public string $postfix = '',
+        public string $prefix = '',
+        public string $type = 'text',
+        public string $width = 'md',
     ) {
         $this->exposePropertyAsState('width');
 
@@ -25,6 +26,18 @@ class Input extends BaseComponent
 
         $this->defineState('hasAffix', function () {
             return !empty($this->prefix) || !empty($this->postfix);
+        });
+
+        $this->defineState('isCheckbox', function () {
+            return $this->type === 'checkbox';
+        });
+
+        $this->defineState('isRadioButton', function () {
+            return $this->type === 'radio';
+        });
+
+        $this->defineState('isCheckable', function () {
+            return $this->type === 'checkbox' || $this->type === 'radio';
         });
 
         $this->wrapperElement = $this->registerAttributeBuilderElement('wrapper');

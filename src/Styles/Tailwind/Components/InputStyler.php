@@ -10,11 +10,31 @@ class InputStyler extends BaseStyler
 {
     public function __invoke(AttributeBuilder $attributeBuilder): void
     {
-        // add the default field styling
-        $attributeBuilder->mixin(InputFieldMixin::class);
+        // if we aren't a checkbox, we add the normal styling
+        $attributeBuilder->whenNot('isCheckable', function (AttributeBuilder $attributeBuilder) {
+            // add the default field styling
+            $attributeBuilder->mixin(InputFieldMixin::class);
 
-        // handle the component width
-        $attributeBuilder->mixin(ComponentWidth::class);
+            // handle the component width
+            $attributeBuilder->mixin(ComponentWidth::class);
+        });
+
+        // if we are a checkbox, we need to handle things a little differently
+        $attributeBuilder->when('isCheckable', function (AttributeBuilder $attributeBuilder) {
+            $attributeBuilder->addClass([
+                'h-4',
+                'w-4',
+                'border-white/10',
+                'bg-white/5',
+                'text-sky-600',
+                'focus:ring-sky-600',
+                'focus:ring-offset-gray-900',
+            ]);
+
+            $attributeBuilder->when('isCheckbox', function (AttributeBuilder $attributeBuilder) {
+                $attributeBuilder->addClass('rounded');
+            });
+        });
 
         // handle situations where there is a pre-/post-fix for the field
         $attributeBuilder->when('hasAffix', function (AttributeBuilder $attributeBuilder) {
