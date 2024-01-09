@@ -34,7 +34,7 @@ it('can add classes to the classes that already exist', function (string $method
     $attributeBuilder->addClass($data);
 
     // check that the classes are correct
-    expect($attributeBuilder->getAttributes())->toHaveKey('class', 'class-1 class-2 class-3 class-4 class-5 class-6');
+    expect($attributeBuilder->getAttributes())->toHaveKey('class', 'class-6 class-1 class-2 class-3 class-4 class-5');
 })->with($classData);
 
 it('can remove classes in multiple ways', function (string $method, $data) {

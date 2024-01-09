@@ -35,14 +35,32 @@ class AttributeBuilder
      */
     protected $elementAttributeBags = [];
 
+    /**
+     * The class list for the main element
+     * @var ClassList
+     */
+    protected ClassList $classList;
+
+    /**
+     * An array of class list for each of the registered elements
+     * @var array<string,ClassList>
+     */
+    protected $elementClassLists = [];
+
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
         array $elements = []
     ) {
+        // create a class list for the default element
+        $this->classList = new ClassList($this);
+
         // loop through each of the elements that have been specified
         foreach ($elements as $element) {
             // create a new attribute bag for that element
             $this->elementAttributeBags[$element] = new ComponentAttributeBag();
+
+            // create a class list for the element
+            $this->elementClassLists[$element] = new ClassList($this, $element);
 
             // generate the element prefix
             $elementPrefix = Str::of($element . ':')->kebab()->__toString();
@@ -97,14 +115,14 @@ class AttributeBuilder
             $classes = array_key_exists($stateValue, $classes) ? $classes[$stateValue] : null;
         } else {
             // flatten the arguments into the function
-            $classes = Arr::flatten((array) $classes);
+            $classes = Arr::flatten(Arr::wrap($classes));
         }
 
-        // generate the new class list
-        $newValue = trim(implode(' ', (array) $classes) . ' ' . $this->getAttribute('class', attributeBag:$element));
+        // add the class to the class list
+        $this->classList->add($classes);
 
-        // now just call set attribute on the class
-        return $this->setAttribute('class', $newValue, $attributeType, $condition, $negateCondition, $element, $state);
+        // return a fluent api
+        return $this;
     }
 
     /**
@@ -247,10 +265,10 @@ class AttributeBuilder
      * @param mixed $default
      * @return mixed
      */
-    public function getAttribute($attribute, $default = null, $attributeBag = null): mixed
+    public function getAttribute($attribute, $default = null, $element = null): mixed
     {
         // get the attribute from the attribute bag
-        return $this->getAttributeBag($attributeBag)->get($attribute, $default);
+        return $this->getAttributeBag($element)->get($attribute, $default);
     }
 
     public function when($condition, Closure $callback, bool $negateCondition = false)
