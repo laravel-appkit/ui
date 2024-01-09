@@ -71,7 +71,7 @@ class ClassList
      * Check if a particular class is in the class list
      *
      * @param string $class
-     * @return boolean
+     * @return bool
      */
     public function has($class): bool
     {
