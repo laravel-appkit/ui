@@ -5,7 +5,6 @@ namespace AppKit\UI;
 use BadMethodCallException;
 use Closure;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
 use Illuminate\View\ComponentAttributeBag;
