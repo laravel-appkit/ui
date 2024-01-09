@@ -104,8 +104,13 @@ class AttributeBuilder
      * @return AttributeBuilder
      * @throws InvalidArgumentException
      */
-    public function addClass($classes, $attributeType = null, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
+    public function addClass($classes, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
     {
+        // if we have a conditional, we need to check if it passes
+        if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
+            return $this;
+        }
+
         // if we have passed in and array
         if (is_array($classes) && $state) {
             // get the value of the state
@@ -131,8 +136,13 @@ class AttributeBuilder
      * @param mixed $classes
      * @return AttributeBuilder
      */
-    public function removeClass($classes, $attributeType = null, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
+    public function removeClass($classes, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
     {
+        // if we have a conditional, we need to check if it passes
+        if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
+            return $this;
+        }
+
         // if we have passed in and array
         if (is_array($classes) && $state) {
             // get the value of the state
@@ -145,46 +155,11 @@ class AttributeBuilder
             $classes = Arr::flatten((array) $classes);
         }
 
-        // calculate the classes that we need to remove
-        $classesToRemove = collect($classes)
-            ->map(function ($item) {
-                // covert every item into an array
-                if (is_array($item)) {
-                    // if we are already an array, we can just return it
-                    return $item;
-                }
+        // remove the class from the class list
+        $this->classList->remove($classes);
 
-                // otherwise, we need to split the string on spaces
-                return explode(' ', $item);
-            })
-            ->flatten()
-            ->map(function ($item) {
-                // trim all of the items in the collection
-                return trim($item);
-            })
-            ->toArray();
-
-        // get all of the current classes already applied
-        $currentClasses = explode(' ', $this->getAttribute('class', '', $element));
-
-        // create an array to store all of the new classes
-        $newClasses = [];
-
-        // loop through all of the classes that we already have
-        foreach ($currentClasses as $currentClass) {
-            // trim the class
-            $currentClass = trim($currentClass);
-
-            // check if it's in the list of classes to remove
-            if (!in_array($currentClass, $classesToRemove)) {
-                // if it's not, we add it to the list of classes that the attribute bag should have
-                $newClasses[] = $currentClass;
-            }
-        }
-
-        $newValue = implode(' ', $newClasses);
-
-        return $this->setAttribute('class', $newValue, $attributeType, $condition, $negateCondition, $element, $state);
+        // return a fluent api
+        return $this;
     }
 
     /**
