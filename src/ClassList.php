@@ -13,10 +13,10 @@ class ClassList
      */
     protected $classes = [];
 
-    public function __construct(public AttributeBuilder $attributeBuilder, public ?string $element = null)
+    public function __construct(public AttributeBuilder $attributeBuilder, public Element $element)
     {
         // pull out any default classes that the attribute builder had passed to it's constructor
-        $defaultClasses = $this->attributeBuilder->getAttribute('class', element: $element);
+        $defaultClasses = $this->element->getAttribute('class');
 
         // if we have any
         if ($defaultClasses) {
@@ -36,7 +36,7 @@ class ClassList
         // loop through all of the classes (in various methods) that should be added
         foreach ($this->prepareClasses($classes) as $class) {
             // check we don't already have it
-            if (!$this->has($class)) {
+            if (!$this->contains($class)) {
                 // merge it in to the end
                 $this->classes[] = $class;
             }
@@ -57,7 +57,7 @@ class ClassList
         // loop through all of the classes (in various methods) that should be added
         foreach ($this->prepareClasses($classes) as $class) {
             // check we don't already have it
-            if ($this->has($class)) {
+            if ($this->contains($class)) {
                 // merge it in to the end
                 $this->classes = array_diff($this->classes, [$class]);
             }
@@ -73,7 +73,7 @@ class ClassList
      * @param string $class
      * @return bool
      */
-    public function has($class): bool
+    public function contains($class): bool
     {
         return in_array($class, $this->classes);
     }
@@ -143,6 +143,6 @@ class ClassList
         $classList = $this->getClassString();
 
         // set the attribute on the attribute builder
-        $this->attributeBuilder->setAttribute('class', $classList, element: $this->element);
+        $this->element->setAttribute('class', $classList);
     }
 }

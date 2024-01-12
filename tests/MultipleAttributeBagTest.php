@@ -5,7 +5,7 @@ it('can register and use multiple attribute bags', function () {
     $attributeBuilder = createAttributeBuilder(elements: ['label']);
 
     // add the class to the attribute builder
-    $attributeBuilder->setAttribute('foo', 'bar', element: 'label');
+    $attributeBuilder->element('label')->setAttribute('foo', 'bar');
 
     // check that the attribute is in the label attribute bag
     expect($attributeBuilder->getAttributeBag('label')->getAttributes())->toHaveKey('foo', 'bar');
@@ -30,7 +30,7 @@ it('can remove attributes from a particular element attribute bag', function () 
     $attributeBuilder = createAttributeBuilder(attributes: ['label:foo' => 'bar'], elements: ['label']);
 
     // remove the attribute from the attribute bag
-    $attributeBuilder->removeAttribute('foo', element: 'label');
+    $attributeBuilder->element('label')->removeAttribute('foo');
 
     // check that the attribute is in the label attribute bag
     expect($attributeBuilder->getAttributeBag('label')->getAttributes())->not()->toHaveKey('foo', 'bar');

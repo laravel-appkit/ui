@@ -20,46 +20,31 @@ class AttributeBuilder
      * An array to store the registered attribute helpers
      * @var array
      */
-    protected static $attributeHelpers = [];
+    public static $attributeHelpers = [];
 
     /**
      * An array to store the registered conditional helpers
      * @var array<string,closure>
      */
-    protected $states = [];
+    public $states = [];
 
     /**
-     * An array of attribute bags for each of the registered elements
-     * @var array<string,ComponentAttributeBag>
+     * An array of elements, including the default one
+     * @var Element[]
      */
-    protected $elementAttributeBags = [];
-
-    /**
-     * The class list for the main element
-     * @var ClassList
-     */
-    protected ClassList $classList;
-
-    /**
-     * An array of class list for each of the registered elements
-     * @var array<string,ClassList>
-     */
-    protected $elementClassLists = [];
+    public $elements;
 
     public function __construct(
         protected ComponentAttributeBag &$attributeBag,
         array $elements = []
     ) {
-        // create a class list for the default element
-        $this->classList = new ClassList($this);
+        // set up the default element
+        $this->elements['__default'] = new Element($this, $attributeBag);
 
-        // loop through each of the elements that have been specified
+        // loop through each of the elements that have been speficied
         foreach ($elements as $element) {
             // create a new attribute bag for that element
-            $this->elementAttributeBags[$element] = new ComponentAttributeBag();
-
-            // create a class list for the element
-            $this->elementClassLists[$element] = new ClassList($this, $element);
+            $elementAttributeBag = new ComponentAttributeBag();
 
             // generate the element prefix
             $elementPrefix = Str::of($element . ':')->kebab()->__toString();
@@ -75,12 +60,15 @@ class AttributeBuilder
                     $newAttributeName = $attributeString->remove($elementPrefix)->__toString();
 
                     // add the attribute to the appropriate element attribute bag
-                    $this->getAttributeBag($element)->offsetSet($newAttributeName, $value);
+                    $elementAttributeBag->offsetSet($newAttributeName, $value);
 
                     // and remove it from the default attribute bag (which will still have the old name)
                     $this->getAttributeBag()->offsetUnset($attributeName);
                 }
             }
+
+            // create an Element instance, and store it in the elements array, indexed by the name of the element
+            $this->elements[$element] = new Element($this, $elementAttributeBag);
         }
     }
 
@@ -97,154 +85,13 @@ class AttributeBuilder
     }
 
     /**
-     * Add classes to the attribute bag
+     * Conditionally run updates on the component
      *
-     * @param mixed $classes
-     * @return AttributeBuilder
-     * @throws InvalidArgumentException
-     */
-    public function addClass($classes, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
-    {
-        // if we have a conditional, we need to check if it passes
-        if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
-            return $this;
-        }
-
-        // if we have passed in and array
-        if (is_array($classes) && $state) {
-            // get the value of the state
-            $stateValue = $this->states[$state]();
-
-            // we need to get the value from the array
-            $classes = array_key_exists($stateValue, $classes) ? $classes[$stateValue] : null;
-        } else {
-            // flatten the arguments into the function
-            $classes = Arr::flatten(Arr::wrap($classes));
-        }
-
-        // add the class to the class list
-        $this->classList->add($classes);
-
-        // return a fluent api
-        return $this;
-    }
-
-    /**
-     * Remove classes from the attribute bag
-     *
-     * @param mixed $classes
-     * @return AttributeBuilder
-     */
-    public function removeClass($classes, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
-    {
-        // if we have a conditional, we need to check if it passes
-        if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
-            return $this;
-        }
-
-        // if we have passed in and array
-        if (is_array($classes) && $state) {
-            // get the value of the state
-            $stateValue = $this->states[$state]();
-
-            // we need to get the value from the array
-            $classes = array_key_exists($stateValue, $classes) ? $classes[$stateValue] : null;
-        } else {
-            // flatten the arguments into the function
-            $classes = Arr::flatten((array) $classes);
-        }
-
-        // remove the class from the class list
-        $this->classList->remove($classes);
-
-        // return a fluent api
-        return $this;
-    }
-
-    /**
-     * Set an attribute on the attribute bag
-     *
-     * @param mixed $attribute
-     * @param mixed $value
      * @param mixed $condition
+     * @param Closure $callback
      * @param bool $negateCondition
-     * @return AttributeBuilder
-     * @throws RuntimeException
+     * @return $this
      */
-    public function setAttribute($attribute, $value = null, $attributeType = null, $condition = null, $negateCondition = false, $element = null, $state = null): AttributeBuilder
-    {
-        // if we have a conditional, we need to check if it passes
-        if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
-            return $this;
-        }
-
-        // if we have passed in and array
-        if (is_array($value)) {
-            // and have a state element
-            if ($state) {
-                // get the value of the state
-                $stateValue = $this->states[$state]();
-
-                // we need to get the value from the array
-                $value = array_key_exists($stateValue, $value) ? $value[$stateValue] : null;
-            }
-        }
-
-        // loop through each of the attributes that we need to remove
-        foreach ($this->formatAttributes([$attribute => $value], $attributeType) as $attribute => $value) {
-            $this->getAttributeBag($element)->offsetSet($attribute, $value);
-        }
-
-        // return a fluent API
-        return $this;
-    }
-
-    /**
-     * Remove an attribute from the attribute bag
-     *
-     * @param mixed $attribute
-     * @param mixed $attributeType
-     * @param mixed $condition
-     * @param bool $negateCondition
-     * @return AttributeBuilder
-     * @throws RuntimeException
-     */
-    public function removeAttribute($attribute, $attributeType = null, $condition = null, $negateCondition = false, $element = null): AttributeBuilder
-    {
-        // if we have a conditional, we need to check if it passes
-        if ($condition != null && !$this->conditionalPasses($condition, $negateCondition)) {
-            return $this;
-        }
-
-        // make sure that the attributes are an array
-        $attribute = (array) $attribute;
-
-        // and then fill them with null
-        $attribute = array_fill_keys($attribute, null);
-
-        // loop through each of the attributes that we need to remove
-        foreach ($this->formatAttributes($attribute, $attributeType) as $attribute => $value) {
-            // and remove it
-            $this->getAttributeBag($element)->offsetUnset($attribute);
-        }
-
-        // return a fluent API
-        return $this;
-    }
-
-    /**
-     * Get an attribute from the attribute bag
-     *
-     * @param mixed $attribute
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getAttribute($attribute, $default = null, $element = null): mixed
-    {
-        // get the attribute from the attribute bag
-        return $this->getAttributeBag($element)->get($attribute, $default);
-    }
-
     public function when($condition, Closure $callback, bool $negateCondition = false)
     {
         if ($this->conditionalPasses($condition, $negateCondition)) {
@@ -254,16 +101,38 @@ class AttributeBuilder
         return $this;
     }
 
+    /**
+     * (Inverse) Conditionally run updates on the component
+     *
+     * @param mixed $condition
+     * @param Closure $callback
+     * @return $this
+     */
     public function whenNot($condition, Closure $callback)
     {
         return $this->when($condition, $callback, true);
     }
 
+    /**
+     * Conditionally run updates on the component
+     *
+     * @param mixed $condition
+     * @param Closure $callback
+     * @param bool $negateCondition
+     * @return $this
+     */
     public function if($condition, Closure $callback, bool $negateCondition = false)
     {
         return $this->when($condition, $callback, $negateCondition);
     }
 
+    /**
+     * (Inverse) Conditionally run updates on the component
+     *
+     * @param mixed $condition
+     * @param Closure $callback
+     * @return $this
+     */
     public function ifNot($condition, Closure $callback)
     {
         return $this->when($condition, $callback, true);
@@ -318,7 +187,7 @@ class AttributeBuilder
      * @param string $attributeType
      * @return array
      */
-    protected function formatAttributes($attributes, $attributeType = null): array
+    public function formatAttributes($attributes, $attributeType = null): array
     {
         // ensure that the attributes are an array (it's possible only one has been passed)
         $attributes = (array) $attributes;
@@ -355,7 +224,7 @@ class AttributeBuilder
      * @param bool $negateCondition
      * @return bool
      */
-    protected function conditionalPasses(string|callable $condition, bool $negateCondition): bool
+    public function conditionalPasses(string|callable $condition, bool $negateCondition): bool
     {
         // check if we have a condition that exists in the helpers
         if (is_string($condition)) {
@@ -392,13 +261,9 @@ class AttributeBuilder
      *
      * @return ComponentAttributeBag
      */
-    public function getAttributeBag(?string $element = null): ComponentAttributeBag
+    public function getAttributeBag(?string $element = '__default'): ComponentAttributeBag
     {
-        if ($element) {
-            return $this->elementAttributeBags[$element];
-        }
-
-        return $this->attributeBag;
+        return $this->element($element)->getAttributeBag();
     }
 
     /**
@@ -416,6 +281,27 @@ class AttributeBuilder
 
         // evaluate the conditional, ensuring that it's a boolean
         return $state();
+    }
+
+    /**
+     * Return a given element
+     *
+     * @param string $element
+     * @return Element
+     */
+    public function element($element = '__default'): Element
+    {
+        return $this->elements[$element];
+    }
+
+    /**
+     * Get the attributes, of the default element
+     *
+     * @return mixed
+     */
+    public function getAttributes()
+    {
+        return $this->element()->getAttributes();
     }
 
     private function generateMagicMethodRegexCapture(string $captureGroup, array $values, array $triggers = [])
@@ -470,7 +356,7 @@ class AttributeBuilder
         ' . $this->generateMagicMethodRegexCapture('attributeType', self::$attributeHelpers) . '
         (?P<attribute>[A-Za-z0-9]*)?
         (?P<type>Attribute|Class)
-        ' . $this->generateMagicMethodRegexCapture('element', $this->elementAttributeBags, ['to', 'on', 'from']) . '
+        ' . $this->generateMagicMethodRegexCapture('element', $this->elements, ['to', 'on', 'from']) . '
         ' . $this->generateMagicMethodRegexCapture('state', $this->states, ['for']) . '
         (
             (If|When)
@@ -484,20 +370,9 @@ class AttributeBuilder
         $magicMethodRegexMatches = [];
 
         if (preg_match($magicMethodRegex, $method, $magicMethodRegexMatches)) {
-            $magicMethodParameterNames = ['attribute', 'value', 'attributeType', 'condition', 'negateCondition', 'element'];
-
             // we alias the add operation to set when dealing with attributes
             if ($magicMethodRegexMatches['operation'] == 'add' && $magicMethodRegexMatches['type'] == 'Attribute') {
                 $magicMethodRegexMatches['operation'] = 'set';
-            }
-
-            // if we are dealing with classes
-            if ($magicMethodRegexMatches['type'] == 'Class') {
-                // we don't have an attribute or value element, so we remove them
-                array_splice($magicMethodParameterNames, 0, 2);
-
-                // and replace them with classes at the start
-                $magicMethodParameterNames = ['classes'] + $magicMethodParameterNames;
             }
 
             // calculate the name of the method that we actually want to call
@@ -514,7 +389,7 @@ class AttributeBuilder
             // check that it is an allowed method
             if (in_array($methodName, $allowedMethods)) {
                 // get the reflection of the method that we are ultimately going to call
-                $methodReflection = new ReflectionMethod($this, $methodName);
+                $methodReflection = new ReflectionMethod($this->element(), $methodName);
 
                 // get the parameters of that method
                 $methodParametersReflection = $methodReflection->getParameters();
@@ -522,37 +397,56 @@ class AttributeBuilder
                 // create an array to store the parameters that we will actually pass to the method
                 $methodParameterValues = [];
 
+                // an array that will store the name of the arguments that haven't been passed in the name of the function, or a name parameter
+                $remainingParameters = [];
+
                 foreach ($methodParametersReflection as $callableParameter) {
                     // get the name of the parameter
                     $parameterName = $callableParameter->getName();
 
-                    // check if we have a matching parameter in the regex matches
+                    // check if we have the parameter in the method name
                     if (array_key_exists($parameterName, $magicMethodRegexMatches) && !empty($magicMethodRegexMatches[$parameterName])) {
                         // if we do, we get that value and set it on the array that will be passed to the method
                         $methodParameterValues[$parameterName] = lcfirst($magicMethodRegexMatches[$parameterName]);
+                    } elseif (array_key_exists($parameterName, $parameters)) {
+                        // if we do, we get that value and set it on the array that will be passed to the method
+                        $methodParameterValues[$parameterName] = $parameters[$parameterName];
 
-                        // we then remove the parameter name from the list that we are still looking for
-                        $magicMethodParameterNames = array_diff($magicMethodParameterNames, [$parameterName]);
+                        // remove this as a parameter, as we have already used it
+                        unset($parameters[$parameterName]);
+                    } else {
+                        // we don't seem to have this parameter, keep a note of that
+                        $remainingParameters[] = $parameterName;
                     }
                 }
 
-                // because we have removed some things from the array, we want to reset the keys
-                $magicMethodParameterNames = array_values($magicMethodParameterNames);
+                // as we have been removing from the parameters, we need to reindex the array
+                $parameters = array_values($parameters);
 
-                // loop through everything that is left
-                foreach ($magicMethodParameterNames as $parameterPosition => $parameterName) {
-                    // and check if it was passed through as a parameter to the magic method
-                    if (isset($parameters[$parameterPosition])) {
-                        // if it was, then we add it to the list of parameters
-                        $methodParameterValues[$parameterName] = $parameters[$parameterPosition];
+                // loop through the parameters that we had passed into the method
+                foreach ($parameters as $i => $remainingParameter) {
+                    // check if we have a possible value in the remaining parameters array
+                    if (array_key_exists($i, $remainingParameters)) {
+                        // if we do, we will use that as the parameter value
+                        $methodParameterValues[$remainingParameters[$i]] = $remainingParameter;
                     }
                 }
+
+                // get the element that we are running this one
+                $element = (!empty($magicMethodRegexMatches['element']) ? lcfirst($magicMethodRegexMatches['element']) : '__default');
 
                 // finally, we call the underlying method
-                return call_user_func_array([$this, $methodName], $methodParameterValues);
+                call_user_func_array([$this->element($element), $methodName], $methodParameterValues);
+
+                // return a fluent API
+                return $this;
             }
         }
 
-        return $this->forwardCallTo($this->attributeBag, $method, $parameters);
+        // forward any remaining calls to the underlying, default, element
+        $this->forwardCallTo($this->element(), $method, $parameters);
+
+        // return a fluent API
+        return $this;
     }
 }
