@@ -41,7 +41,7 @@ class AttributeBuilder
         // set up the default element
         $this->elements['__default'] = new Element($this, $attributeBag);
 
-        // loop through each of the elements that have been speficied
+        // loop through each of the elements that have been specified
         foreach ($elements as $element) {
             // create a new attribute bag for that element
             $elementAttributeBag = new ComponentAttributeBag();
