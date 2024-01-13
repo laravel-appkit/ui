@@ -2,13 +2,14 @@
 
 namespace AppKit\UI;
 
+use ArrayAccess;
 use BadMethodCallException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
 use Illuminate\View\ComponentAttributeBag;
 
-class Element
+class Element implements ArrayAccess
 {
     use ForwardsCalls;
 
@@ -184,6 +185,21 @@ class Element
     }
 
     /**
+     * Get an attribute value via magic parameter
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function __get(string $name): mixed
+    {
+        // turn the name of the attribute into kebab case
+        $name = Str::of($name)->kebab()->__toString();
+
+        // get the value
+        return $this->getAttribute($name);
+    }
+
+    /**
      * Set an attribute value via magic parameter
      *
      * @param string $name
@@ -218,6 +234,51 @@ class Element
 
         // remove the attribute
         $this->removeAttribute($name);
+    }
+
+    /**
+     * Set an attribute via array notation
+     *
+     * @param mixed $offset
+     * @param mixed $value
+     * @return void
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->setAttribute($offset, $value);
+    }
+
+    /**
+     * Get an attribute via array notation
+     *
+     * @param mixed $offset
+     * @return mixed
+     */
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->getAttribute($offset);
+    }
+
+    /**
+     * Check if an attribute exists via array notation
+     *
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists(mixed $offset): bool
+    {
+        return $this->getAttribute($offset) != '';
+    }
+
+    /**
+     * Remove an attribute via array notation
+     *
+     * @param mixed $offset
+     * @return void
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+        $this->removeAttribute($offset);
     }
 
     /**

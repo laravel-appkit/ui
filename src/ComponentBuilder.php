@@ -2,6 +2,7 @@
 
 namespace AppKit\UI;
 
+use ArrayAccess;
 use BadMethodCallException;
 use Closure;
 use Illuminate\Support\Arr;
@@ -12,7 +13,7 @@ use InvalidArgumentException;
 use ReflectionMethod;
 use RuntimeException;
 
-class ComponentBuilder
+class ComponentBuilder implements ArrayAccess
 {
     use ForwardsCalls;
 
@@ -304,6 +305,17 @@ class ComponentBuilder
         return $this->element()->getAttributes();
     }
 
+     /**
+     * Get an attribute value on the default element via magic parameter
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function __get(string $name): mixed
+    {
+        return $this->element()->__get($name);
+    }
+
     /**
      * Set an attribute value on the default element via magic parameter
      *
@@ -317,7 +329,7 @@ class ComponentBuilder
     }
 
     /**
-     * Unset an attribute value via a magic parameter
+     * Unset an attribute value on the default element via a magic parameter
      *
      * @param string $name
      * @return void
@@ -325,6 +337,51 @@ class ComponentBuilder
     public function __unset(string $name): void
     {
         $this->element()->__unset($name);
+    }
+
+    /**
+     * Set an attribute on the default element via array notation
+     *
+     * @param mixed $offset
+     * @param mixed $value
+     * @return void
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->element()->offsetSet($offset, $value);
+    }
+
+    /**
+     * Get an attribute on the default element via array notation
+     *
+     * @param mixed $offset
+     * @return mixed
+     */
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->element()->offsetGet($offset);
+    }
+
+    /**
+     * Check if an attribute exists via array notation
+     *
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists(mixed $offset): bool
+    {
+        return $this->element()->offsetExists($offset);
+    }
+
+    /**
+     * Remove an attribute on the default element via array notation
+     *
+     * @param mixed $offset
+     * @return void
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+        $this->element()->offsetUnset($offset);
     }
 
     private function generateMagicMethodRegexCapture(string $captureGroup, array $values, array $triggers = [])
