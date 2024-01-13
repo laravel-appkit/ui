@@ -304,6 +304,29 @@ class ComponentBuilder
         return $this->element()->getAttributes();
     }
 
+    /**
+     * Set an attribute value on the default element via magic parameter
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set(string $name, $value): void
+    {
+        $this->element()->__set($name, $value);
+    }
+
+    /**
+     * Unset an attribute value via a magic parameter
+     *
+     * @param string $name
+     * @return void
+     */
+    public function __unset(string $name): void
+    {
+        $this->element()->__unset($name);
+    }
+
     private function generateMagicMethodRegexCapture(string $captureGroup, array $values, array $triggers = [])
     {
         // we need to build up the regex that we are going to use to parse the method

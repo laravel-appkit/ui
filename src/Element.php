@@ -4,6 +4,7 @@ namespace AppKit\UI;
 
 use BadMethodCallException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
 use Illuminate\View\ComponentAttributeBag;
 
@@ -180,6 +181,43 @@ class Element
     public function getAttributeBag()
     {
         return $this->attributeBag;
+    }
+
+    /**
+     * Set an attribute value via magic parameter
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set(string $name, $value): void
+    {
+        // turn the name of the attribute into kebab case
+        $name = Str::of($name)->kebab()->__toString();
+
+        // if the value is null
+        if ($value === null) {
+            // we unset the attribute
+            $this->removeAttribute($name);
+        } else {
+            // set the attribute
+            $this->setAttribute($name, $value);
+        }
+    }
+
+    /**
+     * Unset an attribute value via a magic parameter
+     *
+     * @param string $name
+     * @return void
+     */
+    public function __unset(string $name): void
+    {
+        // turn the name of the attribute into kebab case
+        $name = Str::of($name)->kebab()->__toString();
+
+        // remove the attribute
+        $this->removeAttribute($name);
     }
 
     /**
