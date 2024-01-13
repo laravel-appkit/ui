@@ -2,7 +2,7 @@
 
 namespace AppKit\UI\Styles\Tailwind\Components;
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Styles\Tailwind\Tailwind;
 
 abstract class BaseStyler
@@ -26,8 +26,8 @@ abstract class BaseStyler
     /**
      * Run the styler
      *
-     * @param AttributeBuilder $attributeBuilder
+     * @param ComponentBuilder $componentBuilder
      * @return void
      */
-    abstract public function __invoke(AttributeBuilder $attributeBuilder): void;
+    abstract public function __invoke(ComponentBuilder $componentBuilder): void;
 }

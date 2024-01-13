@@ -2,13 +2,13 @@
 
 namespace AppKit\UI\Styles\Tailwind\Mixins;
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 
 class InputFieldMixin extends BaseMixin
 {
-    public function __invoke(AttributeBuilder $attributeBuilder): void
+    public function __invoke(ComponentBuilder $componentBuilder): void
     {
-        $attributeBuilder->addClass([
+        $componentBuilder->addClass([
             'block',
             'border-0',
             'focus:ring-2',

@@ -1,67 +1,67 @@
 <?php
 
 it('can add an attribute', function () {
-    // create a new attribute builder
-    $attributeBuilder = createAttributeBuilder();
+    // create a new component builder
+    $componentBuilder = createComponentBuilder();
 
-    // add the class to the attribute builder
-    $attributeBuilder->setAttribute('foo', 'bar');
+    // add the class to the component builder
+    $componentBuilder->setAttribute('foo', 'bar');
 
     // check that the classes are correct
-    expect($attributeBuilder->getAttributes())->toHaveKey('foo', 'bar');
+    expect($componentBuilder->getAttributes())->toHaveKey('foo', 'bar');
 });
 
 it('can change the value of an existing attribute', function () {
-    // create a new attribute builder
-    $attributeBuilder = createAttributeBuilder(['foo' => 'bar']);
+    // create a new component builder
+    $componentBuilder = createComponentBuilder(['foo' => 'bar']);
 
-    // add the class to the attribute builder
-    $attributeBuilder->setAttribute('foo', 'bat');
+    // add the class to the component builder
+    $componentBuilder->setAttribute('foo', 'bat');
 
     // check that the classes are correct
-    expect($attributeBuilder->getAttributes())->toHaveKey('foo', 'bat');
+    expect($componentBuilder->getAttributes())->toHaveKey('foo', 'bat');
 });
 
 it('can remove an existing attribute', function () {
-    // create a new attribute builder
-    $attributeBuilder = createAttributeBuilder(['foo' => 'bar']);
+    // create a new component builder
+    $componentBuilder = createComponentBuilder(['foo' => 'bar']);
 
-    // add the class to the attribute builder
-    $attributeBuilder->removeAttribute('foo');
+    // add the class to the component builder
+    $componentBuilder->removeAttribute('foo');
 
     // check that the classes are correct
-    expect($attributeBuilder->getAttributes())->not()->toHaveKey('foo');
+    expect($componentBuilder->getAttributes())->not()->toHaveKey('foo');
 });
 
 it('can remove multiple existing attributes via an array', function () {
-    // create a new attribute builder
-    $attributeBuilder = createAttributeBuilder(['foo' => 'bar', 'bat' => 'buz']);
+    // create a new component builder
+    $componentBuilder = createComponentBuilder(['foo' => 'bar', 'bat' => 'buz']);
 
-    // add the class to the attribute builder
-    $attributeBuilder->removeAttribute(['foo', 'bat']);
+    // add the class to the component builder
+    $componentBuilder->removeAttribute(['foo', 'bat']);
 
     // check that the classes are correct
-    expect($attributeBuilder->getAttributes())->not()->toHaveKeys(['foo', 'bat']);
+    expect($componentBuilder->getAttributes())->not()->toHaveKeys(['foo', 'bat']);
 });
 
 it('can add an attribute via a magic method', function () {
-    // create a new attribute builder
-    $attributeBuilder = createAttributeBuilder();
+    // create a new component builder
+    $componentBuilder = createComponentBuilder();
 
-    // add the class to the attribute builder
-    $attributeBuilder->setFooAttribute('bar');
+    // add the class to the component builder
+    $componentBuilder->setFooAttribute('bar');
 
     // check that the classes are correct
-    expect($attributeBuilder->getAttributes())->toHaveKey('foo', 'bar');
+    expect($componentBuilder->getAttributes())->toHaveKey('foo', 'bar');
 });
 
 it('can remove an attribute via a magic method', function () {
-    // create a new attribute builder
-    $attributeBuilder = createAttributeBuilder(['foo' => 'bar']);
+    // create a new component builder
+    $componentBuilder = createComponentBuilder(['foo' => 'bar']);
 
-    // add the class to the attribute builder
-    $attributeBuilder->removeFooAttribute();
+    // add the class to the component builder
+    $componentBuilder->removeFooAttribute();
 
     // check that the classes are correct
-    expect($attributeBuilder->getAttributes())->not()->toHaveKey('foo');
+    expect($componentBuilder->getAttributes())->not()->toHaveKey('foo');
 });

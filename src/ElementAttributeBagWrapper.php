@@ -13,9 +13,9 @@ class ElementAttributeBagWrapper implements Htmlable
 
     }
 
-    public function run(AttributeBuilder $attributeBuilder)
+    public function run(ComponentBuilder $componentBuilder)
     {
-        $this->elements = $attributeBuilder->getAttributeBag($this->element);
+        $this->elements = $componentBuilder->getAttributeBag($this->element);
     }
 
     public function __toString()

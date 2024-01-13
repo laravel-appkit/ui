@@ -13,9 +13,9 @@ class ClassList
      */
     protected $classes = [];
 
-    public function __construct(public AttributeBuilder $attributeBuilder, public Element $element)
+    public function __construct(public ComponentBuilder $componentBuilder, public Element $element)
     {
-        // pull out any default classes that the attribute builder had passed to it's constructor
+        // pull out any default classes that the component builder had passed to it's constructor
         $defaultClasses = $this->element->getAttribute('class');
 
         // if we have any
@@ -42,7 +42,7 @@ class ClassList
             }
         }
 
-        // update the underlying attribute builder
+        // update the underlying component builder
         $this->updateAttributeBuilder();
     }
 
@@ -63,7 +63,7 @@ class ClassList
             }
         }
 
-        // update the underlying attribute builder
+        // update the underlying component builder
         $this->updateAttributeBuilder();
     }
 
@@ -133,7 +133,7 @@ class ClassList
     }
 
     /**
-     * Update the underlying attribute builder
+     * Update the underlying component builder
      *
      * @return void
      */
@@ -142,7 +142,7 @@ class ClassList
         // get the class string
         $classList = $this->getClassString();
 
-        // set the attribute on the attribute builder
+        // set the attribute on the component builder
         $this->element->setAttribute('class', $classList);
     }
 }

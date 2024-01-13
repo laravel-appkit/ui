@@ -2,26 +2,26 @@
 
 namespace AppKit\UI\Styles\Tailwind\Components;
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Styles\Tailwind\Mixins\ComponentWidth;
 use AppKit\UI\Styles\Tailwind\Mixins\InputFieldMixin;
 
 class InputStyler extends BaseStyler
 {
-    public function __invoke(AttributeBuilder $attributeBuilder): void
+    public function __invoke(ComponentBuilder $componentBuilder): void
     {
         // if we aren't a checkbox, we add the normal styling
-        $attributeBuilder->whenNot('isCheckable', function (AttributeBuilder $attributeBuilder) {
+        $componentBuilder->whenNot('isCheckable', function (ComponentBuilder $componentBuilder) {
             // add the default field styling
-            $attributeBuilder->mixin(InputFieldMixin::class);
+            $componentBuilder->mixin(InputFieldMixin::class);
 
             // handle the component width
-            $attributeBuilder->mixin(ComponentWidth::class);
+            $componentBuilder->mixin(ComponentWidth::class);
         });
 
         // if we are a checkbox, we need to handle things a little differently
-        $attributeBuilder->when('isCheckable', function (AttributeBuilder $attributeBuilder) {
-            $attributeBuilder->addClass([
+        $componentBuilder->when('isCheckable', function (ComponentBuilder $componentBuilder) {
+            $componentBuilder->addClass([
                 'h-4',
                 'w-4',
                 'border-white/10',
@@ -31,22 +31,22 @@ class InputStyler extends BaseStyler
                 'focus:ring-offset-gray-900',
             ]);
 
-            $attributeBuilder->when('isCheckbox', function (AttributeBuilder $attributeBuilder) {
-                $attributeBuilder->addClass('rounded');
+            $componentBuilder->when('isCheckbox', function (ComponentBuilder $componentBuilder) {
+                $componentBuilder->addClass('rounded');
             });
         });
 
         // handle situations where there is a pre-/post-fix for the field
-        $attributeBuilder->when('hasAffix', function (AttributeBuilder $attributeBuilder) {
+        $componentBuilder->when('hasAffix', function (ComponentBuilder $componentBuilder) {
             // override background and ring styling on the input
-            $attributeBuilder->addClass([
+            $componentBuilder->addClass([
                 'bg-transparent',
                 'flex-1',
                 'focus:ring-0',
             ]);
 
             // remove some further classes from the input
-            $attributeBuilder->removeClass([
+            $componentBuilder->removeClass([
                 'ring-1',
                 'dark:bg-white/5',
                 'focus:ring-2',
@@ -55,7 +55,7 @@ class InputStyler extends BaseStyler
             ]);
 
             // make the wrapper look like an input field
-            $attributeBuilder->addClassToWrapper([
+            $componentBuilder->addClassToWrapper([
                 'flex',
                 'rounded-md',
                 'shadow-sm',
@@ -74,8 +74,8 @@ class InputStyler extends BaseStyler
             ]);
 
             // change the padding of the field depending on pre-/post-fixes
-            $attributeBuilder->addClassWhenHasPrefix('pl-1');
-            $attributeBuilder->addClassWhenHasPostfix('pr-1');
+            $componentBuilder->addClassWhenHasPrefix('pl-1');
+            $componentBuilder->addClassWhenHasPostfix('pr-1');
         });
     }
 }

@@ -2,13 +2,13 @@
 
 namespace AppKit\UI\Styles\Tailwind\Mixins;
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 
 class FocusOutlineMixin extends BaseMixin
 {
-    public function __invoke(AttributeBuilder $attributeBuilder): void
+    public function __invoke(ComponentBuilder $componentBuilder): void
     {
-        $attributeBuilder->addClass([
+        $componentBuilder->addClass([
             'focus-visible:outline',
             'focus-visible:outline-2',
             'focus-visible:outline-offset-2',

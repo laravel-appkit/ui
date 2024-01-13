@@ -2,15 +2,15 @@
 
 namespace AppKit\UI\Styles\Tailwind\Components;
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Styles\Tailwind\Mixins\BackgroundColorMixin;
 use AppKit\UI\Styles\Tailwind\Mixins\FocusOutlineMixin;
 
 class ButtonStyler extends BaseStyler
 {
-    public function __invoke(AttributeBuilder $attributes): void
+    public function __invoke(ComponentBuilder $component): void
     {
-        $attributes
+        $component
             ->addClass(['text-md', 'font-semibold', 'shadow-sm'])
             ->mixin(
                 FocusOutlineMixin::class,

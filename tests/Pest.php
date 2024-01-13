@@ -1,6 +1,6 @@
 <?php
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 use Illuminate\View\ComponentAttributeBag;
 
 /*
@@ -43,36 +43,36 @@ expect()->extend('toBeOne', function () {
 */
 
 /**
- * Create an instance of an attribute builder
+ * Create an instance of an component builder
  *
  * @param array $attributes
  * @param array $options
- * @return AttributeBuilder
+ * @return ComponentBuilder
  */
-function createAttributeBuilder($attributes = [], $elements = [])
+function createComponentBuilder($attributes = [], $elements = [])
 {
-    // create an attribute bag that will be passed to the attribute builder
+    // create an attribute bag that will be passed to the component builder
     $attributeBag = new ComponentAttributeBag($attributes);
 
-    // return the attribute builder
-    return new AttributeBuilder($attributeBag, $elements);
+    // return the component builder
+    return new ComponentBuilder($attributeBag, $elements);
 }
 
-function addDataAttributeHelperToAttributeBuilder()
+function addDataAttributeHelperToComponentBuilder()
 {
-    AttributeBuilder::registerAttributeHelper('data', function ($attribute, $value) {
+    ComponentBuilder::registerAttributeHelper('data', function ($attribute, $value) {
         return ['data-' . $attribute => $value];
     });
 }
 
-function addStatesToAttributeBuilder(AttributeBuilder $attributeBuilder)
+function addStatesToComponentBuilder(ComponentBuilder $componentBuilder)
 {
-    $attributeBuilder->registerState('true', fn () => true);
-    $attributeBuilder->registerState('false', fn () => false);
+    $componentBuilder->registerState('true', fn () => true);
+    $componentBuilder->registerState('false', fn () => false);
 
 }
 
-function addSizeStateToAttributeBuilder(AttributeBuilder $attributeBuilder, $size)
+function addSizeStateToComponentBuilder(ComponentBuilder $componentBuilder, $size)
 {
-    $attributeBuilder->registerState('size', fn () => $size);
+    $componentBuilder->registerState('size', fn () => $size);
 }

@@ -1,6 +1,6 @@
 <?php
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Tests\Components\HigherOrderTestComponent;
 
 beforeEach(function () {
@@ -14,8 +14,8 @@ afterEach(function () {
 });
 
 it('can apply a customisation', function () {
-    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
-        $attributes->setAttribute('foo', 'bar');
+    HigherOrderTestComponent::customise(function (ComponentBuilder $component) {
+        $component->setAttribute('foo', 'bar');
     });
 
     // render a component
@@ -29,12 +29,12 @@ it('can apply a customisation', function () {
 });
 
 it('can apply multiple customisations', function () {
-    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
-        $attributes->setAttribute('foo', 'bar');
+    HigherOrderTestComponent::customise(function (ComponentBuilder $component) {
+        $component->setAttribute('foo', 'bar');
     });
 
-    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
-        $attributes->setAttribute('bat', 'ball');
+    HigherOrderTestComponent::customise(function (ComponentBuilder $component) {
+        $component->setAttribute('bat', 'ball');
     });
 
     // render a component
@@ -49,12 +49,12 @@ it('can apply multiple customisations', function () {
 });
 
 it('can apply customisations with weights', function () {
-    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
-        $attributes->setAttribute('foo', 'bar');
+    HigherOrderTestComponent::customise(function (ComponentBuilder $component) {
+        $component->setAttribute('foo', 'bar');
     });
 
-    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
-        $attributes->setAttribute('foo', 'ball');
+    HigherOrderTestComponent::customise(function (ComponentBuilder $component) {
+        $component->setAttribute('foo', 'ball');
     }, 20);
 
     // render a component
@@ -68,12 +68,12 @@ it('can apply customisations with weights', function () {
 });
 
 it('applies customisations in the order they were defined for equal weights', function () {
-    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
-        $attributes->setAttribute('foo', 'bar');
+    HigherOrderTestComponent::customise(function (ComponentBuilder $component) {
+        $component->setAttribute('foo', 'bar');
     });
 
-    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
-        $attributes->setAttribute('foo', 'bat');
+    HigherOrderTestComponent::customise(function (ComponentBuilder $component) {
+        $component->setAttribute('foo', 'bat');
     });
 
     // render a component
@@ -87,8 +87,8 @@ it('applies customisations in the order they were defined for equal weights', fu
 });
 
 it('can pass properties down to state', function () {
-    HigherOrderTestComponent::customise(function (AttributeBuilder $attributes) {
-        $attributes->setAttributeWhenToggle('foo', 'bar');
+    HigherOrderTestComponent::customise(function (ComponentBuilder $component) {
+        $component->setAttributeWhenToggle('foo', 'bar');
     });
 
     // render a component

@@ -2,34 +2,34 @@
 
 namespace AppKit\UI\Components\Concerns;
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 use AppKit\UI\ElementAttributeBagWrapper;
 use Closure;
 
-trait HasAttributeBuilder
+trait HasComponentBuilder
 {
     /**
-     * The parsers that the attribute builder should be run through
+     * The parsers that the component builder should be run through
      * @var array<int,array<int,Closure>>
      */
-    protected static $attributeBuilderParsers = [];
+    protected static $componentBuilderParsers = [];
 
     /**
-     * The elements that have been specified for the attribute builder
+     * The elements that have been specified for the component builder
      * @var array<string>
      */
-    protected $attributeBuilderElements = [];
+    protected $componentBuilderElements = [];
 
     /**
      * The instance of the Attribute Builder
-     * @var AttributeBuilder
+     * @var ComponentBuilder
      */
-    protected AttributeBuilder $attributeBuilder;
+    protected ComponentBuilder $componentBuilder;
 
-    protected $attributeBuilderState = [];
+    protected $componentBuilderState = [];
 
     /**
-     * Add a new attribute builder parser at a given weight
+     * Add a new component builder parser at a given weight
      *
      * @param Closure $closure
      * @param int $weight
@@ -38,19 +38,19 @@ trait HasAttributeBuilder
     public static function registerAttributeBuilderParser(callable $closure, $weight = 10)
     {
         // if this is the first time that we are seeing the weight
-        if (!array_key_exists(static::class, static::$attributeBuilderParsers)) {
+        if (!array_key_exists(static::class, static::$componentBuilderParsers)) {
             // set up an array to store all of the closures of this weight
-            static::$attributeBuilderParsers[static::class] = [];
+            static::$componentBuilderParsers[static::class] = [];
         }
 
         // if this is the first time that we are seeing the weight
-        if (!array_key_exists($weight, static::$attributeBuilderParsers[static::class])) {
+        if (!array_key_exists($weight, static::$componentBuilderParsers[static::class])) {
             // set up an array to store all of the closures of this weight
-            static::$attributeBuilderParsers[static::class][$weight] = [];
+            static::$componentBuilderParsers[static::class][$weight] = [];
         }
 
         // store the closure in the parses array
-        static::$attributeBuilderParsers[static::class][$weight][spl_object_hash($closure)] = $closure;
+        static::$componentBuilderParsers[static::class][$weight][spl_object_hash($closure)] = $closure;
     }
 
     /**
@@ -72,14 +72,14 @@ trait HasAttributeBuilder
     }
 
     /**
-     * Reset all of the attribute builder parsers
+     * Reset all of the component builder parsers
      *
      * @return void
      */
     public static function resetAllAttributeBuilderParsers()
     {
         // empty out the array
-        static::$attributeBuilderParsers = [];
+        static::$componentBuilderParsers = [];
     }
 
     /**
@@ -102,11 +102,11 @@ trait HasAttributeBuilder
 
     public function defineState(string $state, closure $closure)
     {
-        if (!array_key_exists(static::class, $this->attributeBuilderState)) {
-            $this->attributeBuilderState[static::class] = [];
+        if (!array_key_exists(static::class, $this->componentBuilderState)) {
+            $this->componentBuilderState[static::class] = [];
         }
 
-        $this->attributeBuilderState[static::class][$state] = $closure;
+        $this->componentBuilderState[static::class][$state] = $closure;
     }
 
     public function exposePropertyAsState($property, $state = null)
@@ -115,39 +115,39 @@ trait HasAttributeBuilder
             $state = $property;
         }
 
-        if (!array_key_exists(static::class, $this->attributeBuilderState)) {
-            $this->attributeBuilderState[static::class] = [];
+        if (!array_key_exists(static::class, $this->componentBuilderState)) {
+            $this->componentBuilderState[static::class] = [];
         }
 
-        $this->attributeBuilderState[static::class][$state] = fn () => $this->{$property};
+        $this->componentBuilderState[static::class][$state] = fn () => $this->{$property};
     }
 
     /**
-     * Register a new element for the attribute builder
+     * Register a new element for the component builder
      *
      * @param string $element
      * @return ElementAttributeBagWrapper
      */
     protected function registerAttributeBuilderElement(string $element): ElementAttributeBagWrapper
     {
-        if (!array_key_exists(static::class, $this->attributeBuilderElements)) {
-            $this->attributeBuilderElements[static::class] = [];
+        if (!array_key_exists(static::class, $this->componentBuilderElements)) {
+            $this->componentBuilderElements[static::class] = [];
         }
 
         // add the name to the array of elements
-        $this->attributeBuilderElements[static::class][] = $element;
+        $this->componentBuilderElements[static::class][] = $element;
 
         // return a wrapper, as we will need to generate the actual content attributes later
         return new ElementAttributeBagWrapper($element);
     }
 
     /**
-     * Get the underlying attribute builder instance
+     * Get the underlying component builder instance
      *
-     * @return AttributeBuilder
+     * @return ComponentBuilder
      */
-    public function getAttributeBuilder(): AttributeBuilder
+    public function getAttributeBuilder(): ComponentBuilder
     {
-        return $this->attributeBuilder;
+        return $this->componentBuilder;
     }
 }

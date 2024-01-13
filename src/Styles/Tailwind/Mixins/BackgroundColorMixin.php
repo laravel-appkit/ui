@@ -2,7 +2,7 @@
 
 namespace AppKit\UI\Styles\Tailwind\Mixins;
 
-use AppKit\UI\AttributeBuilder;
+use AppKit\UI\ComponentBuilder;
 use InvalidArgumentException;
 
 class BackgroundColorMixin extends BaseMixin
@@ -10,16 +10,16 @@ class BackgroundColorMixin extends BaseMixin
     /**
      * Invoke the mixin
      *
-     * @param AttributeBuilder $attributes
+     * @param ComponentBuilder $component
      * @return void
      * @throws InvalidArgumentException
      */
-    public function __invoke(AttributeBuilder $attributes): void
+    public function __invoke(ComponentBuilder $component): void
     {
         // get the colour that we want to apply
-        $color = $attributes->getStateValue('color');
+        $color = $component->getStateValue('color');
 
-        $attributes->addClass(
+        $component->addClass(
             $this->tailwind->getColorClasses($color, include: ['hover', 'outline', 'text'])
         );
     }

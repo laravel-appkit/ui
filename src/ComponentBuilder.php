@@ -12,7 +12,7 @@ use InvalidArgumentException;
 use ReflectionMethod;
 use RuntimeException;
 
-class AttributeBuilder
+class ComponentBuilder
 {
     use ForwardsCalls;
 
@@ -139,7 +139,7 @@ class AttributeBuilder
     }
 
     /**
-     * Apply mixins to the attribute builder
+     * Apply mixins to the component builder
      *
      * @param mixed $mixins
      * @return $this
@@ -168,10 +168,10 @@ class AttributeBuilder
      * Merge the attributes into the attribute bag
      *
      * @param mixed $attributes
-     * @return AttributeBuilder
+     * @return ComponentBuilder
      * @throws InvalidArgumentException
      */
-    public function mergeAttributes($attributes): AttributeBuilder
+    public function mergeAttributes($attributes): ComponentBuilder
     {
         // merge on the attribute bag will return a new instance, so we need to update our reference to be the new one
         $this->attributeBag = $this->attributeBag->merge($attributes);
@@ -190,7 +190,7 @@ class AttributeBuilder
     public function formatAttributes($attributes, $attributeType = null): array
     {
         // ensure that the attributes are an array (it's possible only one has been passed)
-        $attributes = (array) $attributes;
+        $attributes = Arr::wrap($attributes);
 
         // if we don't have an attribute type
         if ($attributeType == null) {
@@ -247,9 +247,9 @@ class AttributeBuilder
      *
      * @param string $name
      * @param callable $callable
-     * @return AttributeBuilder
+     * @return ComponentBuilder
      */
-    public function registerState(string $name, callable $callable): AttributeBuilder
+    public function registerState(string $name, callable $callable): ComponentBuilder
     {
         $this->states[$name] = $callable;
 

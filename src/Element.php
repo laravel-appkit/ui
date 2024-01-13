@@ -17,30 +17,30 @@ class Element
      */
     protected ClassList $classList;
 
-    public function __construct(protected AttributeBuilder $attributeBuilder, protected ComponentAttributeBag $attributeBag)
+    public function __construct(protected ComponentBuilder $componentBuilder, protected ComponentAttributeBag $attributeBag)
     {
         // create the class list for this element
-        $this->classList = new ClassList($attributeBuilder, $this);
+        $this->classList = new ClassList($componentBuilder, $this);
     }
 
     /**
      * Add classes to the attribute bag
      *
      * @param mixed $classes
-     * @return AttributeBuilder
+     * @return ComponentBuilder
      * @throws InvalidArgumentException
      */
     public function addClass($classes, $condition = null, $negateCondition = false, $state = null): Element
     {
         // if we have a conditional, we need to check if it passes
-        if ($condition != null && !$this->attributeBuilder->conditionalPasses($condition, $negateCondition)) {
+        if ($condition != null && !$this->componentBuilder->conditionalPasses($condition, $negateCondition)) {
             return $this;
         }
 
         // if we have passed in and array
         if (is_array($classes) && $state) {
             // get the value of the state
-            $stateValue = $this->attributeBuilder->states[$state]();
+            $stateValue = $this->componentBuilder->states[$state]();
 
             // we need to get the value from the array
             $classes = array_key_exists($stateValue, $classes) ? $classes[$stateValue] : null;
@@ -60,19 +60,19 @@ class Element
      * Remove classes from the attribute bag
      *
      * @param mixed $classes
-     * @return AttributeBuilder
+     * @return ComponentBuilder
      */
     public function removeClass($classes, $condition = null, $negateCondition = false, $state = null): Element
     {
         // if we have a conditional, we need to check if it passes
-        if ($condition != null && !$this->attributeBuilder->conditionalPasses($condition, $negateCondition)) {
+        if ($condition != null && !$this->componentBuilder->conditionalPasses($condition, $negateCondition)) {
             return $this;
         }
 
         // if we have passed in and array
         if (is_array($classes) && $state) {
             // get the value of the state
-            $stateValue = $this->attributeBuilder->states[$state]();
+            $stateValue = $this->componentBuilder->states[$state]();
 
             // we need to get the value from the array
             $classes = array_key_exists($stateValue, $classes) ? $classes[$stateValue] : null;
@@ -95,13 +95,13 @@ class Element
      * @param mixed $value
      * @param mixed $condition
      * @param bool $negateCondition
-     * @return AttributeBuilder
+     * @return ComponentBuilder
      * @throws RuntimeException
      */
     public function setAttribute($attribute, $value = null, $attributeType = null, $condition = null, $negateCondition = false, $state = null): Element
     {
         // if we have a conditional, we need to check if it passes
-        if ($condition != null && !$this->attributeBuilder->conditionalPasses($condition, $negateCondition)) {
+        if ($condition != null && !$this->componentBuilder->conditionalPasses($condition, $negateCondition)) {
             return $this;
         }
 
@@ -110,7 +110,7 @@ class Element
             // and have a state element
             if ($state) {
                 // get the value of the state
-                $stateValue = $this->attributeBuilder->states[$state]();
+                $stateValue = $this->componentBuilder->states[$state]();
 
                 // we need to get the value from the array
                 $value = array_key_exists($stateValue, $value) ? $value[$stateValue] : null;
@@ -118,7 +118,7 @@ class Element
         }
 
         // loop through each of the attributes that we need to remove
-        foreach ($this->attributeBuilder->formatAttributes([$attribute => $value], $attributeType) as $attribute => $value) {
+        foreach ($this->componentBuilder->formatAttributes([$attribute => $value], $attributeType) as $attribute => $value) {
             $this->attributeBag->offsetSet($attribute, $value);
         }
 
@@ -133,24 +133,24 @@ class Element
      * @param mixed $attributeType
      * @param mixed $condition
      * @param bool $negateCondition
-     * @return AttributeBuilder
+     * @return ComponentBuilder
      * @throws RuntimeException
      */
     public function removeAttribute($attribute, $attributeType = null, $condition = null, $negateCondition = false): Element
     {
         // if we have a conditional, we need to check if it passes
-        if ($condition != null && !$this->attributeBuilder->conditionalPasses($condition, $negateCondition)) {
+        if ($condition != null && !$this->componentBuilder->conditionalPasses($condition, $negateCondition)) {
             return $this;
         }
 
         // make sure that the attributes are an array
-        $attribute = (array) $attribute;
+        $attribute = Arr::wrap($attribute);
 
         // and then fill them with null
         $attribute = array_fill_keys($attribute, null);
 
         // loop through each of the attributes that we need to remove
-        foreach ($this->attributeBuilder->formatAttributes($attribute, $attributeType) as $attribute => $value) {
+        foreach ($this->componentBuilder->formatAttributes($attribute, $attributeType) as $attribute => $value) {
             // and remove it
             $this->attributeBag->offsetUnset($attribute);
         }
