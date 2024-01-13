@@ -305,12 +305,12 @@ class ComponentBuilder implements ArrayAccess
         return $this->element()->getAttributes();
     }
 
-     /**
-     * Get an attribute value on the default element via magic parameter
-     *
-     * @param string $name
-     * @return mixed
-     */
+    /**
+    * Get an attribute value on the default element via magic parameter
+    *
+    * @param string $name
+    * @return mixed
+    */
     public function __get(string $name): mixed
     {
         return $this->element()->__get($name);
