@@ -24,11 +24,12 @@ class InputStyler extends BaseStyler
             $componentBuilder->addClass([
                 'h-4',
                 'w-4',
-                'border-white/10',
+                'border-gray-300',
                 'bg-white/5',
-                'text-sky-600',
                 'focus:ring-sky-600',
-                'focus:ring-offset-gray-900',
+                'dark:focus:ring-offset-gray-900',
+                'dark:border-white/10',
+                'text-sky-600',
             ]);
 
             $componentBuilder->when('isCheckbox', function (ComponentBuilder $componentBuilder) {

@@ -2,6 +2,7 @@
 
 namespace AppKit\UI;
 
+use AppKit\UI\Id;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -56,6 +57,22 @@ class UIServiceProvider extends ServiceProvider
         // Register the main class to use with the facade
         $this->app->singleton('ui', function () {
             return new UI();
+        });
+
+        $this->app->singleton(Id::class, function () {
+            return new Id();
+        });
+
+        Blade::directive('id', function (string $expression) {
+            return "<?php app('". Id::class . "')->for($expression); ?>";
+        });
+
+        Blade::directive('idBlock', function (string $expression) {
+            return "<?php app('". Id::class . "')->startBlock($expression); ?>";
+        });
+
+        Blade::directive('endIdBlock', function (string $expression) {
+            return "<?php app('". Id::class . "')->endBlock($expression); ?>";
         });
 
         // define the source of the views

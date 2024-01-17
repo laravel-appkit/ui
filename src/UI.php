@@ -73,4 +73,9 @@ class UI
             $this->initializedComponents[] = $component::class;
         }
     }
+
+    public function id($id)
+    {
+        return $this->app->get(Id::class)->for($id);
+    }
 }
