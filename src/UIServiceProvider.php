@@ -2,7 +2,6 @@
 
 namespace AppKit\UI;
 
-use AppKit\UI\Id;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
