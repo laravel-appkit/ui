@@ -3,7 +3,7 @@
         <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">{{ $prefix }}</span>
     @endif
 
-    <input type="{{ $type }}" {{ $attributes }} />
+    <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}" {{ $attributes }} />
 
     @if (!empty($postfix))
         <span class="flex select-none items-center pr-3 text-gray-500 sm:text-sm">{{ $postfix }}</span>

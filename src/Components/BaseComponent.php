@@ -6,7 +6,9 @@ use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\Concerns\HasComponentBuilder;
 use AppKit\UI\ElementAttributeBagWrapper;
 use AppKit\UI\Facades\UI;
+use Illuminate\Console\View\Components\Component;
 use Illuminate\View\Component as BladeComponent;
+use Illuminate\View\Factory;
 
 abstract class BaseComponent extends BladeComponent
 {
@@ -15,6 +17,10 @@ abstract class BaseComponent extends BladeComponent
     protected $viewName = null;
 
     public $elements = [];
+
+    public $parentComponent;
+
+    public $childComponents = [];
 
     /**
      * Set the extra attributes that the component should make available.
@@ -76,6 +82,11 @@ abstract class BaseComponent extends BladeComponent
         return $this;
     }
 
+    public function addChildComponent(BladeComponent $component)
+    {
+        $this->childComponents[] = $component;
+    }
+
     /**
      * Render the component
      *
@@ -83,6 +94,12 @@ abstract class BaseComponent extends BladeComponent
      */
     public function render()
     {
-        return $this->viewName;
+        return function ($data) {
+            UI::renderingComponent($this);
+
+            $data['childComponents'] = $this->childComponents;
+
+            return view($this->viewName, $data)->render();
+        };
     }
 }

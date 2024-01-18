@@ -5,10 +5,15 @@ namespace AppKit\UI;
 use AppKit\UI\Components\BaseComponent;
 use AppKit\UI\Contracts\StyleFramework;
 use AppKit\UI\Styles\Tailwind\Tailwind;
+use Illuminate\View\Component;
 
 class UI
 {
     private $app;
+
+    private $renderStackLevel = 0;
+
+    private $renderStack = [];
 
     /**
      * An array of components which have been initialised
@@ -72,10 +77,36 @@ class UI
             // add the component to the list of initialized components
             $this->initializedComponents[] = $component::class;
         }
+
+        if (!empty($this->renderStack)) {
+            $parent = end($this->renderStack);
+
+            $component->parentComponent = $parent;
+            $parent->addChildComponent($component);
+
+            $nested = true;
+        }
+
+        $this->renderStack[] = $component;
     }
 
     public function id($id)
     {
         return $this->app->get(Id::class)->for($id);
+    }
+
+    public function startIdBlock(...$ids)
+    {
+        return $this->app->get(Id::class)->startIdBlock(...$ids);
+    }
+
+    public function renderingComponent(Component $component)
+    {
+        $last = array_pop($this->renderStack);
+    }
+
+    public function stack()
+    {
+        return $this->renderStack;
     }
 }

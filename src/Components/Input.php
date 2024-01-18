@@ -9,10 +9,12 @@ class Input extends BaseComponent
     public $wrapperElement;
 
     public function __construct(
+        public string $name,
         public string $postfix = '',
         public string $prefix = '',
         public string $type = 'text',
         public string $width = 'md',
+        public string $id = '',
     ) {
         $this->exposePropertyAsState('width');
 
@@ -41,5 +43,9 @@ class Input extends BaseComponent
         });
 
         $this->wrapperElement = $this->registerAttributeBuilderElement('wrapper');
+
+        if (!$this->id) {
+            $this->id = $this->name;
+        }
     }
 }
