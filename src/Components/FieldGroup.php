@@ -2,8 +2,6 @@
 
 namespace AppKit\UI\Components;
 
-use Illuminate\View\Factory;
-
 class FieldGroup extends BaseComponent
 {
     protected $viewName = 'appkit-ui::components.field-group';

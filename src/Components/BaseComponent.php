@@ -8,7 +8,6 @@ use AppKit\UI\ElementAttributeBagWrapper;
 use AppKit\UI\Facades\UI;
 use Illuminate\Console\View\Components\Component;
 use Illuminate\View\Component as BladeComponent;
-use Illuminate\View\Factory;
 
 abstract class BaseComponent extends BladeComponent
 {
