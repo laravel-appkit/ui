@@ -84,6 +84,8 @@ class UI
             $component->parentComponent = $parent;
             $parent->addChildComponent($component);
 
+            $component->parentSet();
+
             $nested = true;
         }
 

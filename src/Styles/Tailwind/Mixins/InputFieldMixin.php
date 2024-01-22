@@ -41,5 +41,19 @@ class InputFieldMixin extends BaseMixin
             'dark:disabled:text-gray-700',
             'dark:disabled:ring-gray-700',
         ]);
+
+        $componentBuilder->when('hasError', function (ComponentBuilder $componentBuilder) {
+            $componentBuilder->addClass([
+                'text-red-900',
+                'ring-red-300',
+                'placeholder:text-red-300',
+                'focus:ring-red-500',
+
+                'dark:text-red-600',
+                'dark:ring-red-800',
+                'dark:placeholder:text-red-800',
+                'dark:focus:ring-red-600',
+            ]);
+        });
     }
 }

@@ -18,7 +18,8 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/support": "^8.38.0|^9.0|^10.0"
+        "illuminate/support": "^8.38.0|^9.0|^10.0",
+        "yieldstudio/tailwind-merge-php": "^0.0.3"
     },
     "require-dev": {
         "laravel/legacy-factories": "^1.1",

@@ -8,6 +8,8 @@ use AppKit\UI\ElementAttributeBagWrapper;
 use AppKit\UI\Facades\UI;
 use Illuminate\Console\View\Components\Component;
 use Illuminate\View\Component as BladeComponent;
+use YieldStudio\TailwindMerge\TailwindMerge;
+use YieldStudio\TailwindMerge\TailwindMergeConfig;
 
 abstract class BaseComponent extends BladeComponent
 {
@@ -64,8 +66,16 @@ abstract class BaseComponent extends BladeComponent
             }
         }
 
+        $newAttributes = $this->componentBuilder->getAttributeBag()->getAttributes();
+
+        $twMerge = new TailwindMerge(TailwindMergeConfig::default()); // Config is optional
+
+        if (array_key_exists('class', $newAttributes)) {
+            $newAttributes['class'] = $twMerge->merge($newAttributes['class']);
+        }
+
         // pull out the "new" attributes
-        $this->attributes = $this->attributes->setAttributes($this->componentBuilder->getAttributeBag()->getAttributes());
+        $this->attributes = $this->attributes->setAttributes($newAttributes);
 
         // loop through each piece of data that we have
         foreach ($this->data() as $dataName => $dataElement) {
@@ -84,6 +94,11 @@ abstract class BaseComponent extends BladeComponent
     public function addChildComponent(BladeComponent $component)
     {
         $this->childComponents[] = $component;
+    }
+
+    public function parentSet()
+    {
+
     }
 
     /**

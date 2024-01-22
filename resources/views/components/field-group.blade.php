@@ -9,7 +9,9 @@
         {{ $slot }}
     </div>
 
-    <div class="mt-3">
-        <x-appkit::help-text :text="$help" />
-    </div>
+    @if ($error)
+        <p class="mt-2 text-sm text-red-600">{{ $error }}</p>
+    @endif
+
+    <x-appkit::help-text :text="$help" />
 </div>

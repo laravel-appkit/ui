@@ -9,6 +9,7 @@ class FieldGroup extends BaseComponent
     public function __construct(
         public ?string $label = '',
         public ?string $help = '',
+        public ?string $error = '',
     ) {
 
     }

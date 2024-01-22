@@ -15,8 +15,11 @@ class Input extends BaseComponent
         public string $type = 'text',
         public string $width = 'md',
         public string $id = '',
+        public bool $hasError = false,
     ) {
         $this->exposePropertyAsState('width');
+
+        $this->exposePropertyAsState('hasError');
 
         $this->defineState('hasPrefix', function () {
             return !empty($this->prefix);
@@ -46,6 +49,13 @@ class Input extends BaseComponent
 
         if (!$this->id) {
             $this->id = $this->name;
+        }
+    }
+
+    public function parentSet()
+    {
+        if ($this->parentComponent->error) {
+            $this->hasError = true;
         }
     }
 }
