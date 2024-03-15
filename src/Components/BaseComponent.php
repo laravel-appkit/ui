@@ -7,6 +7,7 @@ use AppKit\UI\Components\Concerns\HasComponentBuilder;
 use AppKit\UI\ElementAttributeBagWrapper;
 use AppKit\UI\Facades\UI;
 use Illuminate\Console\View\Components\Component;
+use Illuminate\Support\Collection;
 use Illuminate\View\Component as BladeComponent;
 use YieldStudio\TailwindMerge\TailwindMerge;
 use YieldStudio\TailwindMerge\TailwindMergeConfig;
@@ -21,7 +22,7 @@ abstract class BaseComponent extends BladeComponent
 
     public $parentComponent;
 
-    public $childComponents = [];
+    public $childComponents;
 
     /**
      * Set the extra attributes that the component should make available.
@@ -32,6 +33,8 @@ abstract class BaseComponent extends BladeComponent
     public function withAttributes(array $attributes)
     {
         UI::startComponent($this);
+
+        $this->childComponents = new Collection();
 
         // ensure that we have an attribute bag assigned to the component
         $this->attributes = $this->attributes ?: $this->newAttributeBag();

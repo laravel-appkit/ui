@@ -8,7 +8,7 @@ class Label extends BaseComponent
 
     public function __construct(
         public string $for,
-        public string $text,
+        public string $label,
     ) {
 
     }

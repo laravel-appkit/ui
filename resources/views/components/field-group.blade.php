@@ -1,17 +1,15 @@
 @php
-    $id = $childComponents[0]->id;
+    $id = $childComponents->first()->id;
 @endphp
 
 <div class="col-span-full">
-    <x-appkit::label for="{{ $id }}" :text="$label" />
+    <x-appkit::label for="{{ $id }}" :$label />
 
-    <div class="mt-2">
-        {{ $slot }}
-    </div>
+    {{ $slot }}
 
     @if ($error)
-        <p class="mt-2 text-sm text-red-600">{{ $error }}</p>
+    <x-appkit::field-error :$error />
     @endif
 
-    <x-appkit::help-text :text="$help" />
+    <x-appkit::help-text :$help />
 </div>
