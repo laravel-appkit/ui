@@ -54,7 +54,7 @@ class Input extends BaseComponent
 
     public function parentSet()
     {
-        if ($this->parentComponent->error) {
+        if ($this->parentComponent instanceof (FieldGroup::class) && $this->parentComponent->error) {
             $this->hasError = true;
         }
     }

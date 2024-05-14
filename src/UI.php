@@ -5,6 +5,7 @@ namespace AppKit\UI;
 use AppKit\UI\Components\BaseComponent;
 use AppKit\UI\Contracts\StyleFramework;
 use AppKit\UI\Styles\Tailwind\Tailwind;
+use Illuminate\Support\Js;
 use Illuminate\View\Component;
 
 class UI
@@ -14,6 +15,8 @@ class UI
     private $renderStackLevel = 0;
 
     private $renderStack = [];
+
+    private $jsData = [];
 
     /**
      * An array of components which have been initialised
@@ -84,6 +87,8 @@ class UI
             $component->parentComponent = $parent;
             $parent->addChildComponent($component);
 
+            $component->siblingIndex = count($parent->childComponents);
+
             $component->parentSet();
 
             $nested = true;
@@ -110,5 +115,35 @@ class UI
     public function stack()
     {
         return $this->renderStack;
+    }
+
+    public function getJsRuntimeVariableName($name) {
+        return 'ui' . md5($name);
+    }
+
+    public function registerJsRuntimeVariable($name, $value) {
+        $name = $this->getJsRuntimeVariableName($name);
+        $this->jsData[$name] = $value;
+    }
+
+    public function registerModal($name) {
+        $this->registerJsRuntimeVariable('modal::' . $name . '.open', false);
+    }
+
+    public function getJsRuntime()
+    {
+        return Js::from($this->jsData);
+    }
+
+    public function isModalOpen($name) {
+        return $this->getJsRuntimeVariableName('modal::' . $name . '.open');
+    }
+
+    public function openModal($name) {
+        return $this->getJsRuntimeVariableName('modal::' . $name . '.open') . ' = true';
+    }
+
+    public function closeModal($name) {
+        return $this->getJsRuntimeVariableName('modal::' . $name . '.open') . ' = false';
     }
 }

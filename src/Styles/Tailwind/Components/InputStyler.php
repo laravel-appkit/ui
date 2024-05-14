@@ -72,6 +72,7 @@ class InputStyler extends BaseStyler
                 'dark:bg-white/5',
                 'dark:text-white',
                 'dark:ring-white/10',
+                'dark:focus-within:ring-sky-800',
             ]);
 
             // change the padding of the field depending on pre-/post-fixes

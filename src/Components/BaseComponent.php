@@ -24,6 +24,8 @@ abstract class BaseComponent extends BladeComponent
 
     public $childComponents;
 
+    public $siblingIndex = null;
+
     /**
      * Set the extra attributes that the component should make available.
      *
@@ -115,6 +117,7 @@ abstract class BaseComponent extends BladeComponent
             UI::renderingComponent($this);
 
             $data['childComponents'] = $this->childComponents;
+            $data['siblingIndex'] = $this->siblingIndex;
 
             return view($this->viewName, $data)->render();
         };

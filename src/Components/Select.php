@@ -10,7 +10,10 @@ class Select extends BaseComponent
 
     public function __construct(
         public string $width = 'md',
+        public bool $hasError = false,
     ) {
         $this->exposePropertyAsState('width');
+
+        $this->exposePropertyAsState('hasError');
     }
 }

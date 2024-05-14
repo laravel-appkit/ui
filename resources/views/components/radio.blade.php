@@ -6,10 +6,10 @@
     </div>
 
     <div class="text-sm leading-6">
-        <x-appkit::label for="{{ UI::id($id) }}" text="{{ $label }}" />
+        <x-appkit::label for="{{ UI::id($id) }}" :$label />
 
         @if ($help)
-        <x-appkit::help-text text="{{ $help }}" />
+        <x-appkit::help-text :$help />
         @endif
     </div>
 </div>
