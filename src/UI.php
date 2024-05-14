@@ -117,16 +117,19 @@ class UI
         return $this->renderStack;
     }
 
-    public function getJsRuntimeVariableName($name) {
+    public function getJsRuntimeVariableName($name)
+    {
         return 'ui' . md5($name);
     }
 
-    public function registerJsRuntimeVariable($name, $value) {
+    public function registerJsRuntimeVariable($name, $value)
+    {
         $name = $this->getJsRuntimeVariableName($name);
         $this->jsData[$name] = $value;
     }
 
-    public function registerModal($name) {
+    public function registerModal($name)
+    {
         $this->registerJsRuntimeVariable('modal::' . $name . '.open', false);
     }
 
@@ -135,15 +138,18 @@ class UI
         return Js::from($this->jsData);
     }
 
-    public function isModalOpen($name) {
+    public function isModalOpen($name)
+    {
         return $this->getJsRuntimeVariableName('modal::' . $name . '.open');
     }
 
-    public function openModal($name) {
+    public function openModal($name)
+    {
         return $this->getJsRuntimeVariableName('modal::' . $name . '.open') . ' = true';
     }
 
-    public function closeModal($name) {
+    public function closeModal($name)
+    {
         return $this->getJsRuntimeVariableName('modal::' . $name . '.open') . ' = false';
     }
 }

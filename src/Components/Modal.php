@@ -15,15 +15,18 @@ class Modal extends BaseComponent
         UI::registerModal($this->name);
     }
 
-    public function isOpen() {
+    public function isOpen()
+    {
         return UI::isModalOpen($this->name);
     }
 
-    public function close() {
+    public function close()
+    {
         return UI::closeModal($this->name);
     }
 
-    public function open() {
+    public function open()
+    {
         return UI::openModal($this->name);
     }
 }
