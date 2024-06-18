@@ -1,5 +1,6 @@
 @php
-    $id = $childComponents->first()->id;
+    $id = 'smee';
+    // $id = $childComponents->first()->id;
 @endphp
 
 <div class="col-span-full">
