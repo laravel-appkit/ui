@@ -1,6 +1,6 @@
 @php
+    $id = 'smee';
     // $id = $childComponents->first()->id;
-    $id = 'ah';
 @endphp
 
 <div class="col-span-full space-y-2">
