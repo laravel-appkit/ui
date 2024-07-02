@@ -1,1 +1,1 @@
-<p class="text-sm text-red-600 dark:text-red-400">{{ $error }}</p>
+<p class="text-red-600 dark:text-red-400">{{ $error }}</p>

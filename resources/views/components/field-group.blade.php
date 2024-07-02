@@ -3,7 +3,7 @@
     // $id = $childComponents->first()->id;
 @endphp
 
-<div class="col-span-full space-y-2">
+<div class="space-y-2">
     <x-appkit::label for="{{ $id }}" :$label />
 
     <div>
