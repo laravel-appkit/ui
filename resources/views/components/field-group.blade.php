@@ -1,11 +1,14 @@
 @php
-    $id = $childComponents->first()->id;
+    // $id = $childComponents->first()->id;
+    $id = 'ah';
 @endphp
 
-<div class="col-span-full">
+<div class="col-span-full space-y-2">
     <x-appkit::label for="{{ $id }}" :$label />
 
-    {{ $slot }}
+    <div>
+        {{ $slot }}
+    </div>
 
     @if ($error)
     <x-appkit::field-error :$error />
