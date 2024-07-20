@@ -3,10 +3,11 @@
 namespace AppKit\UI\Styles\Tailwind\Components;
 
 use AppKit\UI\ComponentBuilder;
+use AppKit\UI\Components\BaseComponent;
 
 class HeadingStyler extends BaseStyler
 {
-    public function __invoke(ComponentBuilder $componentBuilder): void
+    public function __invoke(ComponentBuilder $componentBuilder, BaseComponent $instance): void
     {
         $componentBuilder->addClassForLevel([
             1 => '',

@@ -14,5 +14,7 @@
     <x-appkit::field-error :$error />
     @endif
 
+    @if ($help)
     <x-appkit::help-text :$help />
+    @endif
 </div>
