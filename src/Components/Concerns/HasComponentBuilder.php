@@ -3,7 +3,7 @@
 namespace AppKit\UI\Components\Concerns;
 
 use AppKit\UI\ComponentBuilder;
-use AppKit\UI\ElementAttributeBagWrapper;
+use AppKit\UI\ElementAttributeBag;
 use Closure;
 
 trait HasComponentBuilder
@@ -130,9 +130,9 @@ trait HasComponentBuilder
      * Register a new element for the component builder
      *
      * @param string $element
-     * @return ElementAttributeBagWrapper
+     * @return ElementAttributeBag
      */
-    protected function registerAttributeBuilderElement(string $element): ElementAttributeBagWrapper
+    protected function registerAttributeBuilderElement(string $element): ElementAttributeBag
     {
         if (!array_key_exists(static::class, $this->componentBuilderElements)) {
             $this->componentBuilderElements[static::class] = [];
@@ -142,7 +142,7 @@ trait HasComponentBuilder
         $this->componentBuilderElements[static::class][] = $element;
 
         // return a wrapper, as we will need to generate the actual content attributes later
-        return new ElementAttributeBagWrapper($element);
+        return new ElementAttributeBag($element);
     }
 
     /**

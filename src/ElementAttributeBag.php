@@ -4,7 +4,7 @@ namespace AppKit\UI;
 
 use Illuminate\Contracts\Support\Htmlable;
 
-class ElementAttributeBagWrapper implements Htmlable
+class ElementAttributeBag implements Htmlable
 {
     private $elements;
 

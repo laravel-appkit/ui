@@ -3,15 +3,15 @@
 @endphp
 
 <div {{ $attributes }}>
-    <x-appkit::label for="{{ $id }}" :$label {{ $labelElement }} />
+    <x-appkit::label for="{{ $id }}" :$label {{ $labelAttributes }} />
 
-    <div {{ $inputWrapperElement }}>
+    <div {{ $fieldAttributes }}>
         {{ $slot }}
     </div>
 
-    <x-appkit::field-error :$name :$error {{ $errorElement }} />
+    <x-appkit::field-error :$name :$error {{ $errorAttributes }} />
 
     @if ($help)
-    <x-appkit::help-text :$help {{ $helpElement }} />
+    <x-appkit::help-text :$help {{ $helpAttributes }} />
     @endif
 </div>

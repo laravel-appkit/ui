@@ -4,7 +4,7 @@ namespace AppKit\UI\Components;
 
 use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\Concerns\HasComponentBuilder;
-use AppKit\UI\ElementAttributeBagWrapper;
+use AppKit\UI\ElementAttributeBag;
 use AppKit\UI\Facades\UI;
 use Illuminate\Console\View\Components\Component;
 use Illuminate\Support\Collection;
@@ -95,7 +95,7 @@ abstract class BaseComponent extends BladeComponent
         // loop through each piece of data that we have
         foreach ($this->data() as $dataName => $dataElement) {
             // check if it it's an instance of an element attribute bag
-            if ($dataElement instanceof ElementAttributeBagWrapper) {
+            if ($dataElement instanceof ElementAttributeBag) {
                 // if it is, pull out the attributes and set everything we need to
                 $this->{$dataName} = $dataElement->run($this->componentBuilder);
 
@@ -152,7 +152,7 @@ abstract class BaseComponent extends BladeComponent
                     return $name == 'attributes' || $name == 'elements';
                 })
                 ->reject(function (ReflectionProperty $property) use ($data) {
-                    return is_a($data[$property->getName()], ElementAttributeBagWrapper::class);
+                    return is_a($data[$property->getName()], ElementAttributeBag::class);
                 })
                 ->map(function (ReflectionProperty $property) {
                     return $property->getName();

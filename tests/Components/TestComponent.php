@@ -3,7 +3,7 @@
 namespace AppKit\UI\Tests\Components;
 
 use AppKit\UI\Components\BaseComponent;
-use AppKit\UI\ElementAttributeBagWrapper;
+use AppKit\UI\ElementAttributeBag;
 use Closure;
 use Illuminate\View\Component;
 
@@ -11,7 +11,7 @@ class TestComponent extends BaseComponent
 {
     /**
      * An example element attribute bag
-     * @var ElementAttributeBagWrapper
+     * @var ElementAttributeBag
      */
     public $labelAttributes;
 
