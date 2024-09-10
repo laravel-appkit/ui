@@ -5,7 +5,6 @@ namespace AppKit\UI;
 use AppKit\UI\Components\BaseComponent;
 use AppKit\UI\Contracts\StyleFramework;
 use AppKit\UI\Styles\Tailwind\Tailwind;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Js;
 use Illuminate\View\Component;
 

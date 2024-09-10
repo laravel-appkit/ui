@@ -5,15 +5,17 @@ namespace AppKit\UI\Components\Traits;
 use Exception;
 use Illuminate\View\Component;
 
-trait InteractsWithComponentStack {
+trait InteractsWithComponentStack
+{
     /**
      * Find the closest ancestor that matches a particular class
      *
      * @param string|array $components
-     * @param boolean $throw
+     * @param bool $throw
      * @return Component|null
      */
-    protected function closest(string|array $components, bool $throw = false): Component | null {
+    protected function closest(string|array $components, bool $throw = false): Component | null
+    {
         // coerce the components into an array to make them consistent
         $components = (array) $components;
 

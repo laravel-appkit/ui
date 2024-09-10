@@ -20,7 +20,8 @@ class ReorderButtons extends BaseComponent
      *
      * @param string|null $source The javascript/alpine path that is being iterated
      */
-    public function __construct(public ?string $source = null) {
+    public function __construct(public ?string $source = null)
+    {
         // constructor automatically promotes class properties
     }
 
@@ -29,7 +30,8 @@ class ReorderButtons extends BaseComponent
      *
      * @return void
      */
-    public function build(): void {
+    public function build(): void
+    {
         // if we already have a source, we don't need to do anything
         if (is_null($this->source)) {
             // find the closes Repeating Group component

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppKit\UI\Components;
 
 class Form extends BaseComponent

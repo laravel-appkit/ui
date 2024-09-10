@@ -8,7 +8,8 @@ class ReorderHandle extends BaseComponent
 {
     protected $viewName = 'appkit-ui::components.repeating-group.reorder-handle';
 
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 }
