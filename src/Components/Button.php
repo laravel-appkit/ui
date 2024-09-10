@@ -12,7 +12,7 @@ class Button extends BaseComponent
     protected string $viewName = 'components.button';
 
     public function __construct(
-        public string $color = 'blue',
+        public string $color = 'red',
         public string $size = 'md',
         public string $shape = 'rounded',
     ) {

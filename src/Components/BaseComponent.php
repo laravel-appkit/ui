@@ -6,7 +6,6 @@ use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\Concerns\HasComponentBuilder;
 use AppKit\UI\ElementAttributeBag;
 use AppKit\UI\Facades\UI;
-use Illuminate\Console\View\Components\Component;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component as BladeComponent;
 use ReflectionClass;
@@ -25,13 +24,13 @@ abstract class BaseComponent extends BladeComponent
      */
     protected string $viewName = '';
 
-    public $elements = [];
+    public array $elements = [];
 
-    public $parentComponent;
+    public ?BaseComponent $parentComponent = null;
 
-    public $childComponents;
+    public ?Collection $childComponents = null;
 
-    public $siblingIndex = null;
+    public ?int $siblingIndex = null;
 
     /**
      * Set the extra attributes that the component should make available.
@@ -88,9 +87,6 @@ abstract class BaseComponent extends BladeComponent
 
         // pull out the "new" attributes
         $this->attributes = $this->attributes->setAttributes($newAttributes);
-
-
-
 
         // loop through each piece of data that we have
         foreach ($this->data() as $dataName => $dataElement) {
