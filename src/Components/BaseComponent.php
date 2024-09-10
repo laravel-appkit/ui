@@ -97,7 +97,7 @@ abstract class BaseComponent extends BladeComponent
             // check if it it's an instance of an element attribute bag
             if ($dataElement instanceof ElementAttributeBag) {
                 // if it is, pull out the attributes and set everything we need to
-                $this->{$dataName} = $dataElement->run($this->componentBuilder);
+                $this->{$dataName} = $dataElement->setComponentBuilder($this->componentBuilder);
 
                 $this->elements[$dataName] = $this->{$dataName};
             }

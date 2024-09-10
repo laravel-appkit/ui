@@ -13,28 +13,28 @@ class FieldGroup extends BaseComponent
      *
      * @var ElementAttributeBag
      */
-    public $labelAttributes;
+    public ElementAttributeBag $labelAttributes;
 
     /**
      * Attributes to be applied around the field
      *
      * @var ElementAttributeBag
      */
-    public $fieldAttributes;
+    public ElementAttributeBag $fieldAttributes;
 
     /**
      * Attributes to be applied to the error message
      *
      * @var ElementAttributeBag
      */
-    public $errorAttributes;
+    public ElementAttributeBag $errorAttributes;
 
     /**
      * Attributes to be applied to the help text
      *
      * @var ElementAttributeBag
      */
-    public $helpAttributes;
+    public ElementAttributeBag $helpAttributes;
 
     public function __construct(
         public ?string $name = '',
@@ -42,6 +42,7 @@ class FieldGroup extends BaseComponent
         public ?string $help = '',
         public ?string $error = '',
     ) {
+        // register the attribute builder elements
         $this->labelAttributes = $this->registerAttributeBuilderElement('label');
         $this->fieldAttributes = $this->registerAttributeBuilderElement('field');
         $this->errorAttributes = $this->registerAttributeBuilderElement('error');

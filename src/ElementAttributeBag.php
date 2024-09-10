@@ -6,24 +6,26 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class ElementAttributeBag implements Htmlable
 {
-    private $elements;
+    private ComponentBuilder $componentBuilder;
 
     public function __construct(protected string $element)
     {
 
     }
 
-    public function run(ComponentBuilder $componentBuilder)
+    public function setComponentBuilder(ComponentBuilder $componentBuilder): self
     {
-        $this->elements = $componentBuilder->getAttributeBag($this->element);
+        $this->componentBuilder = $componentBuilder;
+
+        return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->elements->__toString();
+        return $this->componentBuilder->getAttributeBag($this->element)->__toString();
     }
 
-    public function toHtml()
+    public function toHtml(): string
     {
         return $this->__toString();
     }
