@@ -23,7 +23,7 @@ abstract class BaseComponent extends BladeComponent
      *
      * @var string
      */
-    protected $viewName = null;
+    protected string $viewName = '';
 
     public $elements = [];
 
@@ -165,7 +165,7 @@ abstract class BaseComponent extends BladeComponent
                 }
             }
 
-            return view($this->viewName, $data)->render();
+            return view('appkit-ui::' . $this->viewName, $data)->render();
         };
     }
 }

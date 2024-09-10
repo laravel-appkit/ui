@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class Button extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.button';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.button';
 
     public function __construct(
         public string $color = 'blue',

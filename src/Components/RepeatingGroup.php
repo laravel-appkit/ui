@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class RepeatingGroup extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.repeating-group.index';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.repeating-group.index';
 
     public function __construct(
         public string $source,

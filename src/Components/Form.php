@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class Form extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.form';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.form';
 
     public function __construct(
         // public $action = '',

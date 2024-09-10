@@ -6,7 +6,12 @@ use AppKit\UI\Components\BaseComponent;
 
 class ReorderHandle extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.repeating-group.reorder-handle';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.repeating-group.reorder-handle';
 
     public function __construct()
     {

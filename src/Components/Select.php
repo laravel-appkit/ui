@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class Select extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.select';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.select';
 
     public $wrapperElement;
 

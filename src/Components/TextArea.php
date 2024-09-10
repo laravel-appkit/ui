@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class TextArea extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.text-area';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.text-area';
 
     public $wrapperElement;
 

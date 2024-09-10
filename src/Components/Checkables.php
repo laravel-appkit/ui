@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class Checkables extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.checkables';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.checkables';
 
     public string $itemComponentName = '';
 

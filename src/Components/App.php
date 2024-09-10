@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class App extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.app';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.app';
 
     public function __construct(
 

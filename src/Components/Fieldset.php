@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class Fieldset extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.fieldset';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.fieldset';
 
     public function __construct(
         public string $legend,

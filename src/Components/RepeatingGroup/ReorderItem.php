@@ -13,7 +13,12 @@ class ReorderItem extends BaseComponent
     /**
      * {@inheritDoc}
      */
-    protected $viewName = 'appkit-ui::components.repeating-group.reorder-item';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.repeating-group.reorder-item';
 
     /**
      * Construct a Remove Button component

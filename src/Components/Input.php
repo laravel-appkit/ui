@@ -7,7 +7,12 @@ use Illuminate\Support\Str;
 
 class Input extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.input';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.input';
 
     public $wrapperElement;
 

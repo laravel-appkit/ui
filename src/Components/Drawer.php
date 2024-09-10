@@ -6,7 +6,12 @@ use AppKit\UI\Facades\UI;
 
 class Drawer extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.drawer';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.drawer';
 
     public function __construct(
         public string $name,

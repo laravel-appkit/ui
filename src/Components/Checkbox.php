@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class Checkbox extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.checkbox';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.checkbox';
 
     public function __construct(
         public string $name,

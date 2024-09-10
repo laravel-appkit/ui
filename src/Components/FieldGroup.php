@@ -6,7 +6,12 @@ use AppKit\UI\ElementAttributeBag;
 
 class FieldGroup extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.field-group';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.field-group';
 
     /**
      * Attributes to be applied to the element

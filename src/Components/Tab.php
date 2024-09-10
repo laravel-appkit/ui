@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class Tab extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.tab';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.tab';
 
     public function __construct(
         public string $title

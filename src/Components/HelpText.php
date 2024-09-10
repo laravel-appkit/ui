@@ -4,7 +4,12 @@ namespace AppKit\UI\Components;
 
 class HelpText extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.help-text';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.help-text';
 
     public function __construct(
         public string $help,

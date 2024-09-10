@@ -6,7 +6,12 @@ use AppKit\UI\Facades\UI;
 
 class Modal extends BaseComponent
 {
-    protected $viewName = 'appkit-ui::components.modal';
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
+    protected string $viewName = 'components.modal';
 
     public function __construct(
         public string $name,
