@@ -7,6 +7,7 @@ class FieldError extends BaseComponent
     protected $viewName = 'appkit-ui::components.field-error';
 
     public function __construct(
+        public ?string $name,
         public string $error,
     ) {
 

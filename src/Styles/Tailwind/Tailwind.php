@@ -32,7 +32,7 @@ class Tailwind implements StyleFramework
      * @return string[]
      * @throws RuntimeException
      */
-    public function getColorClasses(string $color, int $scale = 600, string $property = 'bg', $include = [])
+    public function getColorClasses(string $color, int $scale = 600, string $property = 'bg', $include = []): array
     {
         // the array of classes that we need to add
         $classes = [];
@@ -109,7 +109,7 @@ class Tailwind implements StyleFramework
      * @param string $prefix
      * @return string
      */
-    private function generateColorClass($color, $scale, $property, $prefix = '')
+    private function generateColorClass($color, $scale, $property, $prefix = ''): string
     {
         // the parts of the class
         $parts = [$property, $color, $scale];
@@ -131,7 +131,7 @@ class Tailwind implements StyleFramework
      * @param int $scale
      * @return string
      */
-    public function getTextOnColorScale(string $color, int $scale)
+    public function getTextOnColorScale(string $color, int $scale): string
     {
         return $scale < 500 ? 'black' : 'white';
     }
@@ -143,7 +143,7 @@ class Tailwind implements StyleFramework
      * @param int $scale
      * @return int
      */
-    public function getHoverColorScale(string $color, int $scale)
+    public function getHoverColorScale(string $color, int $scale): int
     {
         return $scale > 100 ? ($scale - 100) : ($scale + 100);
     }
@@ -155,7 +155,7 @@ class Tailwind implements StyleFramework
      * @param int $scale
      * @return int
      */
-    public function getDarkModeColorScale(string $color, int $scale)
+    public function getDarkModeColorScale(string $color, int $scale): int
     {
         return 900 - $scale;
     }

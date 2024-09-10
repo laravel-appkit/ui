@@ -7,7 +7,7 @@ class Button extends BaseComponent
     protected $viewName = 'appkit-ui::components.button';
 
     public function __construct(
-        public string $color = 'red',
+        public string $color = 'blue',
         public string $size = 'md',
         public string $shape = 'rounded',
     ) {

@@ -1,5 +1,5 @@
-<fieldset>
-    <legend class="text-sm font-semibold leading-6 text-white">{{ $legend }}</legend>
+<fieldset {{ $attributes }}>
+    <legend class="font-medium text-gray-900 leading-6 dark:text-white">{{ $legend }}</legend>
 
     {{ $slot }}
 </fieldset>

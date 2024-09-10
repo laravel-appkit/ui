@@ -11,9 +11,6 @@ class InputStyler extends BaseStyler
 {
     public function __invoke(ComponentBuilder $componentBuilder, BaseComponent $instance): void
     {
-        $componentBuilder->setAttribute('x-model', 'form.' . $instance->name);
-        $componentBuilder->setAttribute('@change', 'form.validate(\'' . $instance->name . '\')');
-
         // if we aren't a checkbox, we add the normal styling
         $componentBuilder->whenNot('isCheckable', function (ComponentBuilder $componentBuilder) {
             // add the default field styling

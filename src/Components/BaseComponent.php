@@ -9,6 +9,8 @@ use AppKit\UI\Facades\UI;
 use Illuminate\Console\View\Components\Component;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component as BladeComponent;
+use ReflectionClass;
+use ReflectionProperty;
 use YieldStudio\TailwindMerge\TailwindMerge;
 use YieldStudio\TailwindMerge\TailwindMergeConfig;
 
@@ -16,6 +18,11 @@ abstract class BaseComponent extends BladeComponent
 {
     use HasComponentBuilder;
 
+    /**
+     * The name of the view that this component renders
+     *
+     * @var string
+     */
     protected $viewName = null;
 
     public $elements = [];
@@ -82,6 +89,9 @@ abstract class BaseComponent extends BladeComponent
         // pull out the "new" attributes
         $this->attributes = $this->attributes->setAttributes($newAttributes);
 
+
+
+
         // loop through each piece of data that we have
         foreach ($this->data() as $dataName => $dataElement) {
             // check if it it's an instance of an element attribute bag
@@ -106,6 +116,11 @@ abstract class BaseComponent extends BladeComponent
 
     }
 
+    public function build()
+    {
+
+    }
+
     /**
      * Render the component
      *
@@ -116,8 +131,39 @@ abstract class BaseComponent extends BladeComponent
         return function ($data) {
             UI::renderingComponent($this);
 
-            $data['childComponents'] = $this->childComponents;
-            $data['siblingIndex'] = $this->siblingIndex;
+            $this->build();
+
+            $class = get_class($this);
+
+            // dump($class);
+
+            $reflection = new ReflectionClass($this);
+
+            $properties = collect($reflection->getProperties(ReflectionProperty::IS_PUBLIC))
+                ->reject(function (ReflectionProperty $property) {
+                    return $property->isStatic();
+                })
+                ->reject(function (ReflectionProperty $property) {
+                    return $this->shouldIgnore($property->getName());
+                })
+                ->reject(function (ReflectionProperty $property) {
+                    $name = $property->getName();
+
+                    return $name == 'attributes' || $name == 'elements';
+                })
+                ->reject(function (ReflectionProperty $property) use ($data) {
+                    return is_a($data[$property->getName()], ElementAttributeBagWrapper::class);
+                })
+                ->map(function (ReflectionProperty $property) {
+                    return $property->getName();
+                })->all();
+
+            foreach ($properties as $property) {
+                if ($data[$property] != $this->{$property}) {
+
+                    $data[$property] = $this->{$property};
+                }
+            }
 
             return view($this->viewName, $data)->render();
         };

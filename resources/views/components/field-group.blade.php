@@ -1,20 +1,17 @@
 @php
     $id = 'smee';
-    // $id = $childComponents->first()->id;
 @endphp
 
-<div class="space-y-2">
-    <x-appkit::label for="{{ $id }}" :$label />
+<div {{ $attributes }}>
+    <x-appkit::label for="{{ $id }}" :$label {{ $labelElement }} />
 
-    <div>
+    <div {{ $inputWrapperElement }}>
         {{ $slot }}
     </div>
 
-    @if ($error)
-    <x-appkit::field-error :$error />
-    @endif
+    <x-appkit::field-error :$name :$error {{ $errorElement }} />
 
     @if ($help)
-    <x-appkit::help-text :$help />
+    <x-appkit::help-text :$help {{ $helpElement }} />
     @endif
 </div>

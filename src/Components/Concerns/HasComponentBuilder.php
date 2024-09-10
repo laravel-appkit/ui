@@ -35,8 +35,12 @@ trait HasComponentBuilder
      * @param int $weight
      * @return void
      */
-    public static function registerAttributeBuilderParser(callable $closure, $weight = 10)
+    public static function registerAttributeBuilderParser(callable|string $closure, $weight = 10)
     {
+        if (is_string($closure) && class_exists($closure) && method_exists($closure, '__invoke')) {
+            $closure = new $closure();
+        }
+
         // if this is the first time that we are seeing the weight
         if (!array_key_exists(static::class, static::$componentBuilderParsers)) {
             // set up an array to store all of the closures of this weight
@@ -56,7 +60,7 @@ trait HasComponentBuilder
     /**
      * @see registerAttributeBuilderParser
      */
-    public static function customize(callable $closure, $weight = 10)
+    public static function customize(callable|string $closure, $weight = 10)
     {
         // this is just an alias to registerAttributeBuilderParser
         static::registerAttributeBuilderParser(...func_get_args());
@@ -65,7 +69,7 @@ trait HasComponentBuilder
     /**
      * @see registerAttributeBuilderParser
      */
-    public static function customise(callable $closure, $weight = 10)
+    public static function customise(callable|string $closure, $weight = 10)
     {
         // this is just an alias to registerAttributeBuilderParser
         static::registerAttributeBuilderParser(...func_get_args());

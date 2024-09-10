@@ -1,3 +1,3 @@
-<div x-data="{{ UI::getJsRuntime() }}" class="[&_[x-cloak]]:hidden">
+<div x-data="{{ UI::getJsRuntime() }}" {{ $attributes }}>
     {{ $slot }}
 </div>
