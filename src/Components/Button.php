@@ -15,6 +15,7 @@ class Button extends BaseComponent
         public string $color = 'red',
         public string $size = 'md',
         public string $shape = 'rounded',
+        public ?string $href = null,
     ) {
         $this->exposePropertyAsState('color');
         $this->exposePropertyAsState('size');
