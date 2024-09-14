@@ -29,8 +29,7 @@ class ReorderButtons extends BaseComponent
     public function __construct(
         #[Inheritable(fromComponents: RepeatingGroup::class)]
         public ?string $source = null
-    )
-    {
+    ) {
         // constructor automatically promotes class properties
     }
 }

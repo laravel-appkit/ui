@@ -20,7 +20,8 @@ class Fieldset extends BaseComponent
 
     }
 
-    public function build() {
+    public function build()
+    {
         if (is_a($this->inheritedAttributes, ElementAttributeBag::class)) {
             $this->inheritedAttributes = $this->inheritedAttributes->attributes();
         }

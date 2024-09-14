@@ -7,7 +7,8 @@ use Exception;
 use Illuminate\Support\Str;
 use ReflectionMethod;
 
-class Attributes {
+class Attributes
+{
     /**
      * Where we want to look for the attributes
      *
@@ -86,7 +87,7 @@ class Attributes {
     /**
      * Set the target attribute type
      *
-     * @param integer $type
+     * @param int $type
      * @return self
      */
     public function type(int $type): self
@@ -169,7 +170,8 @@ class Attributes {
      *
      * @return array
      */
-    public function get(): array {
+    public function get(): array
+    {
         $return = [];
 
         // check that we are looking at parameters (it's the only one implemented so far)
