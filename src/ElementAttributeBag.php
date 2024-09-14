@@ -20,6 +20,11 @@ class ElementAttributeBag implements Htmlable
         return $this;
     }
 
+    public function attributes(): array
+    {
+        return $this->componentBuilder->getAttributeBag($this->element)->getAttributes();
+    }
+
     public function __toString(): string
     {
         return $this->componentBuilder->getAttributeBag($this->element)->__toString();

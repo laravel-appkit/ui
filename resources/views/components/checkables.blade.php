@@ -1,7 +1,10 @@
-<x-appkit::fieldset legend="My Legend">
-    <div class="mt-3 space-y-4">
+<x-appkit::fieldset :inheritedAttributes="$fieldsetAttributes" :legend="$label">
+    <div {{ $attributes }}>
         @foreach ($options as $option)
-            <x-dynamic-component :component="$itemComponentName" name="example" id="{{ $id }}" label="{{ $option['label'] }}" help="{{ $option['help'] }}" value="{{ $option['value'] }}" />
+            @php
+            ['label' => $label, 'help' => $help, 'value' => $value] = $option;
+            @endphp
+            <x-dynamic-component :component="$itemComponentName" :$name :$id :$label :$help :$value />
         @endforeach
     </div>
 </x-appkit::fieldset>

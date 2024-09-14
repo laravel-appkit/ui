@@ -13,9 +13,7 @@ class AddAnotherButton extends BaseComponent
      */
     protected string $viewName = 'components.repeating-group.add-another-button';
 
-    public function __construct(
-        public string $source,
-    ) {
+    public function __construct(public string $source) {
 
     }
 }

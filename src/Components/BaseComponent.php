@@ -2,10 +2,13 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\Inheritable;
 use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\Concerns\HasComponentBuilder;
 use AppKit\UI\ElementAttributeBag;
 use AppKit\UI\Facades\UI;
+use AppKit\UI\Support\Attributes;
+use Attribute;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component as BladeComponent;
 use ReflectionClass;
@@ -118,6 +121,35 @@ abstract class BaseComponent extends BladeComponent
     }
 
     /**
+     * Check if we have any constructor parameters that have an inheritable attribute on it
+     *
+     * @return void
+     */
+    public function buildInheritableParameters()
+    {
+        // get the list of the inheritable parameters
+        $inheritableParameters = Attributes::find(Inheritable::class)
+            ->onConstructorParameters()
+            ->ofClass(static::class)
+            ->get();
+
+        // check if we have any inheritable parameters
+        if ($inheritableParameters) {
+            // then loop through them
+            foreach ($inheritableParameters as $parameter => $inheritableAttribute) {
+                // we only care about them if it's null
+                if (is_null($this->{$parameter})) {
+                    // find the closes applicable component
+                    $inheritsFrom = $this->closest($inheritableAttribute->fromComponents, true);
+
+                    // use the parent as the source of the attribute
+                    $this->{$parameter} = $inheritsFrom->{$parameter};
+                }
+            }
+        }
+    }
+
+    /**
      * Render the component
      *
      * @return Closure
@@ -125,42 +157,60 @@ abstract class BaseComponent extends BladeComponent
     public function render()
     {
         return function ($data) {
+            // signal that we are about to render this component
             UI::renderingComponent($this);
 
+            // build the inheritable parameters that have the Inheritable attribute on them
+            $this->buildInheritableParameters();
+
+            // build anything custom for the component
             $this->build();
 
-            $class = get_class($this);
-
-            // dump($class);
-
+            // get a reflection for this component
             $reflection = new ReflectionClass($this);
 
+            // loop through the public properties
             $properties = collect($reflection->getProperties(ReflectionProperty::IS_PUBLIC))
                 ->reject(function (ReflectionProperty $property) {
+                    // we don't care if they are static
                     return $property->isStatic();
                 })
                 ->reject(function (ReflectionProperty $property) {
+                    // and anything we have signaled that should be ignored
                     return $this->shouldIgnore($property->getName());
                 })
                 ->reject(function (ReflectionProperty $property) {
+                    // get the name of the property
                     $name = $property->getName();
 
+                    // because we are going to have changed both of these (probably), then we don't need to deal with them here
                     return $name == 'attributes' || $name == 'elements';
                 })
                 ->reject(function (ReflectionProperty $property) use ($data) {
+                    // We also don't want to deal with anything that is an ElementAttributeBag
                     return is_a($data[$property->getName()], ElementAttributeBag::class);
                 })
                 ->map(function (ReflectionProperty $property) {
+                    // now, we pull out the names of what's left
                     return $property->getName();
                 })->all();
 
+            // loop through all of the public properties that we aren't dealing with on their own
             foreach ($properties as $property) {
+                // check if the data that will be passed to the renderer has been updated via a build method
                 if ($data[$property] != $this->{$property}) {
-
+                    // if it has, we update it to be the new value
                     $data[$property] = $this->{$property};
                 }
             }
 
+            // if we have inheritable attributes on the component (attributes passed in from another attribute bag)
+            if (isset($data['inheritedAttributes'])) {
+                // we merge them in right at the end
+                $data['attributes'] = $data['attributes']->merge($this->inheritedAttributes);
+            }
+
+            // now we render the view
             return view('appkit-ui::' . $this->viewName, $data)->render();
         };
     }
