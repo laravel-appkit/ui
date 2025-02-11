@@ -161,4 +161,24 @@ class UI
     {
         return $this->getJsRuntimeVariableName('modal::' . $name . '.open') . ' = false';
     }
+
+    /**
+     * Signal that the form label should show optional fields, not required fields
+     *
+     * @return void
+     */
+    public function highlightOptionalFormFields(): void
+    {
+        config(['appkit-ui::highlight_optional_fields' => true]);
+    }
+
+    /**
+     * Signal that the form label should show required fields, not optional fields
+     *
+     * @return void
+     */
+    public function highlightRequiredFormFields(): void
+    {
+        config(['appkit-ui::highlight_optional_fields' => false]);
+    }
 }

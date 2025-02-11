@@ -1,1 +1,1 @@
-<label for="{{ $for }}" {{ $attributes }}>{{ $label }}</label>
+<label for="{{ $for }}" {{ $attributes }}>{{ $label }}<x-appkit::field-requirement :$required /></label>

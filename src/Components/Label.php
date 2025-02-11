@@ -14,6 +14,7 @@ class Label extends BaseComponent
     public function __construct(
         public string $for,
         public string $label,
+        public bool $required = false,
     ) {
 
     }

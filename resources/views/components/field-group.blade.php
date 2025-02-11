@@ -3,7 +3,7 @@
 @endphp
 
 <div {{ $attributes }}>
-    <x-appkit::label for="{{ $id }}" :$label {{ $labelAttributes }} />
+    <x-appkit::label for="{{ $id }}" :$label :$required {{ $labelAttributes }} />
 
     <div {{ $fieldAttributes }}>
         {{ $slot }}

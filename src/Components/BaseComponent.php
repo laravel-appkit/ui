@@ -11,6 +11,7 @@ use AppKit\UI\Support\Attributes;
 use Attribute;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component as BladeComponent;
+use Illuminate\View\ComponentAttributeBag;
 use ReflectionClass;
 use ReflectionProperty;
 use YieldStudio\TailwindMerge\TailwindMerge;
@@ -49,6 +50,14 @@ abstract class BaseComponent extends BladeComponent
 
         // ensure that we have an attribute bag assigned to the component
         $this->attributes = $this->attributes ?: $this->newAttributeBag();
+
+        // handle situations where attributes have been passed in to the component as a attribute bag
+        if (array_key_exists('attributes', $attributes) && $attributes['attributes'] instanceof ComponentAttributeBag) {
+            $promotedAttributes = $attributes['attributes']->getAttributes();
+
+            unset($attributes['attributes']);
+            $attributes = array_merge($attributes, $promotedAttributes);
+        }
 
         // create the new attribute bag that we will pass to the component builder
         $attributeBag = $this->newAttributeBag($attributes);

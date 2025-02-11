@@ -46,6 +46,7 @@ class FieldGroup extends BaseComponent
         public ?string $label = '',
         public ?string $help = '',
         public ?string $error = '',
+        public bool $required = false,
     ) {
         // register the attribute builder elements
         $this->labelAttributes = $this->registerAttributeBuilderElement('label');
