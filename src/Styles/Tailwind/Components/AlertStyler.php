@@ -4,8 +4,6 @@ namespace AppKit\UI\Styles\Tailwind\Components;
 
 use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\BaseComponent;
-use AppKit\UI\Styles\Tailwind\Mixins\BackgroundColorMixin;
-use AppKit\UI\Styles\Tailwind\Mixins\FocusOutlineMixin;
 
 class AlertStyler extends BaseStyler
 {
