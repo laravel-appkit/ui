@@ -3,6 +3,7 @@
 namespace AppKit\UI\Components;
 
 use AppKit\UI\Attributes\Inheritable;
+use AppKit\UI\Attributes\Slotable;
 use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\Concerns\HasComponentBuilder;
 use AppKit\UI\ElementAttributeBag;
@@ -159,6 +160,34 @@ abstract class BaseComponent extends BladeComponent
     }
 
     /**
+     * Check if we have any constructor parameters that have an inheritable attribute on it
+     *
+     * @return void
+     */
+    public function buildSlotableParameters(array $data)
+    {
+        // get the list of the inheritable parameters
+        $slotableParameters = Attributes::find(Slotable::class)
+            ->onConstructorParameters()
+            ->ofClass(static::class)
+            ->get();
+
+        // check if we have any inheritable parameters
+        if ($slotableParameters) {
+            foreach ($slotableParameters as $parameter => $slotableParameter) {
+                /** @var Slotable $slotableParameter */
+                if (empty($slotableParameter->slotName)) {
+                    $slotableParameter->slotName = $parameter;
+                }
+
+                if (array_key_exists('__laravel_slots', $data) && array_key_exists($slotableParameter->slotName, $data['__laravel_slots'])) {
+                    $this->{$parameter} = $data['__laravel_slots'][$slotableParameter->slotName];
+                }
+            }
+        }
+    }
+
+    /**
      * Render the component
      *
      * @return Closure
@@ -171,6 +200,8 @@ abstract class BaseComponent extends BladeComponent
 
             // build the inheritable parameters that have the Inheritable attribute on them
             $this->buildInheritableParameters();
+
+            $this->buildSlotableParameters($data);
 
             // build anything custom for the component
             $this->build();
