@@ -2,6 +2,8 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\Element;
+use AppKit\UI\Attributes\ExposedAsState;
 use AppKit\UI\Attributes\Slotable;
 use AppKit\UI\ElementAttributeBag;
 
@@ -12,40 +14,42 @@ class Alert extends BaseComponent
      *
      * @var ElementAttributeBag
      */
-    public ElementAttributeBag $titleAttributes;
+    #[Element('title')]
+    public ?ElementAttributeBag $titleAttributes = null;
 
     /**
      * Attributes to be applied to the error message
      *
      * @var ElementAttributeBag
      */
-    public ElementAttributeBag $contentAttributes;
+    #[Element('content')]
+    public ?ElementAttributeBag $contentAttributes = null;
 
     /**
      * Attributes to be applied to the error message
      *
      * @var ElementAttributeBag
      */
-    public ElementAttributeBag $iconAttributes;
+    #[Element('icon')]
+    public ?ElementAttributeBag $iconAttributes = null;
 
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string|null $icon
+     * @param string|null $title
+     * @param string|null $type
      */
-    protected string $viewName = 'components.alert';
-
     public function __construct(
         #[Slotable]
-        public ?string $title = null,
-        #[Slotable]
         public ?string $icon = null,
+
+        #[Slotable]
+        public ?string $title = null,
+
+        #[ExposedAsState]
         public ?string $type = 'success',
     ) {
-        $this->titleAttributes = $this->registerAttributeBuilderElement('title');
-        $this->contentAttributes = $this->registerAttributeBuilderElement('content');
-        $this->iconAttributes = $this->registerAttributeBuilderElement('icon');
-
-        $this->exposePropertyAsState('type');
+        // constructor promotion handles the rest
     }
 }

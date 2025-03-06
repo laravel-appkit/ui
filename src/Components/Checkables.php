@@ -2,17 +2,11 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\Element;
 use AppKit\UI\ElementAttributeBag;
 
 class Checkables extends BaseComponent
 {
-    /**
-     * The name of the view that this component renders
-     *
-     * @var string
-     */
-    protected string $viewName = 'components.checkables';
-
     /**
      * The component name that should be rendered for each of the options
      *
@@ -25,8 +19,18 @@ class Checkables extends BaseComponent
      *
      * @var ElementAttributeBag
      */
-    public ElementAttributeBag $fieldsetAttributes;
+    #[Element('fieldset')]
+    public ?ElementAttributeBag $fieldsetAttributes = null;
 
+    /**
+     * Create an instance of the component
+     *
+     * @param string $id
+     * @param string $label
+     * @param string $name
+     * @param string $type
+     * @param array $options
+     */
     public function __construct(
         public string $id,
         public string $label,
@@ -36,6 +40,6 @@ class Checkables extends BaseComponent
     ) {
         $this->itemComponentName = ($this->type == 'radio') ? 'appkit::radio' : 'appkit::checkbox';
 
-        $this->fieldsetAttributes = $this->registerAttributeBuilderElement('fieldset');
+        // constructor promotion handles the rest
     }
 }

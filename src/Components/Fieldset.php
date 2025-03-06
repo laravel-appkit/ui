@@ -7,19 +7,19 @@ use AppKit\UI\ElementAttributeBag;
 class Fieldset extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param array|ElementAttributeBag|null|null $inheritedAttributes
+     * @param string $legend
      */
-    protected string $viewName = 'components.fieldset';
-
     public function __construct(
-        public string $legend,
         public array|ElementAttributeBag|null $inheritedAttributes = null,
+        public string $legend,
     ) {
-
+        // constructor promotion handles the rest
     }
 
+    // TODO: Move this to an attribute
     public function build()
     {
         if (is_a($this->inheritedAttributes, ElementAttributeBag::class)) {

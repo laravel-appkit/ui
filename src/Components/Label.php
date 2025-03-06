@@ -5,17 +5,17 @@ namespace AppKit\UI\Components;
 class Label extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string $for
+     * @param string $label
+     * @param boolean $required
      */
-    protected string $viewName = 'components.label';
-
     public function __construct(
         public string $for,
         public string $label,
         public bool $required = false,
     ) {
-
+        // constructor promotion handles the rest
     }
 }

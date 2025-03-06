@@ -5,15 +5,9 @@ namespace AppKit\UI\Components;
 class App extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
-     *
-     * @var string
+     * Create an instance of the component
      */
-    protected string $viewName = 'components.app';
-
-    public function __construct(
-
-    ) {
-
+    public function __construct() {
+        // constructor promotion handles the rest
     }
 }

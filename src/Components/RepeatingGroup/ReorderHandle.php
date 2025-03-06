@@ -7,14 +7,10 @@ use AppKit\UI\Components\BaseComponent;
 class ReorderHandle extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
-     *
-     * @var string
+     * Create an instance of the component
      */
-    protected string $viewName = 'components.repeating-group.reorder-handle';
-
-    public function __construct()
+   public function __construct()
     {
-
+        // constructor promotion handles the rest
     }
 }

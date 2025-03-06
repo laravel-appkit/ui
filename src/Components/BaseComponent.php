@@ -2,15 +2,20 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\Element;
+use AppKit\UI\Attributes\ExposedAsState;
 use AppKit\UI\Attributes\Inheritable;
 use AppKit\UI\Attributes\Slotable;
 use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\Concerns\HasComponentBuilder;
+use AppKit\UI\Components\Concerns\InteractsWithComponentStack;
 use AppKit\UI\ElementAttributeBag;
 use AppKit\UI\Facades\UI;
 use AppKit\UI\Support\Attributes;
 use Attribute;
+use Closure;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Illuminate\View\Component as BladeComponent;
 use Illuminate\View\ComponentAttributeBag;
 use ReflectionClass;
@@ -21,6 +26,7 @@ use YieldStudio\TailwindMerge\TailwindMergeConfig;
 abstract class BaseComponent extends BladeComponent
 {
     use HasComponentBuilder;
+    use InteractsWithComponentStack;
 
     /**
      * The name of the view that this component renders
@@ -45,8 +51,44 @@ abstract class BaseComponent extends BladeComponent
      */
     public function withAttributes(array $attributes)
     {
+        // flag to the service provider that we are starting this component
         UI::startComponent($this);
 
+        // if we don't have a view name passed in, we try to generate one based on a convention
+        if (empty($this->viewName)) {
+            $this->viewName = Str::of(static::class)
+                ->remove('AppKit\UI\Components\\')
+                ->replace('\\', '.')
+                ->kebab()
+                ->replace('.-', '.')
+                ->prepend('components.');
+        }
+
+        // find parameters that are being exposed as a state
+        Attributes::find(ExposedAsState::class)
+            ->onConstructorParameters()
+            ->ofClass(static::class)
+            ->get()
+            ->keys()
+            ->each(fn ($parameter) => $this->exposePropertyAsState($parameter));
+
+        Attributes::find(ExposedAsState::class)
+            ->onMethods()
+            ->ofClass(static::class)
+            ->get()
+            ->keys()
+            ->each(fn ($method) => $this->defineState($method, Closure::fromCallable([$this, $method])));
+
+        // find the element attribute bags that we need to register
+        Attributes::find(Element::class)
+            ->onProperties()
+            ->ofClass(static::class)
+            ->get()
+            ->each(function ($attribute, $property) {
+                $this->{$property} = $this->registerElement($attribute->elementName);
+            });
+
+        // create a collection of child components
         $this->childComponents = new Collection();
 
         // ensure that we have an attribute bag assigned to the component
@@ -247,6 +289,7 @@ abstract class BaseComponent extends BladeComponent
             // if we have inheritable attributes on the component (attributes passed in from another attribute bag)
             if (isset($data['inheritedAttributes'])) {
                 // we merge them in right at the end
+                dd($this->inheritedAttributes);
                 $data['attributes'] = $data['attributes']->merge($this->inheritedAttributes);
             }
 

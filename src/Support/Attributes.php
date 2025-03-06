@@ -4,7 +4,9 @@ namespace AppKit\UI\Support;
 
 use Attribute;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use ReflectionClass;
 use ReflectionMethod;
 
 class Attributes
@@ -121,6 +123,26 @@ class Attributes
     }
 
     /**
+     * Shorthand for searching for attribute on properties
+     *
+     * @return self
+     */
+    public function property(): self
+    {
+        return $this->type(Attribute::TARGET_PROPERTY);
+    }
+
+    /**
+     * Shorthand for searching for attribute on properties
+     *
+     * @return self
+     */
+    public function onMethods(): self
+    {
+        return $this->type(Attribute::TARGET_METHOD);
+    }
+
+    /**
      * Shorthand for searching on the constructor
      *
      * @return self
@@ -170,7 +192,7 @@ class Attributes
      *
      * @return array
      */
-    public function get(): array
+    public function get(): Collection
     {
         $return = [];
 
@@ -191,7 +213,41 @@ class Attributes
                 }
             }
 
-            return $return;
+            return new Collection($return);
+        } elseif ($this->attributeType == Attribute::TARGET_PROPERTY) {
+            // get the reflection of the method
+            $classReflection = new ReflectionClass($this->targetClass);
+
+            // loop through the params on the method
+            foreach ($classReflection->getProperties() as $property) {
+                // and get the attributes on it
+                $attributes = $property->getAttributes($this->attributeClass);
+
+                // loop through the attributes
+                foreach ($attributes as $attribute) {
+                    // and set them on the return array
+                    $return[$property->getName()] = $attribute->newInstance();
+                }
+            }
+
+            return new Collection($return);
+        } elseif ($this->attributeType == Attribute::TARGET_METHOD) {
+            // get the reflection of the method
+            $classReflection = new ReflectionClass($this->targetClass);
+
+            // loop through the params on the method
+            foreach ($classReflection->getMethods() as $method) {
+                // and get the attributes on it
+                $attributes = $method->getAttributes($this->attributeClass);
+
+                // loop through the attributes
+                foreach ($attributes as $attribute) {
+                    // and set them on the return array
+                    $return[$method->getName()] = $attribute->newInstance();
+                }
+            }
+
+            return new Collection($return);
         } else {
             throw new Exception('Attribute type ' . $this->attributeType . ' is not currently supported');
         }

@@ -2,18 +2,19 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\ExposedAsState;
+
 class Heading extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string $level
      */
-    protected string $viewName = 'components.heading';
-
     public function __construct(
+        #[ExposedAsState]
         public string $level,
     ) {
-        $this->exposePropertyAsState('level');
+        // constructor promotion handles the rest
     }
 }

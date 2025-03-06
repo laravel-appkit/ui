@@ -5,19 +5,21 @@ namespace AppKit\UI\Components;
 class Checkbox extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string|null $help
+     * @param string $id
+     * @param string $label
+     * @param string $name
+     * @param string $value
      */
-    protected string $viewName = 'components.checkbox';
-
     public function __construct(
-        public string $name,
-        public string $value,
         public string $id,
         public string $label,
+        public string $name,
+        public string $value,
         public ?string $help = null,
     ) {
-
+        // constructor promotion handles the rest
     }
 }

@@ -5,16 +5,9 @@ namespace AppKit\UI\Components;
 class Form extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
-     *
-     * @var string
+     * Create an instance of the component
      */
-    protected string $viewName = 'components.form';
-
-    public function __construct(
-        // public $action = '',
-        // public $method = '',
-    ) {
-
+    public function __construct() {
+        // constructor promotion handles the rest
     }
 }

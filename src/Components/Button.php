@@ -2,23 +2,30 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\ExposedAsState;
+
 class Button extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string $color
+     * @param string $size
+     * @param string $shape
+     * @param string|null $href
      */
-    protected string $viewName = 'components.button';
-
     public function __construct(
+        #[ExposedAsState]
         public string $color = 'red',
+
+        #[ExposedAsState]
         public string $size = 'md',
+
+        #[ExposedAsState]
         public string $shape = 'rounded',
+
         public ?string $href = null,
     ) {
-        $this->exposePropertyAsState('color');
-        $this->exposePropertyAsState('size');
-        $this->exposePropertyAsState('shape');
+        // constructor promotion handles the rest
     }
 }

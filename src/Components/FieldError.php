@@ -5,16 +5,15 @@ namespace AppKit\UI\Components;
 class FieldError extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string $error
+     * @param string|null $name
      */
-    protected string $viewName = 'components.field-error';
-
     public function __construct(
-        public ?string $name,
         public string $error,
+        public ?string $name,
     ) {
-
+        // constructor promotion handles the rest
     }
 }

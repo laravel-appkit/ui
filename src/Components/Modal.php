@@ -2,36 +2,25 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Components\Concerns\IsModal;
 use AppKit\UI\Facades\UI;
 
 class Modal extends BaseComponent
 {
-    /**
-     * The name of the view that this component renders
-     *
-     * @var string
-     */
-    protected string $viewName = 'components.modal';
+    use IsModal;
 
+    /**
+     * Create an instance of the component
+     *
+     * @param string $name
+     * @param string $title
+     */
     public function __construct(
         public string $name,
         public string $title,
     ) {
         UI::registerModal($this->name);
-    }
 
-    public function isOpen()
-    {
-        return UI::isModalOpen($this->name);
-    }
-
-    public function close()
-    {
-        return UI::closeModal($this->name);
-    }
-
-    public function open()
-    {
-        return UI::openModal($this->name);
+        // constructor promotion handles the rest
     }
 }

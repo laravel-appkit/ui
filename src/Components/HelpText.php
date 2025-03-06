@@ -5,15 +5,13 @@ namespace AppKit\UI\Components;
 class HelpText extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string $help
      */
-    protected string $viewName = 'components.help-text';
-
     public function __construct(
         public string $help,
     ) {
-
+        // constructor promotion handles the rest
     }
 }

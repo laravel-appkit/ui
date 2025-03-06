@@ -5,15 +5,13 @@ namespace AppKit\UI\Components;
 class Icon extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string|null $icon
      */
-    protected string $viewName = 'components.icon';
-
     public function __construct(
         public ?string $icon = null,
     ) {
-
+        // constructor promotion handles the rest
     }
 }

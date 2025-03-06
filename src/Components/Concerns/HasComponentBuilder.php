@@ -132,7 +132,7 @@ trait HasComponentBuilder
      * @param string $element
      * @return ElementAttributeBag
      */
-    protected function registerAttributeBuilderElement(string $element): ElementAttributeBag
+    protected function registerElement(string $element): ElementAttributeBag
     {
         if (!array_key_exists(static::class, $this->componentBuilderElements)) {
             $this->componentBuilderElements[static::class] = [];

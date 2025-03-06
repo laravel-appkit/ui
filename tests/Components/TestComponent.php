@@ -2,6 +2,8 @@
 
 namespace AppKit\UI\Tests\Components;
 
+use AppKit\UI\Attributes\Element;
+use AppKit\UI\Attributes\ExposedAsState;
 use AppKit\UI\Components\BaseComponent;
 use AppKit\UI\ElementAttributeBag;
 use Closure;
@@ -13,18 +15,20 @@ class TestComponent extends BaseComponent
      * An example element attribute bag
      * @var ElementAttributeBag
      */
-    public $labelAttributes;
+    #[Element('label')]
+    public ?ElementAttributeBag $labelAttributes = null;
 
     /**
      * Build the component
      *
      * @return void
      */
-    public function __construct(public bool $toggle = false, public string $size = '')
-    {
-        $this->labelAttributes = $this->registerAttributeBuilderElement('label');
-
-        $this->exposePropertyAsState('toggle');
+    public function __construct(
+        #[ExposedAsState]
+        public bool $toggle = false,
+        public string $size = ''
+    ) {
+        // constructor promotion handles the rest
     }
 
     /**

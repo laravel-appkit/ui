@@ -5,19 +5,21 @@ namespace AppKit\UI\Components;
 class Radio extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string $id
+     * @param string|null $help
+     * @param string $label
+     * @param string $name
+     * @param string $value
      */
-    protected string $viewName = 'components.radio';
-
     public function __construct(
+        public string $id,
+        public ?string $help = null,
+        public string $label,
         public string $name,
         public string $value,
-        public string $id,
-        public string $label,
-        public ?string $help = null,
     ) {
-
+        // constructor promotion handles the rest
     }
 }

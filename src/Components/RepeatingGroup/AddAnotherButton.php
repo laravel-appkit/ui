@@ -2,19 +2,22 @@
 
 namespace AppKit\UI\Components\RepeatingGroup;
 
+use AppKit\UI\Attributes\Inheritable;
 use AppKit\UI\Components\BaseComponent;
+use AppKit\UI\Components\RepeatingGroup;
 
 class AddAnotherButton extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Create an instance of the component
      *
-     * @var string
+     * @param string|null $source
      */
-    protected string $viewName = 'components.repeating-group.add-another-button';
-
-    public function __construct(public string $source)
+    public function __construct(
+        #[Inheritable(fromComponents: RepeatingGroup::class)]
+        public ?string $source = null
+    )
     {
-
+        // constructor automatically promotes class properties
     }
 }

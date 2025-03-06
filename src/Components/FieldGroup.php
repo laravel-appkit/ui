@@ -2,56 +2,59 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\Element;
 use AppKit\UI\ElementAttributeBag;
 
 class FieldGroup extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
-     *
-     * @var string
-     */
-    protected string $viewName = 'components.field-group';
-
-    /**
      * Attributes to be applied to the element
      *
      * @var ElementAttributeBag
      */
-    public ElementAttributeBag $labelAttributes;
+    #[Element('label')]
+    public ?ElementAttributeBag $labelAttributes = null;
 
     /**
      * Attributes to be applied around the field
      *
      * @var ElementAttributeBag
      */
-    public ElementAttributeBag $fieldAttributes;
+    #[Element('field')]
+    public ?ElementAttributeBag $fieldAttributes = null;
 
     /**
      * Attributes to be applied to the error message
      *
      * @var ElementAttributeBag
      */
-    public ElementAttributeBag $errorAttributes;
+    #[Element('error')]
+    public ?ElementAttributeBag $errorAttributes = null;
 
     /**
      * Attributes to be applied to the help text
      *
      * @var ElementAttributeBag
      */
-    public ElementAttributeBag $helpAttributes;
+    #[Element('help')]
+    public ?ElementAttributeBag $helpAttributes = null;
 
+    /**
+     * Create an instance of the component
+     *
+     * @param string|null $error
+     * @param string|null $help
+     * @param string|null $label
+     * @param string|null $name
+     * @param boolean $required
+     */
     public function __construct(
-        public ?string $name = '',
-        public ?string $label = '',
-        public ?string $help = '',
         public ?string $error = '',
+        public ?string $help = '',
+        public ?string $label = '',
+        public ?string $name = '',
         public bool $required = false,
     ) {
-        // register the attribute builder elements
-        $this->labelAttributes = $this->registerAttributeBuilderElement('label');
-        $this->fieldAttributes = $this->registerAttributeBuilderElement('field');
-        $this->errorAttributes = $this->registerAttributeBuilderElement('error');
-        $this->helpAttributes = $this->registerAttributeBuilderElement('help');
+        // constructor promotion handles the rest
     }
 }

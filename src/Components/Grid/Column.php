@@ -1,16 +1,18 @@
 <?php
 
-namespace AppKit\UI\Components;
+namespace AppKit\UI\Components\Grid;
 
-class Tab extends BaseComponent
+use AppKit\UI\Components\BaseComponent;
+
+class Column extends BaseComponent
 {
     /**
      * Create an instance of the component
      *
-     * @param string $title
+     * @param integer $width
      */
     public function __construct(
-        public string $title
+        public int $width,
     ) {
         // constructor promotion handles the rest
     }

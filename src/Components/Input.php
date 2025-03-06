@@ -2,19 +2,20 @@
 
 namespace AppKit\UI\Components;
 
-use AppKit\UI\Facades\UI;
+use AppKit\UI\Attributes\Element;
+use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\ElementAttributeBag;
 use Illuminate\Support\Str;
 
 class Input extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * The attributes that get applied to the wrapper
      *
-     * @var string
+     * @var ElementAttributeBag|null
      */
-    protected string $viewName = 'components.input';
-
-    public $wrapperElement;
+    #[Element('wrapper')]
+    public ?ElementAttributeBag $wrapperElement = null;
 
     public function __construct(
         public string $name,
@@ -22,77 +23,65 @@ class Input extends BaseComponent
         public string $postfix = '',
         public string $prefix = '',
         public string $type = 'text',
+        #[ExposedAsState]
         public string $width = 'md',
         public string $id = '',
+        #[ExposedAsState]
         public bool $hasError = false,
         public bool $multiple = false,
     ) {
-        $this->exposePropertyAsState('width');
-
-        $this->exposePropertyAsState('hasError');
-
-        $this->defineState('hasPrefix', function () {
-            return !empty($this->prefix);
-        });
-
-        $this->defineState('hasPostfix', function () {
-            return !empty($this->postfix);
-        });
-
-        $this->defineState('hasAffix', function () {
-            return !empty($this->prefix) || !empty($this->postfix);
-        });
-
-        $this->defineState('isCheckbox', function () {
-            return $this->type === 'checkbox';
-        });
-
-        $this->defineState('isRadioButton', function () {
-            return $this->type === 'radio';
-        });
-
-        $this->defineState('isCheckable', function () {
-            return $this->type === 'checkbox' || $this->type === 'radio';
-        });
-
-        $this->wrapperElement = $this->registerAttributeBuilderElement('wrapper');
-
+        // if we don't have an id passed in, we should use the name as the ID
         if (!$this->id) {
             $this->id = $this->name;
         }
 
+        // ensure that multiples get the necessary bracket notation
         if ($this->multiple && !Str::of($this->name)->endsWith('[]')) {
             $this->name .= '[]';
         }
     }
 
+    #[ExposedAsState]
+    public function hasPrefix()
+    {
+        return !empty($this->prefix);
+    }
+
+    #[ExposedAsState]
+    public function hasPostfix()
+    {
+        return !empty($this->postfix);
+    }
+
+    #[ExposedAsState]
+    public function hasAffix()
+    {
+        return !empty($this->prefix) || !empty($this->postfix);
+    }
+
+    #[ExposedAsState]
+    public function isCheckbox()
+    {
+        return $this->type === 'checkbox';
+    }
+
+    #[ExposedAsState]
+    public function isRadioButton()
+    {
+        return $this->type === 'radio';
+    }
+
+    #[ExposedAsState]
+    public function isCheckable()
+    {
+        return $this->type === 'checkbox' || $this->type === 'radio';
+    }
+
+    // TODO: Move this to the inherritable attribute
     public function parentSet()
     {
         if ($this->parentComponent instanceof (FieldGroup::class) && $this->parentComponent->error) {
             $this->hasError = true;
         }
     }
-
-    /**
-     * Render the component
-     *
-     * @return Closure
-     */
-    /*public function render()
-    {
-        dump($this);
-
-        return function ($data) {
-            UI::renderingComponent($this);
-
-            dump(['$data' => $data]);
-            dump(['$this->data()' => $this->data()]);
-            dd(['merge' => array_merge($data, $this->extractPublicProperties())]);
-
-            $data['childComponents'] = $this->childComponents;
-            $data['siblingIndex'] = $this->siblingIndex;
-
-            return view($this->viewName, $data)->render();
-        };
-    }*/
 }

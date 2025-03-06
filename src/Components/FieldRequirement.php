@@ -5,19 +5,26 @@ namespace AppKit\UI\Components;
 class FieldRequirement extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * Are optional fields highlighted
      *
-     * @var string
+     * @var boolean
      */
-    protected string $viewName = 'components.field-requirement';
-
     public bool $highlightOptionalFields;
 
+    /**
+     * Create an instance of the component
+     *
+     * @param boolean $required
+     * @param string $requiredText
+     * @param string $optionalText
+     */
     public function __construct(
         public bool $required = false,
         public string $requiredText = '*',
         public string $optionalText = ' (Optional)',
     ) {
         $this->highlightOptionalFields = config('appkit-ui::highlight_optional_fields', false);
+
+        // constructor promotion handles the rest
     }
 }

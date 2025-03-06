@@ -1,6 +1,6 @@
 <?php
 
-namespace AppKit\UI\Components\Traits;
+namespace AppKit\UI\Components\Concerns;
 
 use Exception;
 use Illuminate\View\Component;
@@ -36,7 +36,7 @@ trait InteractsWithComponentStack
 
         // if we get to the top of the tree, and haven't found what we are looking for, maybe throw an exception
         if (!$found && $throw) {
-            throw new Exception(self::class . ' components expects to be a descendant of a ' . implode(' or ', $components) . ' component');
+            throw new Exception(static::class . ' components expects to be a descendant of a ' . implode(' or ', $components) . ' component');
         }
 
         // return the suitable candidate

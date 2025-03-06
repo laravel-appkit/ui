@@ -2,23 +2,33 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\Element;
+use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\ElementAttributeBag;
+
 class TextArea extends BaseComponent
 {
     /**
-     * The name of the view that this component renders
+     * The attributes that get applied to the wrapper
      *
-     * @var string
+     * @var ElementAttributeBag|null
      */
-    protected string $viewName = 'components.text-area';
+    #[Element('wrapper')]
+    public ?ElementAttributeBag $wrapperElement = null;
 
-    public $wrapperElement;
-
+    /**
+     * Create an instance of the component
+     *
+     * @param boolean $hasError
+     * @param string $width
+     */
     public function __construct(
-        public string $width = 'md',
+        #[ExposedAsState]
         public bool $hasError = false,
-    ) {
-        $this->exposePropertyAsState('width');
 
-        $this->exposePropertyAsState('hasError');
+        #[ExposedAsState]
+        public string $width = 'md',
+    ) {
+        // constructor promotion handles the rest
     }
 }
