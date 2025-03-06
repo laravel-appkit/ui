@@ -7,14 +7,14 @@ class FieldRequirement extends BaseComponent
     /**
      * Are optional fields highlighted
      *
-     * @var boolean
+     * @var bool
      */
     public bool $highlightOptionalFields;
 
     /**
      * Create an instance of the component
      *
-     * @param boolean $required
+     * @param bool $required
      * @param string $requiredText
      * @param string $optionalText
      */

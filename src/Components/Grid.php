@@ -16,13 +16,12 @@ class Grid extends BaseComponent
     /**
      * Create an instance of the component
      *
-     * @param integer $columns
-     * @param integer $gap
+     * @param int $columns
+     * @param int $gap
      */
     public function __construct(
         #[ExposedAsState]
         public int $columns = 12,
-
         #[ExposedAsState]
         public int $gap = 3,
     ) {

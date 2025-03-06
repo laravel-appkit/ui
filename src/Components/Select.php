@@ -20,12 +20,11 @@ class Select extends BaseComponent
      * Create an instance of the component
      *
      * @param string $width
-     * @param boolean $hasError
+     * @param bool $hasError
      */
     public function __construct(
         #[ExposedAsState]
         public string $width = 'md',
-
         #[ExposedAsState]
         public bool $hasError = false,
     ) {

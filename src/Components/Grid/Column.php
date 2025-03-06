@@ -9,7 +9,7 @@ class Column extends BaseComponent
     /**
      * Create an instance of the component
      *
-     * @param integer $width
+     * @param int $width
      */
     public function __construct(
         public int $width,

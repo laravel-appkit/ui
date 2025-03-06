@@ -4,7 +4,8 @@ namespace AppKit\UI\Components\Concerns;
 
 use AppKit\UI\Facades\UI;
 
-trait IsModal {
+trait IsModal
+{
     /**
      * Returns the alpine expression to determine if the modal is open
      *

@@ -14,9 +14,9 @@ class RepeatingGroup extends BaseComponent
     /**
      * Create an instance of the component
      *
-     * @param boolean $addAnother
+     * @param bool $addAnother
      * @param string $indexName
-     * @param boolean $orderable
+     * @param bool $orderable
      * @param string $source
      */
     public function __construct(

@@ -19,13 +19,12 @@ class TextArea extends BaseComponent
     /**
      * Create an instance of the component
      *
-     * @param boolean $hasError
+     * @param bool $hasError
      * @param string $width
      */
     public function __construct(
         #[ExposedAsState]
         public bool $hasError = false,
-
         #[ExposedAsState]
         public string $width = 'md',
     ) {

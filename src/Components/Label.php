@@ -9,7 +9,7 @@ class Label extends BaseComponent
      *
      * @param string $for
      * @param string $label
-     * @param boolean $required
+     * @param bool $required
      */
     public function __construct(
         public string $for,

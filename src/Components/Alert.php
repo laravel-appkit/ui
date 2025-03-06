@@ -43,10 +43,8 @@ class Alert extends BaseComponent
     public function __construct(
         #[Slotable]
         public ?string $icon = null,
-
         #[Slotable]
         public ?string $title = null,
-
         #[ExposedAsState]
         public ?string $type = 'success',
     ) {

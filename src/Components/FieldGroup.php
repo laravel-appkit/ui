@@ -46,7 +46,7 @@ class FieldGroup extends BaseComponent
      * @param string|null $help
      * @param string|null $label
      * @param string|null $name
-     * @param boolean $required
+     * @param bool $required
      */
     public function __construct(
         public ?string $error = '',
