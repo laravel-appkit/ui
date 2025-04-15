@@ -3,6 +3,7 @@
 namespace AppKit\UI\Styles\Tailwind;
 
 use AppKit\UI\Contracts\StyleFramework;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class Tailwind implements StyleFramework
@@ -16,7 +17,9 @@ class Tailwind implements StyleFramework
     public function locateStylerForComponent(string $component): ?string
     {
         // generate the namespace to the component
-        $class = __NAMESPACE__ . '\Components\\' . class_basename($component) . 'Styler';
+        $class = __NAMESPACE__ . '\Components\\' . str($component)->remove('AppKit\UI\Components\\') . 'Styler';
+
+        Log::info('Looking for ' . $class . ' [' . $component . ']');
 
         // check that the class exists, and return the name of it
         return class_exists($class) ? $class : null;

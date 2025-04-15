@@ -9,6 +9,6 @@ class FieldGroupStyler extends BaseStyler
 {
     public function __invoke(ComponentBuilder $component, BaseComponent $instance): void
     {
-        $component->addClass('space-y-2');
+        $component->addClass('space-y-1');
     }
 }

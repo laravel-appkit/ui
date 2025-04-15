@@ -1,0 +1,3 @@
+<nav {{ $attributes }}>
+    {{ $slot }}
+</nav>

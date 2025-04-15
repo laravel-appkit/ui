@@ -77,7 +77,7 @@ class Input extends BaseComponent
         return $this->type === 'checkbox' || $this->type === 'radio';
     }
 
-    // TODO: Move this to the inherritable attribute
+    // TODO: Move this to the inheritable attribute
     public function parentSet()
     {
         if ($this->parentComponent instanceof (FieldGroup::class) && $this->parentComponent->error) {

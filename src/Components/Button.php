@@ -16,7 +16,7 @@ class Button extends BaseComponent
      */
     public function __construct(
         #[ExposedAsState]
-        public string $color = 'red',
+        public string $color = 'accent',
         #[ExposedAsState]
         public string $size = 'md',
         #[ExposedAsState]

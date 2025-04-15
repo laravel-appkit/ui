@@ -10,6 +10,7 @@ class LabelStyler extends BaseStyler
     public function __invoke(ComponentBuilder $componentBuilder, BaseComponent $instance): void
     {
         $componentBuilder->addClass([
+            'block',
             'font-medium',
             'text-gray-900',
             'leading-6',

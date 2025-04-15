@@ -18,9 +18,9 @@ abstract class BaseMixin
      *
      * @return self
      */
-    public static function with(?array $options = [])
+    public static function with(...$options)
     {
-        return new static($options);
+        return new static(...$options);
     }
 
     /**
@@ -28,9 +28,15 @@ abstract class BaseMixin
      *
      * @return void
      */
-    public function __construct(protected ?array $options = [])
+    public function __construct(...$options)
     {
         $this->tailwind = new Tailwind();
+
+        foreach ($options as $option => $value) {
+            if (property_exists($this, $option)) {
+                $this->{$option} = $value;
+            }
+        }
     }
 
     /**

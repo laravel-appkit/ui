@@ -4,14 +4,11 @@ namespace AppKit\UI\Styles\Tailwind\Components;
 
 use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\BaseComponent;
-use AppKit\UI\Styles\Tailwind\Mixins\AccentCssVariableMixin;
 
-class AppStyler extends BaseStyler
+class NavStyler extends BaseStyler
 {
     public function __invoke(ComponentBuilder $component, BaseComponent $instance): void
     {
-        $component
-            ->addClass('[&_[x-cloak]]:hidden')
-            ->mixin(AccentCssVariableMixin::class);
+        $component->addClass('flex flex-col overflow-visible min-h-auto space-y-6');
     }
 }
