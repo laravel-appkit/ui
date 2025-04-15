@@ -2,8 +2,6 @@
 
 namespace AppKit\UI\Components;
 
-use AppKit\UI\Attributes\ExposedAsState;
-
 class Layout extends BaseComponent
 {
     /**

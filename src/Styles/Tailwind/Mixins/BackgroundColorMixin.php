@@ -10,14 +10,14 @@ class BackgroundColorMixin extends BaseMixin
     /**
      * Include classes relating to hover states
      *
-     * @var boolean
+     * @var bool
      */
     protected $includeHover = false;
 
     /**
      * Include classes relating to text colour
      *
-     * @var boolean
+     * @var bool
      */
     protected $includeText = false;
 

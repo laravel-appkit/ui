@@ -12,8 +12,7 @@ class App extends BaseComponent
     public function __construct(
         #[ExposedAsState]
         public string $accent = 'teal',
-    )
-    {
+    ) {
         // constructor promotion handles the rest
     }
 }

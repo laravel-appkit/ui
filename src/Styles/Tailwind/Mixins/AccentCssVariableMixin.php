@@ -4,8 +4,8 @@ namespace AppKit\UI\Styles\Tailwind\Mixins;
 
 use AppKit\UI\ComponentBuilder;
 
-class AccentCssVariableMixin extends BaseMixin {
-
+class AccentCssVariableMixin extends BaseMixin
+{
     public function __invoke(ComponentBuilder $component): void
     {
         $component->addClassForAccent([

@@ -16,8 +16,7 @@ class Item extends BaseComponent
         public bool $current = false,
         public ?string $href = null,
         public ?string $route = null,
-    )
-    {
+    ) {
         if (!$this->href && $this->route) {
             $this->href = route($this->route);
         }

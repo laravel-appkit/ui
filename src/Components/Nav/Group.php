@@ -21,8 +21,7 @@ class Group extends BaseComponent
      */
     public function __construct(
         public string $title,
-    )
-    {
+    ) {
         // constructor promotion handles the rest
     }
 }
