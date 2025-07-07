@@ -35,4 +35,9 @@ trait IsModal
     {
         return UI::openModal($this->name);
     }
+
+    public function runtimeVariable(): string
+    {
+        return UI::getModalVariable($this->name);
+    }
 }
