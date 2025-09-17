@@ -16,7 +16,6 @@ use AppKit\UI\Support\Attributes;
 use Attribute;
 use Closure;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Fluent;
 use Illuminate\Support\Str;
 use Illuminate\View\Component as BladeComponent;
 use Illuminate\View\ComponentAttributeBag;

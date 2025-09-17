@@ -4,8 +4,8 @@ namespace AppKit\UI\Styles\Tailwind\Mixins;
 
 use AppKit\UI\ComponentBuilder;
 
-class BackdropMixin extends BaseMixin {
-
+class BackdropMixin extends BaseMixin
+{
     public function __invoke(ComponentBuilder $component): void
     {
         $component->addClass([

@@ -24,8 +24,7 @@ class DynamicComponent extends BaseDynamicComponent
     public function __construct(
         string $componentName,
         public array|Collection $slotContent = []
-    )
-    {
+    ) {
         // store the component name that we want to generate
         $this->component = $componentName;
     }
