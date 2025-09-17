@@ -1,5 +1,6 @@
 <dialog {{ $attributes }}>
     <div tabindex="-1">
+        <h1>{{ $title }}</h1>
         <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
             {{ $slot }}
         </div>

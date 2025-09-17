@@ -7,7 +7,8 @@ use AppKit\UI\Components\BaseComponent;
 use AppKit\UI\Styles\Tailwind\Mixins\BackgroundColorMixin;
 use AppKit\UI\Styles\Tailwind\Mixins\FocusOutlineMixin;
 
-class ButtonStyler extends BaseStyler
+// #[CustomisesComponent(Button::class)]
+class ButtonStyler extends BaseStyler /* Implements ComponentCustomiser */
 {
     public function __invoke(ComponentBuilder $component, BaseComponent $instance): void
     {

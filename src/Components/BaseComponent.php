@@ -9,12 +9,14 @@ use AppKit\UI\Attributes\Slotable;
 use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\Concerns\HasComponentBuilder;
 use AppKit\UI\Components\Concerns\InteractsWithComponentStack;
+use AppKit\UI\DeferredComponent;
 use AppKit\UI\ElementAttributeBag;
 use AppKit\UI\Facades\UI;
 use AppKit\UI\Support\Attributes;
 use Attribute;
 use Closure;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Fluent;
 use Illuminate\Support\Str;
 use Illuminate\View\Component as BladeComponent;
 use Illuminate\View\ComponentAttributeBag;
@@ -295,5 +297,10 @@ abstract class BaseComponent extends BladeComponent
             // now we render the view
             return view('appkit-ui::' . $this->viewName, $data)->render();
         };
+    }
+
+    public static function make($options = []): DeferredComponent
+    {
+        return new DeferredComponent(static::class, $options);
     }
 }
