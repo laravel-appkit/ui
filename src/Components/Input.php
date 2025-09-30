@@ -3,7 +3,7 @@
 namespace AppKit\UI\Components;
 
 use AppKit\UI\Attributes\Element;
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 use AppKit\UI\ElementAttributeBag;
 use Illuminate\Support\Str;
 
@@ -23,10 +23,10 @@ class Input extends BaseComponent
         public string $postfix = '',
         public string $prefix = '',
         public string $type = 'text',
-        #[ExposedAsState]
+        #[State]
         public string $width = 'md',
         public string $id = '',
-        #[ExposedAsState]
+        #[State]
         public bool $hasError = false,
         public bool $multiple = false,
     ) {
@@ -41,37 +41,37 @@ class Input extends BaseComponent
         }
     }
 
-    #[ExposedAsState]
+    #[State]
     public function hasPrefix()
     {
         return !empty($this->prefix);
     }
 
-    #[ExposedAsState]
+    #[State]
     public function hasPostfix()
     {
         return !empty($this->postfix);
     }
 
-    #[ExposedAsState]
+    #[State]
     public function hasAffix()
     {
         return !empty($this->prefix) || !empty($this->postfix);
     }
 
-    #[ExposedAsState]
+    #[State]
     public function isCheckbox()
     {
         return $this->type === 'checkbox';
     }
 
-    #[ExposedAsState]
+    #[State]
     public function isRadioButton()
     {
         return $this->type === 'radio';
     }
 
-    #[ExposedAsState]
+    #[State]
     public function isCheckable()
     {
         return $this->type === 'checkbox' || $this->type === 'radio';

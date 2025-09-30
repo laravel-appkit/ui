@@ -69,7 +69,6 @@ function addStatesToComponentBuilder(ComponentBuilder $componentBuilder)
 {
     $componentBuilder->registerState('true', fn () => true);
     $componentBuilder->registerState('false', fn () => false);
-
 }
 
 function addSizeStateToComponentBuilder(ComponentBuilder $componentBuilder, $size)

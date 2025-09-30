@@ -3,7 +3,7 @@
 namespace AppKit\UI\Components;
 
 use AppKit\UI\Attributes\Element;
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 use AppKit\UI\ElementAttributeBag;
 
 class Select extends BaseComponent
@@ -23,9 +23,9 @@ class Select extends BaseComponent
      * @param bool $hasError
      */
     public function __construct(
-        #[ExposedAsState]
+        #[State]
         public string $width = 'md',
-        #[ExposedAsState]
+        #[State]
         public bool $hasError = false,
     ) {
         // constructor promotion handles the rest

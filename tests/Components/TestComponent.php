@@ -2,13 +2,15 @@
 
 namespace AppKit\UI\Tests\Components;
 
+use AppKit\UI\Attributes\AppkitComponent;
 use AppKit\UI\Attributes\Element;
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 use AppKit\UI\Components\BaseComponent;
 use AppKit\UI\ElementAttributeBag;
 use Closure;
 use Illuminate\View\Component;
 
+#[AppkitComponent('test-component')]
 class TestComponent extends BaseComponent
 {
     /**
@@ -24,7 +26,7 @@ class TestComponent extends BaseComponent
      * @return void
      */
     public function __construct(
-        #[ExposedAsState]
+        #[State]
         public bool $toggle = false,
         public string $size = ''
     ) {

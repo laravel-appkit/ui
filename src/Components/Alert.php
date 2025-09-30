@@ -3,7 +3,7 @@
 namespace AppKit\UI\Components;
 
 use AppKit\UI\Attributes\Element;
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 use AppKit\UI\Attributes\Slotable;
 use AppKit\UI\ElementAttributeBag;
 
@@ -45,7 +45,7 @@ class Alert extends BaseComponent
         public ?string $icon = null,
         #[Slotable]
         public ?string $title = null,
-        #[ExposedAsState]
+        #[State]
         public ?string $type = 'success',
     ) {
         // constructor promotion handles the rest

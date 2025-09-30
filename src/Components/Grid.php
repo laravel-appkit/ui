@@ -2,7 +2,7 @@
 
 namespace AppKit\UI\Components;
 
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 
 class Grid extends BaseComponent
 {
@@ -20,9 +20,9 @@ class Grid extends BaseComponent
      * @param int $gap
      */
     public function __construct(
-        #[ExposedAsState]
+        #[State]
         public int $columns = 12,
-        #[ExposedAsState]
+        #[State]
         public int $gap = 3,
     ) {
         // constructor promotion handles the rest

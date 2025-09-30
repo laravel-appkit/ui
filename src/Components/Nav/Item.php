@@ -2,7 +2,7 @@
 
 namespace AppKit\UI\Components\Nav;
 
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 use AppKit\UI\Components\BaseComponent;
 use Illuminate\Support\Facades\Request;
 
@@ -12,7 +12,7 @@ class Item extends BaseComponent
      * Create an instance of the component
      */
     public function __construct(
-        #[ExposedAsState]
+        #[State]
         public bool $current = false,
         public ?string $href = null,
         public ?string $route = null,

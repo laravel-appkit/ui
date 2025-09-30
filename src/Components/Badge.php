@@ -2,6 +2,8 @@
 
 namespace AppKit\UI\Components;
 
+use AppKit\UI\Attributes\ExposedAsState;
+
 class Badge extends BaseComponent
 {
     /**

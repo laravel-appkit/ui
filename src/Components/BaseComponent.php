@@ -3,7 +3,7 @@
 namespace AppKit\UI\Components;
 
 use AppKit\UI\Attributes\Element;
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 use AppKit\UI\Attributes\Inheritable;
 use AppKit\UI\Attributes\Slotable;
 use AppKit\UI\ComponentBuilder;
@@ -66,14 +66,14 @@ abstract class BaseComponent extends BladeComponent
         }
 
         // find parameters that are being exposed as a state
-        Attributes::find(ExposedAsState::class)
+        Attributes::find(State::class)
             ->onConstructorParameters()
             ->ofClass(static::class)
             ->get()
             ->keys()
             ->each(fn ($parameter) => $this->exposePropertyAsState($parameter));
 
-        Attributes::find(ExposedAsState::class)
+        Attributes::find(State::class)
             ->onMethods()
             ->ofClass(static::class)
             ->get()

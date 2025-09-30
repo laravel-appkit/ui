@@ -2,10 +2,13 @@
 
 namespace AppKit\UI\Components;
 
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\AppkitComponent;
+use AppKit\UI\Attributes\Content;
+use AppKit\UI\Attributes\Slot;
+use AppKit\UI\Attributes\State;
 
-// #[AppkitComponent('button')]
-// #[Slot('content', default: true)]
+#[AppkitComponent('button')]
+#[Slot('content', default: true)]
 class Button extends BaseComponent
 {
     /**
@@ -17,13 +20,16 @@ class Button extends BaseComponent
      * @param string|null $href
      */
     public function __construct(
-        #[ExposedAsState]
+        #[State]
         public string $color = 'accent',
-        #[ExposedAsState]
+
+        #[State]
         public string $size = 'md',
-        #[ExposedAsState]
+
+        #[State]
         public string $shape = 'rounded',
-        // #[Content]
+
+        #[Content]
         public ?string $href = null,
     ) {
         // constructor promotion handles the rest

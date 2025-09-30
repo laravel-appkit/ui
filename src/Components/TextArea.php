@@ -3,7 +3,7 @@
 namespace AppKit\UI\Components;
 
 use AppKit\UI\Attributes\Element;
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 use AppKit\UI\ElementAttributeBag;
 
 class TextArea extends BaseComponent
@@ -23,9 +23,9 @@ class TextArea extends BaseComponent
      * @param string $width
      */
     public function __construct(
-        #[ExposedAsState]
+        #[State]
         public bool $hasError = false,
-        #[ExposedAsState]
+        #[State]
         public string $width = 'md',
     ) {
         // constructor promotion handles the rest
