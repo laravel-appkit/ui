@@ -10,8 +10,7 @@ final class Slot
     public function __construct(
         protected string $name,
         protected bool $default = false,
-    )
-    {
+    ) {
 
     }
 }

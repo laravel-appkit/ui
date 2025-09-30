@@ -22,13 +22,10 @@ class Button extends BaseComponent
     public function __construct(
         #[State]
         public string $color = 'accent',
-
         #[State]
         public string $size = 'md',
-
         #[State]
         public string $shape = 'rounded',
-
         #[Content]
         public ?string $href = null,
     ) {

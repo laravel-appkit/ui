@@ -9,8 +9,7 @@ final class AppkitComponent
 {
     public function __construct(
         protected string $name,
-    )
-    {
+    ) {
 
     }
 }

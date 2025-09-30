@@ -3,9 +3,9 @@
 namespace AppKit\UI\Components;
 
 use AppKit\UI\Attributes\Element;
-use AppKit\UI\Attributes\State;
 use AppKit\UI\Attributes\Inheritable;
 use AppKit\UI\Attributes\Slotable;
+use AppKit\UI\Attributes\State;
 use AppKit\UI\ComponentBuilder;
 use AppKit\UI\Components\Concerns\HasComponentBuilder;
 use AppKit\UI\Components\Concerns\InteractsWithComponentStack;
