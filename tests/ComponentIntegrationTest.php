@@ -5,12 +5,12 @@ use AppKit\UI\Tests\Components\HigherOrderTestComponent;
 
 beforeEach(function () {
     // we need to register the component
-    Blade::component(HigherOrderTestComponent::class, 'test-component');
+    Blade::componentNamespace('AppKit\\UI\\Tests\\Components', 'appkit');
 });
 
 it('creates an component builder when a component is rendered', function () {
     // render a component
-    $this->blade('<x-test-component foo="bar" />');
+    $this->blade('<x-appkit::higher-order-test-component foo="bar" />');
 
     // get the instance of the component that was rendered
     $instance = HigherOrderTestComponent::lastInstance();
@@ -23,7 +23,7 @@ it('creates an component builder when a component is rendered', function () {
 
 it('can take in element attributes by prefix', function () {
     // render a component
-    $this->blade('<x-test-component label:foo="bar" />');
+    $this->blade('<x-appkit::higher-order-test-component label:foo="bar" />');
 
     // get the instance of the component that was rendered
     $instance = HigherOrderTestComponent::lastInstance();

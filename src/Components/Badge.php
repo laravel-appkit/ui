@@ -2,8 +2,9 @@
 
 namespace AppKit\UI\Components;
 
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\Slot;
 
+#[Slot('content', default: true)]
 class Badge extends BaseComponent
 {
     /**

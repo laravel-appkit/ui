@@ -2,7 +2,7 @@
 
 namespace AppKit\UI\Components;
 
-use AppKit\UI\Attributes\ExposedAsState;
+use AppKit\UI\Attributes\State;
 
 class Heading extends BaseComponent
 {
@@ -12,7 +12,7 @@ class Heading extends BaseComponent
      * @param string $level
      */
     public function __construct(
-        #[ExposedAsState]
+        #[State]
         public string $level,
     ) {
         // constructor promotion handles the rest
