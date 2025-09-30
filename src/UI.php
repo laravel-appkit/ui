@@ -152,7 +152,6 @@ class UI
         return $this->getJsRuntimeVariableName('modal::' . $name . '.open');
     }
 
-
     public function isModalOpen($name)
     {
         return $this->getJsRuntimeVariableName('modal::' . $name . '.open');
