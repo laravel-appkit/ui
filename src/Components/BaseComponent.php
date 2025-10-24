@@ -290,7 +290,7 @@ abstract class BaseComponent extends BladeComponent
             // if we have inheritable attributes on the component (attributes passed in from another attribute bag)
             if (isset($data['inheritedAttributes'])) {
                 // we merge them in right at the end
-                $data['attributes'] = $data['attributes']->merge($this->inheritedAttributes);
+                $data['attributes'] = $data['attributes']->merge($data['inheritedAttributes']);
             }
 
             // now we render the view

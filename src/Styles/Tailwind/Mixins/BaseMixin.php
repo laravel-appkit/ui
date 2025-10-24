@@ -28,7 +28,7 @@ abstract class BaseMixin
      *
      * @return void
      */
-    public function __construct(...$options)
+    public final function __construct(...$options)
     {
         $this->tailwind = new Tailwind();
 

@@ -15,10 +15,10 @@ class Radio extends BaseComponent
      */
     public function __construct(
         public string $id,
-        public ?string $help = null,
         public string $label,
         public string $name,
         public string $value,
+        public ?string $help = null,
     ) {
         // constructor promotion handles the rest
     }
