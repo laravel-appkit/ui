@@ -5,7 +5,6 @@ namespace AppKit\UI\Components;
 use AppKit\UI\Attributes\Element;
 use AppKit\UI\Attributes\Slotable;
 use AppKit\UI\Attributes\State;
-use AppKit\UI\Attributes\State;
 use AppKit\UI\ElementAttributeBag;
 
 class Alert extends BaseComponent
